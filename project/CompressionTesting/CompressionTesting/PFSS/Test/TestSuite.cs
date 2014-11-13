@@ -19,6 +19,11 @@ namespace CompressionTesting.PFSS.Test
             this.lines = lines;
         }
 
+        public void SetData(PFSSData data)
+        {
+
+        }
+
         public PFSSData GetData()
         {
             return null;
