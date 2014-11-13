@@ -51,6 +51,8 @@
     <Compile Include="Compression\ZipCompression.cs" />
     <Compile Include="DebugOutput\MedianWriter.cs" />
     <Compile Include="ErrorCalculator.cs" />
+    <Compile Include="PFSS\Test\TestPoint.cs" />
+    <Compile Include="PFSS\Test\TestSuite.cs" />
     <Compile Include="Quantization\AngleSubsampling.cs" />
     <Compile Include="Quantization\Discretizer.cs" />
     <Compile Include="Transformation\Spherical.cs" />
