@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CompressionTesting.PFSS
 {
-    public enum TYPE
+    enum TYPE
     {
         SUN_TO_OUTSIDE,
         SUN_TO_SUN,
@@ -24,11 +24,6 @@ namespace CompressionTesting.PFSS
             this.points = points;
         }
 
-        public PFSSPoint getPoint(int index)
-        {
-            if (index >= points.Count)
-                return points[points.Count - (index % points.Count+1)];
-            return points[index];
-        }
+
     }
 }

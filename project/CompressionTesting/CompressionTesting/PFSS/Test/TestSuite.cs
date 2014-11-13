@@ -8,15 +8,23 @@ namespace CompressionTesting.PFSS.Test
 {
     class TestSuite
     {
-        internal List<List<TestPoint>> lines { get; private set; }
+        internal List<TestLine> lines { get; private set; }
+        internal double b0 { get; private set; }
+        internal double l0 { get; private set; }
 
+        internal string file { get; private set; }
 
-        public TestSuite()
+        public TestSuite(List<TestLine> lines)
         {
-
+            this.lines = lines;
         }
 
         public PFSSData GetData()
+        {
+            return null;
+        }
+
+        public PFSSData GetSubsampledData(int factor)
         {
             return null;
         }
