@@ -1,0 +1,2 @@
+standard deviation: 74632.70477531877
+max error: 231822.16171363107

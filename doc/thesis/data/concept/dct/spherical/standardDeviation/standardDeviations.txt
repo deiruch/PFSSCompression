@@ -1,0 +1,41 @@
+capping if higher than 128, cap half
+
+	without residuals, with mnovement
+		standard deviation R	124.3165112920245	double
+		standard deviation Phi	256.56507252393516	double
+		standard deviation Theta	83.527106244464832	double
+
+
+	residuals, without point movement
+		standard deviation R		124.39768737544144	double
+		standard deviation Phi		1236.3500952721085	double
+		standard deviation Theta	83.723257805772988	double
+
+	residuals with movement
+		standard deviation R	124.13528666825854	double
+		standard deviation Phi	256.08383673149405	double
+		standard deviation Theta	83.723257805772988	double
+
+
+cap every parameter higher than 100
+		residuals, moved
+		varR	151.8142076833193	double
+		varP	300.24053554076806	double
+		varT	97.424400008406948	double
+		
+		without residuals, moved
+		varR	152.74480399398007	double
+		varP	301.91695186128538	double
+		varT	97.962156770253046	double
+
+Repeat 99th parameter
+		residuals
+		varR	94.879093718328036	double
+		varP	228.33176462284771	double
+		varT	67.666639084355637	double
+		
+		normal
+		varR	136.39946621870035	double
+		varP	335.32160004523723	double
+		varT	99.774756416612419	double
+

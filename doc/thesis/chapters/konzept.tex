@@ -1,0 +1,33 @@
+\section{Eigenschaften und Kompression der Feldlinien}
+Eigenschaften
+sphärische Koordinaten
+
+\subsection{Ist-Komprimierung}
+warum schon komprimiert
+
+Sphärische Koordinaten Radius; längen und Breitengrade.
+Radius zwischen 1 und 4 facher Sonnenradius
+längen und Breitengrade 0 für 0 Grad und 1 für 360 grad.
+
+Diskretisierung auf shorts, 
+Subsampling
+0 Löschen.
+
+Format: zuerst Konstanten, alle Radien
+Verlustlose Datenkompression gzip
+Clientseitig wieder ein subsampling und umrechnung in kartesische xyz
+
+	
+\subsection{Lösung 0, Clientseitiges Subsampling auf dem Server ausführen}
+
+\subsection{Lösung 1, Diskrete Kosinus Transformation}
+DCT, da alles nahe an harmonischen Halbwellen
+
+subsampling?
+koordinatentransformation
+Diskretisierung?
+Cosinus-Transformation
+Quantisierung
+Diskretisierung
+
+
