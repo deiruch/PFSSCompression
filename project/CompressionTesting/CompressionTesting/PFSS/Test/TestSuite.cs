@@ -14,20 +14,23 @@ namespace CompressionTesting.PFSS.Test
 
         internal string file { get; private set; }
 
-        public TestSuite(List<TestLine> lines)
+        public TestSuite(List<TestLine> lines, double l0, double b0)
         {
             this.lines = lines;
+            this.l0 = l0;
+            this.b0 = b0;
         }
 
         public PFSSData GetData()
         {
-            return null;
+            List<PFSSLine> newLines = new List<PFSSLine>(lines.Count);
+
+            foreach (TestLine l in lines)
+                newLines.Add(l.GetPFSSLine());
+            
+            return new PFSSData(b0,l0,newLines);
         }
 
-        public PFSSData GetSubsampledData(int factor)
-        {
-            return null;
-        }
 
     }
 }

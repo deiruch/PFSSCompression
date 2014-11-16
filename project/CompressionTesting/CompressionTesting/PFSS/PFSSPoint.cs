@@ -9,10 +9,8 @@ namespace CompressionTesting.PFSS
     class PFSSPoint
     {
         public const double SunRadius = 6.957e8;
-        private double l0;
-        private double b0;
 
-        internal int testPointIndex;
+        internal int testPointIndex {get; private set;}
         internal float x { get; set; }
         internal float y { get; set; }
         internal float z { get; set; }
@@ -21,19 +19,17 @@ namespace CompressionTesting.PFSS
         internal short rawPhi { get; private set; }
         internal short rawTheta { get; private set; }
 
-        public PFSSPoint(short rawR, short rawPhi, short rawTheta, double l0, double b0)
+        public PFSSPoint(int index, short rawR, short rawPhi, short rawTheta)
         {
-            this.l0 = l0;
-            this.b0 = b0;
+            this.testPointIndex = index;
             this.rawR = rawR;
             this.rawPhi = rawPhi;
             this.rawTheta = rawTheta;
-
-            this.Reset();
         }
 
         public PFSSPoint(PFSSPoint p)
         {
+            this.testPointIndex = testPointIndex;
             this.rawPhi = p.rawPhi;
             this.rawR = p.rawR;
             this.rawTheta = p.rawTheta;
@@ -42,19 +38,6 @@ namespace CompressionTesting.PFSS
             this.z = p.z;
         }
 
-        public PFSSPoint(float rawR, float rawPhi, float rawTheta, double l0, double b0)
-        {
-            double r = rawR;
-            double phi = rawPhi * 2 * Math.PI;
-            double theta = rawTheta * 2 * Math.PI;
-
-            //current point
-            phi -= l0 / 180.0 * Math.PI;
-            theta += b0 / 180.0 * Math.PI;
-            z = (float)(r * Math.Sin(theta) * Math.Cos(phi));
-            x = (float)(r * Math.Sin(theta) * Math.Sin(phi));
-            y = (float)(r * Math.Cos(theta));
-        }
 
         public PFSSPoint(float x, float y, float z)
         {
@@ -63,9 +46,9 @@ namespace CompressionTesting.PFSS
             this.z = z;
         }
 
-        public void Reset()
+        public void Reset(double l0, double b0)
         {
-            double r = rawR / 8192.0;
+            double r = rawR / 8192.0 * SunRadius;
             double phi = rawPhi / 32768.0 * 2 * Math.PI;
             double theta = rawTheta / 32768.0 * 2 * Math.PI;
 
@@ -92,33 +75,6 @@ namespace CompressionTesting.PFSS
                                                                      + y2 * y2 + z2 * z2));
         }
 
-        public double getDistanceTo(PFSSPoint p)
-        {
-            PFSSPoint vec = getVector(this, p);
-            return vec.magnitude();
-        }
-
-        public double magnitude()
-        {
-            return Math.Sqrt(x * x + y * y + z * z);
-        }
-
-        public static PFSSPoint getVector(PFSSPoint start, PFSSPoint end)
-        {
-            return new PFSSPoint(end.x - start.x, end.y - start.y, end.z - start.z);
-        }
-
-        public static double dot(PFSSPoint p0, PFSSPoint p1)
-        {
-            return p0.x * p1.x + p0.y * p1.y + p0.z * p1.z;
-        }
-
-        public static PFSSPoint cross(PFSSPoint p0, PFSSPoint p1)
-        {
-            float x = p0.y * p1.z - p0.z * p1.y;
-            float y = p0.z * p1.x - p0.x * p1.z;
-            float z = p0.x * p1.y - p0.y * p1.x;
-            return new PFSSPoint(x, y, z);
-        }
+        
     }
 }

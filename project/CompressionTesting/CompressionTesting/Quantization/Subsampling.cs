@@ -7,9 +7,9 @@ using CompressionTesting.PFSS;
 
 namespace CompressionTesting.Quantization
 {
-    internal class AngleSubsampling
+    internal class Subsampling
     {
-        public static void Subsample(PFSSData data, double angle)
+        public static void AngleSubsample(PFSSData data, double angle)
         {
             double ANGLE_OF_LOD = Math.Cos(angle / 180d * Math.PI);
 
@@ -19,7 +19,7 @@ namespace CompressionTesting.Quantization
 
                 List<PFSSPoint> newPoints = new List<PFSSPoint>();
                 bool lineStarted = false;
-                PFSSPoint lastPoint = new PFSSPoint(0, 0, 0, 0, 0);
+                PFSSPoint lastPoint = new PFSSPoint(0, 0, 0);
                 for(int j = 0; j < line.points.Count;j++)
                 {
                     bool colinear = false;
