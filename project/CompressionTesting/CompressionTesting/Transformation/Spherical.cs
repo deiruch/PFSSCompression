@@ -66,9 +66,6 @@ namespace CompressionTesting.Transformation
                     double phi = p.y / 32768.0 * 2 * Math.PI;
                     double theta = p.z / 32768.0 * 2 * Math.PI;
 
-                    if (p.x != p.rawR || p.y != p.rawPhi || p.z != p.rawTheta)
-                        System.Console.WriteLine("why");
-
                     //current point
                     phi -= data.l0 / 180.0 * Math.PI;
                     theta += data.b0 / 180.0 * Math.PI;

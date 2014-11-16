@@ -13,7 +13,7 @@ namespace CompressionTesting.Compression
         {
             Process pProcess = new Process();
             pProcess.StartInfo.FileName = "rar";
-            pProcess.StartInfo.Arguments = "a "+archivePath.FullName+" "+fitsPath.FullName;
+            pProcess.StartInfo.Arguments = "a \""+archivePath.FullName+"\" \""+fitsPath.FullName+"\"";
 
             pProcess.StartInfo.UseShellExecute = false;
             pProcess.StartInfo.RedirectStandardOutput = true;
@@ -22,7 +22,10 @@ namespace CompressionTesting.Compression
             string strOutput = pProcess.StandardOutput.ReadToEnd();
             pProcess.WaitForExit();
 
-            return archivePath.Length;
+            long length = archivePath.Length;
+            archivePath.Delete();
+
+            return length;
         }
     }
 }

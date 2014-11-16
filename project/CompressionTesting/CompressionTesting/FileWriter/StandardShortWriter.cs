@@ -32,9 +32,6 @@ namespace CompressionTesting.FileWriter
             ptph = new short[totalCount];
             ptth = new short[totalCount];
 
-            int maxR = 0;
-            int maxPhi = 0;
-            int maxTheta = 0;
             int index = 0;
 
             foreach(PFSSLine l in input.lines)
@@ -48,9 +45,6 @@ namespace CompressionTesting.FileWriter
                 }
             }
 
-            System.Console.WriteLine(maxR);
-            System.Console.WriteLine(maxPhi);
-            System.Console.WriteLine(maxTheta);
             Fits fits = new Fits();
 
             Double[] b0a = new Double[] { input.b0 };

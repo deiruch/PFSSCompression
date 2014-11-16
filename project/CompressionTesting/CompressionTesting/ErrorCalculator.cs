@@ -73,7 +73,6 @@ namespace CompressionTesting
                 max = Math.Max(err, max);
                 quadSum += err * err;
             }
-          
         }
 
         private class Point

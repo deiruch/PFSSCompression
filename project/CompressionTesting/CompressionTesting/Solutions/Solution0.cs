@@ -32,9 +32,15 @@ namespace CompressionTesting.Solutions
             //forward
             Subsampling.AngleSubsample(data, 5.0);
             Spherical.ForwardToSpherical(data);
-            //Discretizer.ToShorts(data);
-            //StandardShortWriter.WriteFits(data, fits);
-            long size = 0;// RarCompression.DoRar(rarFits, fits);
+            Discretizer.ToShorts(data);
+            StandardShortWriter.WriteFits(data, fits);
+            long size = RarCompression.DoRar(rarFits, fits);
+
+            result.pointCount = 0;
+            for (int i = 0; i < data.lines.Count; i++)
+            {
+                result.pointCount += data.lines[i].points.Count;
+            }
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 

@@ -17,17 +17,16 @@ namespace CompressionTesting
         static void Main(string[] args)
         {
             ISolution solution = new Solution0();
-            string fitsOutputFolder = @"C:\dev\git\bachelor\test\temp";
-            string outputFolder = @"C:\dev\git\bachelor\test\testresult";
+            string fitsOutputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp";
+            string outputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\testresult";
             string[] expectedFiles = Directory.GetFiles(@"C:\dev\git\bachelor\test\testdata\raw");
-            string[] testFiles = Directory.GetFiles(@"C:\dev\git\bachelor\test\testdata\without_subsampling");
-            TestSuite[] testData = new TestSuite[1];
+            TestSuite[] testData = new TestSuite[expectedFiles.Length];
 
-            StreamWriter w = new StreamWriter(new FileStream(Path.Combine(outputFolder,solution.GetName()), FileMode.Create));
-            w.Write("Average Line Size (Bytes);Max Error(Meters); standard deviation (Meters)");
+            StreamWriter w = new StreamWriter(new FileStream(Path.Combine(outputFolder,solution.GetName()+".csv"), FileMode.Create));
+            w.Write("Average Line Size (Bytes);Max Error(Meters);standard deviation (Meters)");
 
             //load data
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < expectedFiles.Length; i++)
             {
                 testData[i] = FitsReader.ReadFloatFits(new FileInfo(expectedFiles[i]));
             }
@@ -36,17 +35,15 @@ namespace CompressionTesting
             int qualityLevels = solution.GetQualityLevels();
             for (int i = 0; i < qualityLevels; i++)
             {
-                
                 TestResult[] result = new TestResult[testData.Length];
                 PFSSData[] data = new PFSSData[testData.Length];
-                for (int j = 0; j < 1; j++)
+                for (int j = 0; j < data.Length; j++)
                 {
                     data[j] = testData[j].GetData();
                     result[j] = solution.DoTestRun(data[j], i, fitsOutputFolder);
                 }
 
                 Tuple<double, double> overall = ErrorCalculator.CalculateOverallError(testData, data);
-
                 long lineCount = 0;
                 long fileSize = 0;
                 foreach (TestResult res in result)
@@ -54,14 +51,15 @@ namespace CompressionTesting
                     fileSize += res.fileSize;
                     lineCount += res.lineCount;
                 }
+
                 //calculate overall line size 
                 double averageLineSize = fileSize / (double)lineCount;
 
+                w.Write("\n");
                 w.Write(averageLineSize + ";" + overall.Item1 + ";" + overall.Item2);
             }
 
             w.Close();
-
         }
 
 
