@@ -31,7 +31,7 @@ namespace CompressionTesting.Solutions
 
             //forward
             //AngleSubsampling.Subsample(data, 5.0);
-            //Spherical.ForwardToSpherical(data);
+            Spherical.ForwardToSpherical(data);
             //Discretizer.ToShorts(data);
             //StandardShortWriter.WriteFits(data, fits);
             long size = 0;// RarCompression.DoRar(rarFits, fits);
@@ -39,7 +39,7 @@ namespace CompressionTesting.Solutions
             result.lineCount = data.lines.Count;
 
             //backward
-            //Spherical.BackwardToSpherical(data);
+            Spherical.BackwardToSpherical(data);
 
             return result;
         }

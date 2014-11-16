@@ -51,6 +51,7 @@ namespace CompressionTesting
             {
                 Point expectedPoint = new Point(expected.points[i]);
                 double err = actualPoint.CalculateDistanceTo(expectedPoint);
+                
                 max = Math.Max(err, max);
                 quadSum += err * err;
             }
@@ -66,6 +67,8 @@ namespace CompressionTesting
                 {
                     Point expectedPoint = new Point(expected.points[j]);
                     double err = calcError(startPoint, endPoint, expectedPoint);
+                    if (err == double.NaN)
+                        System.Console.WriteLine("baadf");
                     max = Math.Max(err, max);
                     quadSum += err * err;
                 }
@@ -81,8 +84,6 @@ namespace CompressionTesting
                 max = Math.Max(err, max);
                 quadSum += err * err;
             }
-
-            //randbehandlung
           
         }
 
