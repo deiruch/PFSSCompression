@@ -33,6 +33,7 @@ namespace CompressionTesting
                     }
                 }
             }
+
             quadSumError /= pointCount;
             quadSumError = Math.Sqrt(quadSumError);
 
@@ -65,12 +66,19 @@ namespace CompressionTesting
                 Point endPoint = new Point(end);
                 for (int j = start.testPointIndex; j < end.testPointIndex; j++)
                 {
+                    double oldquad = quadSum;
                     Point expectedPoint = new Point(expected.points[j]);
                     double err = calcError(startPoint, endPoint, expectedPoint);
                     if (err == double.NaN)
                         System.Console.WriteLine("baadf");
                     max = Math.Max(err, max);
                     quadSum += err * err;
+
+                    if (double.IsNaN(quadSum))
+                    {
+                        System.Console.WriteLine(oldquad);
+                        double err2 = calcError(startPoint, endPoint, expectedPoint);
+                    }
                 }
             }
 
@@ -157,6 +165,7 @@ namespace CompressionTesting
             //perpendicular line intersects with AB. Calculate the smallest distance to the line
             Point lineVector = Point.getVector(B, A);
             Point toP = Point.getVector(B, P);
+
             Point cross = Point.cross(toP, lineVector);
 
             return cross.magnitude() / lineVector.magnitude();
@@ -183,7 +192,7 @@ namespace CompressionTesting
             Point vec1 = Point.getVector(A, B);
             double mag = vec1.magnitude();
             result = -Point.dot(vec0, vec1) / (mag * mag);
-            return result;
+            return double.IsNaN(result) ? 0 : result;
         }
     }
 }
