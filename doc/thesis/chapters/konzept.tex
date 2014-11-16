@@ -1,6 +1,7 @@
 \section{Eigenschaften und Kompression der Feldlinien}
 Eigenschaften
-sphärische Koordinaten
+sphärische Koordinaten, grosse Punktmenge, 1200 linien, 60'000 Punkte etc.
+ähneln Harmonische halbwellen
 
 \subsection{Ist-Komprimierung} \label{konzept:ist-komprimierung}
 warum schon komprimiert
@@ -16,7 +17,6 @@ Subsampling
 Format: zuerst Konstanten, alle Radien
 Verlustlose Datenkompression gzip
 Clientseitig wieder ein subsampling und umrechnung in kartesische xyz
-
 	
 \subsection{Lösung 0, Clientseitiges Subsampling auf dem Server ausführen}
 
@@ -24,10 +24,18 @@ Clientseitig wieder ein subsampling und umrechnung in kartesische xyz
 DCT, da alles nahe an harmonischen Halbwellen
 
 subsampling?
-koordinatentransformation
+koordinatentransformation --> kein wrap around, 
 Diskretisierung?
 Cosinus-Transformation
+
+DCT 2
+idct ist dct3
+
 Quantisierung
-Diskretisierung
+
+speicherung für Entropie encoding, alles was ähnlich ist zusammen.
+
+encoding-> rar
+
 
 
