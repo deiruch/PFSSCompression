@@ -56,10 +56,12 @@ namespace CompressionTesting.Transformation
 
         public static void BackwardToSpherical(PFSSData data)
         {
-            foreach (PFSSLine l in data.lines)
+            for (int i = 0; i < data.lines.Count;i++)
             {
-                foreach (PFSSPoint p in l.points)
+                PFSSLine l = data.lines[i];
+                for (int j = 0; j < l.points.Count;j++ )
                 {
+                    PFSSPoint p = l.points[j];
                     double r = p.x / 8192.0 * PFSSPoint.SunRadius;
                     double phi = p.y / 32768.0 * 2 * Math.PI;
                     double theta = p.z / 32768.0 * 2 * Math.PI;

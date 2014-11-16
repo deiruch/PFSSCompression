@@ -23,6 +23,7 @@ namespace CompressionTesting.Quantization
                 for(int j = 0; j < line.points.Count;j++)
                 {
                     bool colinear = false;
+                    //last point is always colinear == false
                     if (lineStarted && (j + 1) < line.points.Count)
                     {
                         colinear = line.points[j].AngleTo(line.points[j + 1], lastPoint) > ANGLE_OF_LOD;
@@ -37,9 +38,6 @@ namespace CompressionTesting.Quantization
                         newPoints.Add(line.points[j]);
                         lastPoint = line.points[j];
                     }
-
-                    if((j + 1) == data.lines.Count)
-                        newPoints.Add(line.points[j]);
                 }
 
                 //overwrite

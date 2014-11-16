@@ -30,7 +30,7 @@ namespace CompressionTesting.Solutions
             TestResult result = new TestResult();
 
             //forward
-            //AngleSubsampling.Subsample(data, 5.0);
+            Subsampling.AngleSubsample(data, 5.0);
             Spherical.ForwardToSpherical(data);
             //Discretizer.ToShorts(data);
             //StandardShortWriter.WriteFits(data, fits);

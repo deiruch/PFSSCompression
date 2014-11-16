@@ -15,22 +15,13 @@ namespace CompressionTesting
             double maxError = 0;
             double quadSumError = 0;
             long pointCount = 0;
-            int point = 0;
-            int lastPoint = 0;
-            int line = 0;
-            int file = 0;
+
             for (int i = 0; i < expected.Length; i++)
             {
                 //don't check last line, there is something which eats the last few floats of the last line
                 for (int j = 0; j < expected[i].lines.Count-1; j++)
                 {
-                    CalculateLineQuadError(expected[i].lines[j], actual[i].lines[j], ref maxError, ref quadSumError,ref pointCount, ref point);
-                    if (point != lastPoint)
-                    {
-                        lastPoint = point;
-                        line = j;
-                        file = i;
-                    }
+                    CalculateLineQuadError(expected[i].lines[j], actual[i].lines[j], ref maxError, ref quadSumError, ref pointCount);
                 }
             }
 
@@ -40,11 +31,9 @@ namespace CompressionTesting
             return new Tuple<double,double>(maxError,quadSumError);
         }
 
-        private static void CalculateLineQuadError(TestLine expected, PFSSLine actual, ref double max, ref double quadSum, ref long pointCount, ref int point)
+        private static void CalculateLineQuadError(TestLine expected, PFSSLine actual, ref double max, ref double quadSum, ref long pointCount)
         {
-            pointCount += actual.points.Count;
-            int startIndex = 0;
-            int index = 0;
+            pointCount += expected.points.Count;
 
             //randbehandlung
             Point actualPoint = new Point(actual.points[0]);
@@ -69,16 +58,8 @@ namespace CompressionTesting
                     double oldquad = quadSum;
                     Point expectedPoint = new Point(expected.points[j]);
                     double err = calcError(startPoint, endPoint, expectedPoint);
-                    if (err == double.NaN)
-                        System.Console.WriteLine("baadf");
                     max = Math.Max(err, max);
                     quadSum += err * err;
-
-                    if (double.IsNaN(quadSum))
-                    {
-                        System.Console.WriteLine(oldquad);
-                        double err2 = calcError(startPoint, endPoint, expectedPoint);
-                    }
                 }
             }
 
