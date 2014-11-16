@@ -17,12 +17,15 @@ namespace CompressionTesting.PFSS.Test
             this.Type = t;
         }
 
-        public void SetData(PFSSLine line)
+        public PFSSLine GetPFSSLine()
         {
-            for (int i = 0; i < points.Count; i++)
+            List<PFSSPoint> newPoints = new List<PFSSPoint>(points.Count);
+            foreach (TestPoint p in points)
             {
-                points[i].SetPoint(line.points[i]);
+                newPoints.Add(p.GetResettedPoint());
             }
+
+            return new PFSSLine(Type, newPoints);
         }
     }
 }

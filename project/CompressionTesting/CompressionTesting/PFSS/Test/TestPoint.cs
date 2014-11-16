@@ -8,6 +8,7 @@ namespace CompressionTesting.PFSS.Test
 {
     class TestPoint
     {
+        public const double SunRadius = 6.957e8;
         private int index;
         internal float x { get; private set; }
         internal float y { get; private set; }
@@ -18,7 +19,13 @@ namespace CompressionTesting.PFSS.Test
         public TestPoint(int index, float rawR, float rawPhi, float rawTheta, double l0, double b0)
         {
             this.index = index;
-            double r = rawR;
+
+            short discR = (short)Math.Round(rawR*8192);
+            short discP = (short)Math.Round(rawPhi * 32768.0);
+            short discT = (short)Math.Round(rawTheta * 32768.0);
+            this.point = new PFSSPoint(index, discR, discP, discT);
+
+            double r = rawR * SunRadius;
             double phi = rawPhi * 2 * Math.PI;
             double theta = rawTheta * 2 * Math.PI;
 
@@ -30,10 +37,13 @@ namespace CompressionTesting.PFSS.Test
             y = (float)(r * Math.Cos(theta));
         }
 
-        public void SetPoint(PFSSPoint p)
+        public PFSSPoint GetResettedPoint()
         {
-            this.point = p;
-            p.testPointIndex = index;
+            point.x = this.x;
+            point.y = this.y;
+            point.z = this.z;
+
+            return this.point;
         }
     }
 }

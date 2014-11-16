@@ -1,7 +1,25 @@
 \section{Testsetup}
+Verlustbehaftete Kompression muss die Genauigkeit gewährleistet werden.
+Es kann immer eine höhere Kompression unter dem Kompromiss der Genauigkeit.
+Eine feste Grenze für die genauigkeit ist nicht immer festzulegen.
+Um Verfahren trotzdem zu Testen und zu vergleichen werden kompressionen mehrfach in verschiedenen qualitätsstufen getestet und jeweils den Fehler und die resultierende Dateigrösse verglichen.
+
+Bild eines Beispielgraphen
 
 \subsection{Auswahl und Erhebung der Testdaten}
+Testdaten sollen zu einem Randfälle abdecken, als auch durchschnittliche Fälle enthalten.
+Insgesamt wurden 10 Datensätze ausgewählt. Nach grossen Solar Flares gesucht vier Datensätze mit grossen Flares, zwei mit sehr wenig Sonnenaktivität und vier zufällig.
+Die feldlinien werden aber nur alle sechs Stunden berechnet und ein Flare ist ein kurzes ereignis. Es wurden die Datensätze vor dem Ereignis ausgewählt.
+
+wie im Abschnitt \ref{konzept:ist-komprimierung} beschrieben, führt der IDL-Code schon eine Quantisierung durch. deshalb wurde der IDL Code angepasst, quantisierung entfernt und dateien mit float genauigkeit genommen.  
+
+Problem mit letzter linie
 
 \subsection{Messung des Fehlers}
+Expected
 
+Actual
 
+Acutal <= expected
+
+Ich weiss, welches der Originalpunkt ist.

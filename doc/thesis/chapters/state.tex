@@ -1,7 +1,7 @@
 \section{State of the Art}
 
 \subsection{3d Mesh Kompression}
-Game development / Autoindustrie
+Entertainement industrie. Menge an Triangles, an welche zusätzliche Informationen wie Oberflächen-Normalen, Texturkoordinaten etc gebunden sind. Bei hochaufgelösten Modelle werden die Daten schnell über 1 MiByte gross. Angenommen man möchte eine ganze Szene mit mehreren Modellen über ein Netzwerk übertragen, wird die Datenmenge schnell sehr gross.
 
 \subsection{PointCloud Kompression}
 Industrie Lasersampling
@@ -10,6 +10,17 @@ Grosse Punktmenge, welche im 3d Raum komprimiert werden soll.
 verlustfrei/ Verlustbehaftet
 Je nach Implementation können zu jedem Punkt zusatzinfos gespeichert werden wie Farbe/Normalen etc, darüber könnte die Information, zu welcher Linie ein Punkt gehört, gespeichert werden.
 
-\subsection{Spline Signal Approximation}
+\subsection{Signal Approximation}
+Messtechnik von Medizin bis Fotografie, überall wo man ein Signal über Zeit hat
+Versucht ein Signal durch eine Folge von Funktionen zu approximieren.
 
-\subsection{Kosinus/Fourier/Wavelet Transformation}
+Gute Approximation kommt mit wenigen Funktionen aus.
+Verlustbehaftete Kompression, indem man mit einer begrenzten Anzahl
+
+fourier, wavelet Compressed sensing, Spline Approximation
+
+\subsection{Entropie Kodierung}
+Verlustfreie Komprimierung basierend auf Shannons coding theorem
+
+ Arithmeic, Huffman
+Dictionary Type: LZ77, Byte paoir encoding, RLE

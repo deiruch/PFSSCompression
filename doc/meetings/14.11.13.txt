@@ -1,0 +1,29 @@
+Meeting
+
+Fragen:
+	Wie messen: linie von actual point zu actual, und expected points vergleichen.
+	
+	Problem letzte Floats sind nicht vorhanden: 0 point löschung herausnehmen.
+	
+	Bei Fits seeds setzen, sagte felix
+	
+	codestyle: Sandbox--> so viel wie es Sinn macht, nicht zu viel. Plugin + Server schon.
+	
+	visualisierung? Ev. zu viele /zu wenige Punkte. Wie viele Punkte dargestellt werden, ist eine Sache für sich.
+		als zweites Problem anschauen, nicht Teil der Kompression.
+		
+		
+		
+		
+	Doku:
+		State of the art: orthogonal matching pursuit oberbegriff--> Compressive sensing
+			Es fehlt: encodings, wie Rar/Huffman
+		
+		Lossy/Lossless muss in die Doku, in die Einleitung?
+		
+		Konzept: mehr fleisch am knochen--> erkläre, wie z.b. DCT funktioniert, warum z.b. Rar etc.
+		
+	Andre Lösung zeigen
+	
+	
+	
