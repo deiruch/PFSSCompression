@@ -9,15 +9,44 @@ namespace CompressionTesting.Quantization
 {
     class Discretizer
     {
-        public static void ToShorts(PFSSData data)
+        public static void ToShorts(PFSSData data,int offset)
         {
             foreach (PFSSLine l in data.lines)
             {
-                foreach (PFSSPoint p in l.points)
+                for(int i = offset; i < l.points.Count;i++)
                 {
+                    PFSSPoint p = l.points[i];
                     p.x = (short)p.x;
                     p.y = (short)p.y;
                     p.z = (short)p.z;
+                }
+            }
+        }
+
+        public static void Divide(PFSSData data, double factor, int offset)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                for(int i = offset; i < l.points.Count;i++)
+                {
+                    PFSSPoint p = l.points[i];
+                    p.x = (float)(p.x / factor);
+                    p.y = (float)(p.y / factor);
+                    p.z = (float)(p.z / factor);
+                }
+            }
+        }
+
+        public static void Multiply(PFSSData data, double factor, int offset)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                for (int i = offset; i < l.points.Count; i++)
+                {
+                    PFSSPoint p = l.points[i];
+                    p.x = (float)(p.x * factor);
+                    p.y = (float)(p.y * factor);
+                    p.z = (float)(p.z * factor);
                 }
             }
         }

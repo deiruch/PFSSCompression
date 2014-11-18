@@ -16,7 +16,7 @@ namespace CompressionTesting
 
         static void Main(string[] args)
         {
-            ISolution solution = new Solution0();
+            ISolution solution = new Solution1();
             string fitsOutputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp";
             string outputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\testresult";
             string[] expectedFiles = Directory.GetFiles(@"C:\dev\git\bachelor\test\testdata\raw");

@@ -45,5 +45,23 @@ namespace CompressionTesting.Quantization
                 data.lines[i] = newLine;
             }
         }
+
+        public static void Subsample(PFSSData data, int factor)
+        {
+            for (int i = 0; i < data.lines.Count; i++)
+            {
+                PFSSLine line = data.lines[i];
+                List<PFSSPoint> newPoints = new List<PFSSPoint>();
+
+                for (int j = 0; j < line.points.Count; j+=factor)
+                {
+                    newPoints.Add(line.points[j]);
+                }
+
+                //overwrite
+                PFSSLine newLine = new PFSSLine(line.Type, newPoints);
+                data.lines[i] = newLine;
+            }
+        }
     }
 }

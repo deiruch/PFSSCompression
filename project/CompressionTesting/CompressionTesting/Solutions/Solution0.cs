@@ -32,7 +32,7 @@ namespace CompressionTesting.Solutions
             //forward
             Subsampling.AngleSubsample(data, 5.0);
             Spherical.ForwardToSpherical(data);
-            Discretizer.ToShorts(data);
+            Discretizer.ToShorts(data,0);
             StandardShortWriter.WriteFits(data, fits);
             long size = RarCompression.DoRar(rarFits, fits);
 
