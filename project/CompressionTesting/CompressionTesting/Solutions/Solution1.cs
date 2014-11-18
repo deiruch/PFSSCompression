@@ -16,7 +16,7 @@ namespace CompressionTesting.Solutions
     {
         public int GetQualityLevels()
         {
-            return 1;//5
+            return 1;//5, 6
         }
 
         public string GetName()
@@ -31,13 +31,13 @@ namespace CompressionTesting.Solutions
             TestResult result = new TestResult();
 
             Subsampling.Subsample(data,4);
-            Discretizer.Divide(data, 1000, 0);
+            //Discretizer.Divide(data, 1000, 0);
             Residualizer.DoResiduals(data, 1);
-            Residualizer.DoResiduals(data, 2);
-            DCTransformer.Forward(data, 2);
+            //Residualizer.DoResiduals(data, 2);
+            DCTransformer.Forward(data, 1);
 
             int zeroCount = GetZeroCount(data, qualityLevel+5);
-            CompressionTesting.DebugOutput.MedianWriter.AnalyzeDCT(data,2, new FileInfo(Path.Combine(folder, this.GetName()+".csv")));
+            CompressionTesting.DebugOutput.MedianWriter.AnalyzeDCT(data,1, new FileInfo(Path.Combine(folder, this.GetName()+".csv")));
             DCTQuantization.SetToZero(data, zeroCount);
             Discretizer.Divide(data, 1000, 1);
             Discretizer.ToShorts(data, 1);
@@ -72,7 +72,7 @@ namespace CompressionTesting.Solutions
         }
 
         #region intermediate solutions
-        public TestResult NoFileSafe(PFSS.PFSSData data, int qualityLevel, string folder)
+        public TestResult FirstTry(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             FileInfo fits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".fits"));
             FileInfo rarFits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".rar"));
@@ -87,7 +87,7 @@ namespace CompressionTesting.Solutions
             Discretizer.Divide(data, 1000, 1);
             Discretizer.ToShorts(data, 1);
 
-            StandardShortWriter.WriteFits(data, fits);
+            InterleavedWriter.WriteFits(data, fits);
             long size = RarCompression.DoRar(rarFits, fits);
             result.fileSize = size;
             result.lineCount = data.lines.Count;

@@ -1,24 +1,21 @@
 \section{Qualitätsmessung der Kompression}
-Um die Datenmenge der Feldlinien zu verringern werden verlustbehaftete Kompressionsverfahren angewendet. Trotz des Dateverlustes sollen die dekomprimierten Linien möglichst ihren Originalen ähneln. Kleine Abweichungen werden von den Sonnenforschern toleriert. Ihnen ist wichtig, dass vorallem die Form der Kurve möglichst erhalten bleibt. Grosse Abweichungen, die selten eintreten, können aber das Aussehen einer Kurve grundlegend verändern.\\[\baselineskip]
+Um die Datenmenge der Feldlinien zu verringern werden verlustbehaftete Kompressionsverfahren angewendet. Trotz des Dateverlustes sollen die dekomprimierten Linien möglichst ihren Originalen ähneln. Kleine Abweichungen werden von den Sonnenforschern toleriert. Ihnen ist wichtig, dass vorallem die Form der Kurve möglichst erhalten bleibt. Grosse Abweichungen, die selten eintreten, können aber das Aussehen einer Kurve grundlegend verändern.\\
+[\baselineskip]
 Zusammen mit den Sonnenforschern wurden zwei Fehlermasse bestimmt: Der absolute maximale Fehler und die Standardabweichung von der komprimierten Linie zum Original. 
 formel der Standardabweichung, grosse Abweichungen werden stärker gewichtet.\\
-Der absolute maximale Fehler wird noch als Absicherung gemessen. In den meisten Fällen wird die Kompression mit der tieferen Standardabweichung auch den kleineren maximalen Fehler haben. Da aber die Messung über ein paar hunderttausend Punkte durchgeführt wird, ist das Gegenteil denkbar. Eine gute Kompression muss es einen minimalen absoluten Fehler haben und eine minimale Standardabweichung bei minimalem Platzbedarf.\\[\baselineskip]
-Bei einer verlustbehafteten Kompression ist ein Kompromiss zwischen Platzbedarf und Genauigkeit zu finden. Eine feste Fehlergrenze, welche die Kompression nicht überschreiten darf, wäre für die Entwicklung hilfreich. So eine Grenze ist aber nur intuitiv festzulegen.
-
-Um Verfahren trotzdem zu Testen und zu vergleichen werden kompressionen mehrfach in verschiedenen qualitätsstufen getestet und jeweils den Fehler und die resultierende Dateigrösse verglichen.
+Der absolute maximale Fehler wird noch als Absicherung gemessen. In den meisten Fällen wird die Kompression mit der tieferen Standardabweichung auch den kleineren maximalen Fehler haben. Da aber die Messung über ein paar hunderttausend Punkte durchgeführt wird, ist das Gegenteil denkbar. Eine gute Kompression muss es einen minimalen absoluten Fehler haben und eine minimale Standardabweichung bei minimalem Platzbedarf.\\
+[\baselineskip]
+Eine feste Grenze für die Genauigkeit ist leider nicht objektiv festzulegen. Auch wenn eine Grenze gefunden wird, kann diese sich in der Zeit verändern. Im Fall der Feldlinien ist die Internetverbindung der Flaschenhals. Es kann sein, dass in Zukunft mehr Präzision bei mehr Platzbedarf verlangt wird. Deshalb werden die Verfahren, wenn möglich, mit unterschiedlichen Qualitätsstufen getestet und verglichen.
 
 Bild eines Beispielgraphen
 
 \subsection{Auswahl und Erhebung der Testdaten}
-Die Testdaten sollen zu einem alle Randfälle abdecken, als auch durchschnittliche Fälle enthalten. Aus diesem Grund wurden insgesamt zehn Datensätze ausgewählt. 
-Insgesamt wurden 10 Datensätze ausgewählt. Nach grossen Solar Flares gesucht vier Datensätze mit grossen Flares, zwei mit sehr wenig Sonnenaktivität und vier zufällig.
-Die feldlinien werden aber nur alle sechs Stunden berechnet und ein Flare ist ein kurzes ereignis. Es wurden die Datensätze vor dem Ereignis ausgewählt.
+Die Testdaten sollen zu einem alle Randfälle abdecken, als auch durchschnittliche Fälle enthalten. Aus diesem Grund wurden insgesamt zehn Datensätze ausgewählt: Vier Datensätze mit hoher Sonnenaktivität, zwei mit wenig und vier zufällig. Für die vier Datensätzen mit hoher Aktivität wurde in den Jahren 2014 und 2013 nach den grössten Solare Flares gesucht. Für die Datensätze mit wenig Aktivität wurde das Gegenteil gemacht, nach Zeiträumen mit möglichst kleinen Solar Flares gesucht.\\
+Die feldlinien werden aber nur alle sechs Stunden berechnet und Solar Flares sind sehr spontane Ereignisse. Auch eine grosse Flare kann während den sechs Stunden angefangen und wieder aufgehört haben. Für die grossen Solar Flares wurde deshalb beachtet, dass die Datensätze vor dem Ereignis verwendet wurden. Grosse Solar Flares entladen das Feld, vor dem Ereignis ist das Magnetfeld komplexer.\\
+[\baselineskip]
+Wie im Abschnitt \ref{konzept:ist-komprimierung} beschrieben, führt der IDL-Code schon eine Quantisierung durch. Diese wurde entfern und  deshalb wurde der IDL Code angepasst. Die Quantisierung wurde für die Testdaten entfernt. Die Punkte werden nun mit 32 Bit Floating-Point Genauigkeit gespeichert.
 
-wie im Abschnitt \ref{konzept:ist-komprimierung} beschrieben, führt der IDL-Code schon eine Quantisierung durch. deshalb wurde der IDL Code angepasst, quantisierung entfernt und dateien mit float genauigkeit genommen.  
-
-Problem mit letzter linie
-
-\subsection{Messung des Fehlers}
+\subsection{Aublauf des Tests und Messung des Fehlers}
 Expected
 
 Actual
@@ -26,3 +23,4 @@ Actual
 Acutal <= expected
 
 Ich weiss, welches der Originalpunkt ist.
+Fehler berechnet, wie wird die Standardabweichung berechnet
