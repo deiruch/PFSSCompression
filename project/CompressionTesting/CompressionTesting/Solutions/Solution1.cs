@@ -39,7 +39,7 @@ namespace CompressionTesting.Solutions
             }
 
 
-            return (int)Math.Round(maxCount*(1-0.98));
+            return (int)Math.Round(maxCount*(1-0.05*qualityLevel));
         }
 
         public void SelectIntermediateSolution(int i)

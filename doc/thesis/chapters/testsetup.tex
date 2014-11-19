@@ -37,11 +37,19 @@ Die Berechnung ist Dargestellt im Diagramm \ref{testsetup:ablauf:fehlerberechnun
 Gegeben: Stecke $s$ mit Eckpunkten $A$ und $B$ und Punkt $P$.\\
 Gesucht: Kürzeste Distanz zwischen $s$ und $P$\\
 [\baselineskip]
-Zuerst wird überprüft, ob eine Senkrechte durch $P$ überhaupt auf der Strecke $s$ zu liegen kommt. Das ist der Fall, wenn die Strecke $AP$ auf die Strecke $s$ projizierbar ist.
-
-
+Zuerst wird überprüft, ob eine Senkrechte durch $P$ überhaupt auf der Strecke $s$ zu liegen kommt. Das ist der Fall, wenn die Strecke $AP$ auf die Strecke $s$ projizierbar ist:
+\begin{center}
+$ t = \frac{\vec{AB}*\vec{AP}}{\lvert \vec{AB}\rvert ^2}$\\
+  $0 \leq t \leq 1$
+\end{center}
+Wenn das nicht möglich ist, wird der kürzere Distanz von $P$ zu einem der Eckpunkte genommen. Falls aber eine Senkrechte auf $s$ zu liegen kommt, muss jetzt die Länge der Senkrechte berechnet werden. Aus der vorhgehenden Berechnung könnte man den Fusspunkt auf $s$ berechnen und dadurch die Distanz, oder man kann die Distanz direkt über das Kreuzprodukt berechnen.
+\begin{center}
+  $distance = \frac{\lvert \vec{BA}\times \vec{BP}\rvert}{\lvert \vec{BP} \rvert}$
+\end{center}
 
 \subsubsection{Randbehandlung}
-
+Es ist möglich, dass die originalen Endpunkte durch eine Quantisierung verworfen wurden. Das bedeutet, wenn man den Fehler für den allgemeinen Fall berechnet, am Anfang und am Ende Originalpunkte existieren, für die nie eine Distanz berechnet wurde. Deshalb müssen die Ränder speziell behandelt werden.\\
+Anfangsrand\\
+endrand
 
 \subsubsection{Berechnung der Standardabweichung}

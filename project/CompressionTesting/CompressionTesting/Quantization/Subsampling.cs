@@ -57,6 +57,11 @@ namespace CompressionTesting.Quantization
                 {
                     newPoints.Add(line.points[j]);
                 }
+                //add last point if it does not exist
+                if ((line.points.Count - 1) % factor > 0)
+                {
+                    newPoints.Add(line.points[line.points.Count - 1]);
+                }
 
                 //overwrite
                 PFSSLine newLine = new PFSSLine(line.Type, newPoints);
