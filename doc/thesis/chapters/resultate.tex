@@ -1,4 +1,4 @@
-\section{Resultate}
+\section{Resultate}\label{resultate}
 
 \subsection{Lösung 0, Clientseitiges Subsampling auf dem Server ausführen }
 5grad
@@ -19,7 +19,7 @@ Dazu wird nur eine einzige Simulation der Feldlinien verwendet, welche bereits Q
 \textbf{Einfluss der Korrdinatenverschiebung}\\
 Der JPEG Standard  benutzt ebenfalls eine Diskrete Kosinus Transformation. Vor der Transformation wird aber der Wertebereich um Null zentriert: Wenn die Eingabepixel einen Wertebereich von  $0$ bis $255$ haben, wird dieser $-128$ bis $127$ verschoben \cite{wiki:dct:jpeg}. Diese Verschiebung soll den ersten Parameter, den DC Koeffizienten \cite{wiki:dc_bias} dämpfen.\\
 [\baselineskip]
-Im Abschnitt \ref{konzept:ist-komprimierung} wurde bereits der Wertebereich von den Kanälen Radius, Phi und Theta beschrieben. Es ist nochmals darauf hinzuweisen, dass bei der Ist-Quantisierung der Höchstwert auf $2^15$ fällt, was beim Signed 16 Bit Integer zu einem Overflow führt, sprich zum Wert $-2^15$. Wenn also eine Feldlinie den Längengrad Nullpunkt überschreitet, wird Phi zuerst den Wert$2^15-1$ annehmen, dann auf $-2^15$ springen und wieder zurück auf 0. Diese Sprünge können sich negativ auswirken. Solche Sprünge können nur mit hochfrequente Anteilen dargestellt werden und sind dadurch schlechter zu komprimieren. Durch eine Verschiebung würde der Phi-Kanal zwar immernoch sprünge beinhalten, wenn der Nullpunkt überschritten wird. Jedoch nur noch von $2^14-1$ auf $-2^14$.
+Im Abschnitt \ref{konzept:ist-komprimierung} wurde bereits der Wertebereich von den Kanälen Radius, Phi und Theta beschrieben. Es ist nochmals darauf hinzuweisen, dass bei der Ist-Quantisierung der Höchstwert auf $2^{15}$ fällt, was beim Signed 16 Bit Integer zu einem Overflow führt, sprich zum Wert $-2^{15}$. Wenn also eine Feldlinie den Längengrad Nullpunkt überschreitet, wird Phi zuerst den Wert $2^{15}-1$ annehmen, dann auf $-2^{15}$ springen und wieder zurück auf 0. Diese Sprünge können sich negativ auswirken. Solche Sprünge können nur mit hochfrequente Anteilen dargestellt werden und sind dadurch schlechter zu komprimieren. Durch eine Verschiebung würde der Phi-Kanal zwar immernoch sprünge beinhalten, wenn der Nullpunkt überschritten wird. Jedoch nur noch von $2^{14}-1$ auf $-2^{14}$.
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.4\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/spherical_normal.png}

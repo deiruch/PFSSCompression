@@ -1,24 +1,32 @@
 \section{Eigenschaften und Kompression der Feldlinien}
-Eigenschaften
-sphärische Koordinaten, grosse Punktmenge, 1200 linien, 60'000 Punkte etc.
-ähneln Harmonische halbwellen
+Jede Datei beinhaltet 1200 Feldlinien und insgesamt etwa 60'000 Punkte. Die PFSS Extrapolation rechnet alle Punkte im sphärischen Koordinatensystem, mit Längengrad $\phi$,Breitengrad $\theta$ und dem Radius. Der Wertebereich des Radius geht von $0$ bis $4$. Die Einheit ist der Sonnenradius, heisst $R = 1 --> 695'800 km$. Die Winkel $\phi$ und $\theta$ sind in Radians angegeben, $0$ bis $2\pi$ respektive bis $\pi$ für $\theta$. Das sphärische Koordinatensystem hat den Effekt, dass Punkte genauer dargestellt werden, wenn sie näher an der Sonnenoberfläche sind.\\
+[\baselineskip]
+Umrechnung von sphärisch auf euler
+Fits format \cite{website:fits}
 
 \subsection{Ist-Komprimierung} \label{konzept:ist-komprimierung}
-warum schon komprimiert
-
-Sphärische Koordinaten Radius; längen und Breitengrade.
-Radius zwischen 1 und 4 facher Sonnenradius
-längen und Breitengrade 0 für 0 Grad und 1 für 360 grad.
-
-Diskretisierung auf shorts, 
-Subsampling
+Der JHelioviewer bietet an, die Feldlinien zu einem gegebenen Zeitpunkt darzustellen. Damit der Benutzer eine vernünftige Zeit auf die Feldlinien wartet, wurde bereits im Vorfeld eine Kompression implementiert. Zuerst werden die Daten im sphärischen Koordinatensystem auf dem Server quantisiert und mit GZip verlustfrei komprimiert. Der JHelioviewer Dekomprimiert die Daten, transformiert sie in das Eulerische Koordinatensystem um. Die Punktmenge währe für schwächere Grafikkarten zu gross, weshalb der JHelioviewer eine weitere Quantisierung durchführt.\\
+[\baselineskip]
+\textbf{Quantisierung und Dateiformat auf dem Server}\\
+Zuerst werden die Kanäle R,$\phi$ und $\theta$ Kanäle zu shorts diskretisiert:
+\begin{enumerate}
+ \item R: 4 = $2^{15}$. 
+ \item $\phi$: $2\pi$ = $2^{15}$
+ \item $\theta$: $2\pi$ = $2^{15}$
+\end{enumerate}
+$\theta$ Wertebereich geht aber nur von 0 bis $\pi$, die letzten Bits werden gar nicht verwendet. Die Kanäle R und $\phi$ haben das Problem, dass der Wert $2^{15}$ einen Signed Integer Overflow verursacht und auf $-2^{15}$ zu liegen kommt. R scheint den maximalen Wert nie zu erreichen. Wenn aber eine Feldlinie durch den Längengrad Nullpunkt geht, springt der Kanal von  $2^{15}-1$ auf $-2^{15}$ und dann auf 0.\\
+[\baselineskip]
+Subsampling, jeder vierte Punkt 
 0 Löschen.
 
-Format: zuerst Konstanten, alle Radien
-Verlustlose Datenkompression gzip
-Clientseitig wieder ein subsampling und umrechnung in kartesische xyz
+Format: zuerst Konstanten, alle Radien\\
+[\baselineskip]
+\textbf{Quantisierung des JHelioviewers}\\
+Clientseitig wieder ein subsampling und umrechnung in eulerische xyz
 	
 \subsection{Lösung 0, Clientseitiges Subsampling auf dem Server ausführen}
+Subsampling 5Grad auf dem Server
+Minimale Lösung, ziel ist es diese Lösungen zu schlagen.
 
 \subsection{Lösung 1, Diskrete Kosinus Transformation}
 DCT, da alles nahe an harmonischen Halbwellen

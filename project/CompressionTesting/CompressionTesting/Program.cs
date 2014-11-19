@@ -17,20 +17,23 @@ namespace CompressionTesting
         static void Main(string[] args)
         {
             ISolution solution = new Solution1();
+            bool testOneFile = false;
+
             string fitsOutputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp";
             string outputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\testresult";
             string[] expectedFiles = Directory.GetFiles(@"C:\dev\git\bachelor\test\testdata\raw");
-            TestSuite[] testData = new TestSuite[expectedFiles.Length];
+            TestSuite[] testData = testOneFile ? new TestSuite[1] : new TestSuite[expectedFiles.Length];
+        
 
             StreamWriter w = new StreamWriter(new FileStream(Path.Combine(outputFolder,solution.GetName()+".csv"), FileMode.Create));
             w.Write("Average Line Size (Bytes);Max Error(Meters);standard deviation (Meters)");
 
             //load data
-            for (int i = 0; i < expectedFiles.Length; i++)
+            for (int i = 0; i < testData.Length; i++)
             {
                 testData[i] = FitsReader.ReadFloatFits(new FileInfo(expectedFiles[i]));
             }
-
+           
             //do tests
             int qualityLevels = solution.GetQualityLevels();
             for (int i = 0; i < qualityLevels; i++)
