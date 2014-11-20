@@ -31,6 +31,7 @@ namespace CompressionTesting.Solutions
 
             //forward
             Subsampling.AngleSubsample(data, 5.0);
+            //DebugOutput.Printer.PrintLine(data,0,new FileInfo(Path.Combine(folder,"line.csv")));
             Spherical.ForwardToSpherical(data);
             Discretizer.ToShorts(data,0);
             StandardShortWriter.WriteFits(data, fits);

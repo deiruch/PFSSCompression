@@ -88,7 +88,7 @@ namespace CompressionTesting.Solutions
             Residualizer.DoResiduals(data, 1);
             DCTransformer.Forward(data, 1);
 
-            int zeroCount = GetZeroCount(data, qualityLevel);
+            int zeroCount = GetZeroCount(data, qualityLevel+16);
             DCTQuantization.SetToZero(data, zeroCount);
             Discretizer.Divide(data, 1000, 1);
             Discretizer.ToShorts(data, 1);

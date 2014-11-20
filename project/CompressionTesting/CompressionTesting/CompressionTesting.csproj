@@ -35,11 +35,15 @@
     <Reference Include="CSharpFITS_v1.1">
       <HintPath>..\CSharpFITS_v1.1.dll</HintPath>
     </Reference>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\packages\MathNet.Numerics.3.2.3\lib\net40\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="SharpCompress">
       <HintPath>..\SharpCompress.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,6 +54,7 @@
     <Compile Include="Compression\RarCompression.cs" />
     <Compile Include="Compression\ZipCompression.cs" />
     <Compile Include="DebugOutput\MedianWriter.cs" />
+    <Compile Include="DebugOutput\Printer.cs" />
     <Compile Include="ErrorCalculator.cs" />
     <Compile Include="FileWriter\InterleavedWriter.cs" />
     <Compile Include="PFSS\Test\TestLine.cs" />
@@ -57,6 +62,7 @@
     <Compile Include="PFSS\Test\TestSuite.cs" />
     <Compile Include="Quantization\Subsampling.cs" />
     <Compile Include="Quantization\Discretizer.cs" />
+    <Compile Include="Transformation\PCA.cs" />
     <Compile Include="Transformation\Spherical.cs" />
     <Compile Include="XYZErrorCalculator.cs" />
     <Compile Include="FileWriter\StandardShortWriter.cs" />
@@ -78,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

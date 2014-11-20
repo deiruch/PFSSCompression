@@ -8,6 +8,9 @@ using CompressionTesting.Solutions;
 using CompressionTesting.PFSS;
 using CompressionTesting.PFSS.Test;
 
+using MathNet.Numerics.LinearAlgebra;
+using CompressionTesting.Transformation;
+
 namespace CompressionTesting
 {
     class Program
@@ -16,6 +19,43 @@ namespace CompressionTesting
 
         static void Main(string[] args)
         {
+            //run();
+            Matrix<float> bla = Matrix<float>.Build.Dense(11, 3);
+            Matrix<float> bla2 = Matrix<float>.Build.Dense(2, 3);
+            string[] line = File.ReadAllLines(@"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp\line.csv");
+
+            for (int i = 1; i< line.Length; i++)
+            {
+                string[] stuff = line[i].Split(';');
+                bla[i - 1, 0] = float.Parse(stuff[0]);
+                bla[i - 1, 1] = float.Parse(stuff[1]);
+                bla[i - 1, 2] = float.Parse(stuff[2]);
+            }
+            
+
+            PCA p = new PCA(bla,true);
+            Matrix<float> result = p.transform(bla,PCA.TransformationType.ROTATION);
+
+            for (int i = 0; i < bla.RowCount; i++)
+            {
+                for (int j = 0; j < bla.ColumnCount; j++)
+                    System.Console.Write(result[i, j]+" ");
+                System.Console.WriteLine();
+            }
+
+            result = p.inverseTransform(result, PCA.TransformationType.ROTATION);
+            for (int i = 0; i < bla.RowCount; i++)
+            {
+                for (int j = 0; j < bla.ColumnCount; j++)
+                    System.Console.Write(result[i, j] + " ");
+                System.Console.WriteLine();
+            }
+
+            System.Console.WriteLine();
+        }
+
+        private static void run()
+        {
             ISolution solution = new Solution1();
             bool testOneFile = false;
 
@@ -23,9 +63,9 @@ namespace CompressionTesting
             string outputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\testresult";
             string[] expectedFiles = Directory.GetFiles(@"C:\dev\git\bachelor\test\testdata\raw");
             TestSuite[] testData = testOneFile ? new TestSuite[1] : new TestSuite[expectedFiles.Length];
-        
 
-            StreamWriter w = new StreamWriter(new FileStream(Path.Combine(outputFolder,solution.GetName()+".csv"), FileMode.Create));
+
+            StreamWriter w = new StreamWriter(new FileStream(Path.Combine(outputFolder, solution.GetName() + ".csv"), FileMode.Create));
             w.Write("Average Line Size (Bytes);Max Error(Meters);standard deviation (Meters)");
 
             //load data
@@ -33,7 +73,7 @@ namespace CompressionTesting
             {
                 testData[i] = FitsReader.ReadFloatFits(new FileInfo(expectedFiles[i]));
             }
-           
+
             //do tests
             int qualityLevels = solution.GetQualityLevels();
             for (int i = 0; i < qualityLevels; i++)

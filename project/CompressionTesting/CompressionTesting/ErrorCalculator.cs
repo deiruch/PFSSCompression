@@ -75,7 +75,7 @@ namespace CompressionTesting
             }
         }
 
-        private class Point
+        public class Point
         {
             float x;
             float y;
