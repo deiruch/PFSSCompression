@@ -30,10 +30,8 @@ public class PCA {
     private Matrix<float> v;
 	/** Part of the original SVD vector that is responsible for transforming the
 	 * input data into a vector of zeros.*/
-    private Matrix<float> zerosRotationTransformation;
-    private Matrix<float> d;
-	private double[] means;
-	private double threshold;
+    internal Matrix<float> zerosRotationTransformation;
+	internal float[] means;
 	
 	
 	/** Create the PCA transformation
@@ -61,14 +59,16 @@ public class PCA {
 		//debugWrite(centeredData, "centeredData.csv");
 
 		this.v = run(centeredData);
-		
-        this.v = 
-		/** A 3-sigma-like ad-hoc rule */
-		//this.threshold = 3*evdT.getThreshold();
-		
-		//debugWrite(scaling, "scaling.csv");
-		this.pcaRotationTransformation = v;
+
+        this.pcaRotationTransformation = v;	
 	}
+
+    public PCA(Matrix<float> transformation, float[] means)
+    {
+        this.v = transformation;
+        this.pcaRotationTransformation = transformation;
+        this.means = means;
+    }
 
     public Matrix<float> run(Matrix<float> centeredData)
     {
@@ -137,16 +137,16 @@ public class PCA {
 		}
 	}
 	
-	private static Matrix<float> shiftColumns(Matrix<float> data, double[] shifts){
+	private static Matrix<float> shiftColumns(Matrix<float> data, float[] shifts){
 		Matrix<float> m = Matrix<float>.Build.Dense(
 				data.RowCount, data.ColumnCount);
 		for(int c = 0; c < data.ColumnCount; c++)
 			for(int r = 0; r < data.RowCount; r++)
 				m[r, c] = (float)(data[r, c] - shifts[c]);
-		return m;		
+		return m;
 	}
 
-    private static Matrix<float> inverseShiftColumns(Matrix<float> data, double[] shifts)
+    private static Matrix<float> inverseShiftColumns(Matrix<float> data, float[] shifts)
     {
         Matrix<float> m = Matrix<float>.Build.Dense(
                 data.RowCount, data.ColumnCount);
@@ -156,14 +156,14 @@ public class PCA {
         return m;
     }
 	
-	private static double[] getColumnsMeans(Matrix<float> m){
-		double[] means = new double[m.ColumnCount];
+	private static float[] getColumnsMeans(Matrix<float> m){
+		float[] means = new float[m.ColumnCount];
         for (int c = 0; c < m.ColumnCount; c++)
         {
 			double sum = 0;
 			for(int r = 0; r < m.RowCount; r++)
 				sum += m[r, c];
-			means[c] = sum/m.RowCount;
+			means[c] = (float)sum/m.RowCount;
 		}
 		return means;
 	}

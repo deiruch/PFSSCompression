@@ -50,5 +50,37 @@ namespace CompressionTesting.Quantization
                 }
             }
         }
+
+        public static void DivideLinear(PFSSData data,double factor, int offset)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                double div = factor;
+                for (int i = offset; i < l.points.Count; i++)
+                {
+                    PFSSPoint p = l.points[i];
+                    p.x = (float)(p.x / div);
+                    p.y = (float)(p.y / div);
+                    p.z = (float)(p.z / div);
+                    div += factor;
+                }
+            }
+        }
+
+        public static void MultiplyLinear(PFSSData data, double factor, int offset)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                double div = factor;
+                for (int i = offset; i < l.points.Count; i++)
+                {
+                    PFSSPoint p = l.points[i];
+                    p.x = (float)(p.x * div);
+                    p.y = (float)(p.y * div);
+                    p.z = (float)(p.z * div);
+                    div += factor;
+                }
+            }
+        }
     }
 }

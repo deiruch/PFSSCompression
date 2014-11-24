@@ -63,7 +63,9 @@
     <Compile Include="Quantization\Subsampling.cs" />
     <Compile Include="Quantization\Discretizer.cs" />
     <Compile Include="Transformation\PCA.cs" />
+    <Compile Include="Transformation\PCATransform.cs" />
     <Compile Include="Transformation\Spherical.cs" />
+    <Compile Include="Transformation\YCbCr.cs" />
     <Compile Include="XYZErrorCalculator.cs" />
     <Compile Include="FileWriter\StandardShortWriter.cs" />
     <Compile Include="FitsReader.cs" />

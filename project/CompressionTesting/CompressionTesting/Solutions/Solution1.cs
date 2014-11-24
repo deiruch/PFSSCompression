@@ -16,18 +16,18 @@ namespace CompressionTesting.Solutions
     {
         public int GetQualityLevels()
         {
-            return 1;//9;
+            return 11;
         }
 
         public string GetName()
         {
-            return "DCTXYZ";
+            return "DCTXYZ_qantization";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
 
-            return FirstTry(data, qualityLevel, folder);
+            return Second(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -98,6 +98,35 @@ namespace CompressionTesting.Solutions
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
+            Discretizer.Multiply(data, 1000, 1);
+            DCTransformer.Backward(data, 1);
+            Residualizer.UndoResiduals(data, 1);
+
+            return result;
+        }
+
+        public TestResult Second(PFSS.PFSSData data, int qualityLevel, string folder)
+        {
+            FileInfo fits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".fits"));
+            FileInfo rarFits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".rar"));
+            TestResult result = new TestResult();
+
+            Subsampling.Subsample(data, 4);
+            Residualizer.DoResiduals(data, 1);
+            DCTransformer.Forward(data, 1);
+
+            //int zeroCount = GetZeroCount(data, qualityLevel + 16);
+            //DCTQuantization.SetToZero(data, zeroCount);
+            Discretizer.Divide(data, 1000, 1);
+            Discretizer.DivideLinear(data, 2*(qualityLevel+1), 1);
+            Discretizer.ToShorts(data, 1);
+
+            InterleavedWriter.WriteFits(data, fits);
+            long size = RarCompression.DoRar(rarFits, fits);
+            result.fileSize = size;
+            result.lineCount = data.lines.Count;
+
+            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 1), 1);
             Discretizer.Multiply(data, 1000, 1);
             DCTransformer.Backward(data, 1);
             Residualizer.UndoResiduals(data, 1);

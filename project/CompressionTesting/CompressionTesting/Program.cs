@@ -19,27 +19,32 @@ namespace CompressionTesting
 
         static void Main(string[] args)
         {
-            //run();
+            run();
+        }
+
+        private static void pcatryout()
+        {
             Matrix<float> bla = Matrix<float>.Build.Dense(11, 3);
             Matrix<float> bla2 = Matrix<float>.Build.Dense(2, 3);
             string[] line = File.ReadAllLines(@"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp\line.csv");
 
-            for (int i = 1; i< line.Length; i++)
+            for (int i = 1; i < line.Length; i++)
             {
                 string[] stuff = line[i].Split(';');
                 bla[i - 1, 0] = float.Parse(stuff[0]);
                 bla[i - 1, 1] = float.Parse(stuff[1]);
                 bla[i - 1, 2] = float.Parse(stuff[2]);
             }
-            
 
-            PCA p = new PCA(bla,true);
-            Matrix<float> result = p.transform(bla,PCA.TransformationType.ROTATION);
+
+            PCA p = new PCA(bla, true);
+            Matrix<float> result = p.transform(bla, PCA.TransformationType.ROTATION);
 
             for (int i = 0; i < bla.RowCount; i++)
             {
-                for (int j = 0; j < bla.ColumnCount; j++)
-                    System.Console.Write(result[i, j]+" ");
+                System.Console.Write(result[i, 0] + result[i, 1] + " ");
+                System.Console.Write(result[i, 0] - result[i, 1] + " ");
+                System.Console.Write(result[i, 2] + " ");
                 System.Console.WriteLine();
             }
 
