@@ -25,7 +25,7 @@ namespace CompressionTesting.Solutions
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
-            return One(data, qualityLevel, folder);
+            return Zero(data, qualityLevel, folder);
         }
 
         public void SelectIntermediateSolution(int i)

@@ -1,8 +1,10 @@
 \section{Resultate}\label{resultate}
 
-Fits format
+Fits format, überprüfen wie viel es ausmacht. VOrgegriffen, lösung 0 \ref{resultate:loesung0} wird einmal im Fits und einmal alles als Binärdatei geschrieben.
+figure
+Die Resultate zeigen keinen signifikanten Unterschied des Speicherverbrauchs. Pro Feldlinie liegt der Unterschied bei einem Byte. Hochgerechnet sind es 1.2 KiBytes, welches das Fits-Format für sich beansprucht. Der Vorteil vom Fits Format ist, dass mögliche Byte-Ordering Probleme bereits abgefangen werden.
 
-\subsection{Lösung 0, Angle-Subsampling}
+\subsection{Lösung 0, Angle-Subsampling} \label{resultate:loesung0}
 Für die Lösung 0 soll nur das Subsampling, welches der JHelioviewer selbst durchführt, vor der Dateiübertragung durchgeführt werden. Dazu werden die Punkte in das kartesische Koordinatensystem umgerechnet und das angle-subsampling durchgeführt. anschliessend wird in das sphärische System rücktransformiert und schlussendlich die Datei mittels Rar komprimiert.
 \begin{figure}[!htbp]
 	\center
@@ -28,9 +30,7 @@ Momentan noch die ganze Kurve, deshalb ein Subsampling. Die Komplexität ist $O(
 Quantisierung
 
 \subsubsection{DCT}
-Nach dem Subsampling wird
-
-
+Nach dem Subsampling wird die Diskrete Kosinus Transformation ausgeführt. Die Koeffizienten werden anschliessend als 32Bit Integer abgespeichert.
 Speicherung
 Figure
 Lösung leicht besser als die Lösung 0
@@ -49,7 +49,6 @@ Weniger grosse Zahlen, dämpfung des DC-Koeffizienten. Dafür wird die Kurve imm
 figure vergleich Lösung1 und 1-1
 Kann gut Quantisiert werden, es kann der Grossteil der DCT Komponenten auf 0 gesetzt werden. Es ist aber hier auch anzumerken, dass die VArianz hier stärker ins  Gewicht fällt, als bei purer DCT. Trotzdem ist sie besser und weist im selben Punkt die Hälfte vom maximalen Fehler auf. Bei $71$ Byte pro Linie liegt der maximale Fehler bei$70'000$ km anstatt bei $140'000$.
 Die Speicherung könnte weiter verbessert werden, wenn die startpunkte diskretisiert werden, z.b. in diskrete sphärische Koordinaten. Rar scheint allgemein einfacher Integers komprimieren zu können.
-
 
 
 \subsubsection{PCA mit DCT}

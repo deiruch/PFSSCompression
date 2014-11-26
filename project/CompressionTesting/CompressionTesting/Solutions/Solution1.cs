@@ -21,13 +21,13 @@ namespace CompressionTesting.Solutions
 
         public string GetName()
         {
-            return "Solution1_One";
+            return "Solution1_Zero";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return One(data, qualityLevel, folder);
+            return Zero(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -93,7 +93,7 @@ namespace CompressionTesting.Solutions
             //int zeroCount = GetZeroCount(data, qualityLevel + 16);
             //DCTQuantization.SetToZero(data, zeroCount);
             Discretizer.Divide(data, 1000, 0);
-            Discretizer.DivideLinear(data, 2 * (qualityLevel +70), 0);
+            Discretizer.DivideLinear(data, 2 * (qualityLevel +90), 0);
             Discretizer.ToInt(data, 0);
 
             StandardWriter.WriteIntFits(data, fits);
@@ -101,7 +101,7 @@ namespace CompressionTesting.Solutions
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 70), 0);
+            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 90),0);
             Discretizer.Multiply(data, 1000, 0);
             DCTransformer.Backward(data, 0);
             //Residualizer.UndoResiduals(data, 1);
@@ -123,7 +123,7 @@ namespace CompressionTesting.Solutions
             //DCTQuantization.SetToZero(data, zeroCount);
             DebugOutput.MedianWriter.AnalyzeDCT(data, 0, new FileInfo(Path.Combine(folder, this.GetName() + ".csv")));
             Discretizer.Divide(data, 1000, 1);
-            Discretizer.DivideLinear(data, 2*(qualityLevel+1), 1);
+            Discretizer.DivideLinear(data, 2*(qualityLevel+10), 1);
             Discretizer.ToShorts(data, 1);
 
             InterleavedWriter.WriteFits(data, fits);
@@ -131,7 +131,7 @@ namespace CompressionTesting.Solutions
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 1), 1);
+            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 10), 1);
             Discretizer.Multiply(data, 1000, 1);
             DCTransformer.Backward(data, 1);
             Residualizer.UndoResiduals(data, 1);

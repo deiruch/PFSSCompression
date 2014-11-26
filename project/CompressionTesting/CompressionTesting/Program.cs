@@ -21,8 +21,9 @@ namespace CompressionTesting
         static void Main(string[] args)
         {
             //run();
+            testExampleLine();
             //pcatryout2();
-            printLine();
+            //printLine();
         }
         private static void pcatryout2()
         {
@@ -150,8 +151,8 @@ namespace CompressionTesting
 
         private static void run()
         {
-            ISolution solution = new Solution1();
-            bool testOneFile = true;
+            ISolution solution = new Solution0();
+            bool testOneFile = false;
 
             string fitsOutputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp";
             string outputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\testresult";
@@ -197,24 +198,6 @@ namespace CompressionTesting
             }
 
             w.Close();
-        }
-
-        private static PFSSData[] Create()
-        {
-            PFSSPoint p = new PFSSPoint(1, 1, 0);
-            PFSSPoint p1 = new PFSSPoint(2, 2, 0);
-            PFSSPoint p2 = new PFSSPoint(3, 3, 0);
-
-            PFSSPoint p3 = new PFSSPoint(1.9f, 1.1f, 0);
-            PFSSPoint p4 = new PFSSPoint(2.5f, 3, 0);
-
-            List<PFSSPoint> points0 = new List<PFSSPoint> { p, p1, p2 };
-            List<PFSSPoint> points1= new List<PFSSPoint> { p3, p4 };
-
-            List<PFSSLine> line0 = new List<PFSSLine> { new PFSSLine(TYPE.OUTSIDE_TO_SUN, points0) };
-            List<PFSSLine> line1 = new List<PFSSLine> { new PFSSLine(TYPE.OUTSIDE_TO_SUN, points1) };
-
-            return new PFSSData[] { new PFSSData(0, 0, line0), new PFSSData(0, 0, line1) };
         }
     }
 }

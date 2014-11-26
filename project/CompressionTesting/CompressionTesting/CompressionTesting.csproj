@@ -58,6 +58,7 @@
     <Compile Include="ErrorCalculator.cs" />
     <Compile Include="FileWriter\InterleavedWriter.cs" />
     <Compile Include="FileWriter\PCAWriter.cs" />
+    <Compile Include="FileWriter\StandardBufferWriter.cs" />
     <Compile Include="PFSS\Test\TestLine.cs" />
     <Compile Include="PFSS\Test\TestPoint.cs" />
     <Compile Include="PFSS\Test\TestSuite.cs" />
