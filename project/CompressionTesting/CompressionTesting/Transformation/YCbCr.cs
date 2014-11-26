@@ -9,7 +9,7 @@ namespace CompressionTesting.Transformation
 {
     class YCbCr
     {
-        public void forwardFull(PFSSData data, int pointOffset)
+        public static void ForwardFull(PFSSData data, int pointOffset)
         {
             foreach (PFSSLine l in data.lines)
             {
@@ -19,13 +19,13 @@ namespace CompressionTesting.Transformation
                     float y = p.y;
                     float z = p.z;
                     p.x = -x + y + z;
-                    p.y =  y - p.x;
-                    p.z =  z - p.x;
+                    p.y = y - p.x;
+                    p.z = z - p.x;
                 }
             }
         }
 
-        public void backwardsFull(PFSSData data, int pointOffset)
+        public static void BackwardsFull(PFSSData data, int pointOffset)
         {
             foreach (PFSSLine l in data.lines)
             {
@@ -35,7 +35,7 @@ namespace CompressionTesting.Transformation
                     float y = p.y;
                     float z = p.z;
                     p.x = x + y + z;
-                    p.y = x+y;
+                    p.y = x + y;
                     p.z = x + z;
                 }
             }

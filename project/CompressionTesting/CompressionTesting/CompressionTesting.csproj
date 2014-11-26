@@ -57,9 +57,11 @@
     <Compile Include="DebugOutput\Printer.cs" />
     <Compile Include="ErrorCalculator.cs" />
     <Compile Include="FileWriter\InterleavedWriter.cs" />
+    <Compile Include="FileWriter\PCAWriter.cs" />
     <Compile Include="PFSS\Test\TestLine.cs" />
     <Compile Include="PFSS\Test\TestPoint.cs" />
     <Compile Include="PFSS\Test\TestSuite.cs" />
+    <Compile Include="Quantization\PCACoefficient.cs" />
     <Compile Include="Quantization\Subsampling.cs" />
     <Compile Include="Quantization\Discretizer.cs" />
     <Compile Include="Transformation\PCA.cs" />
@@ -67,7 +69,7 @@
     <Compile Include="Transformation\Spherical.cs" />
     <Compile Include="Transformation\YCbCr.cs" />
     <Compile Include="XYZErrorCalculator.cs" />
-    <Compile Include="FileWriter\StandardShortWriter.cs" />
+    <Compile Include="FileWriter\StandardWriter.cs" />
     <Compile Include="FitsReader.cs" />
     <Compile Include="PFSS\Test\TestSuiteConstructor.cs" />
     <Compile Include="PFSS\PFSSData.cs" />

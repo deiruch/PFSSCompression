@@ -48,8 +48,15 @@ Wenn das nicht möglich ist, wird der kürzere Distanz von $P$ zu einem der Eckp
 \end{center}
 
 \subsubsection{Randbehandlung}
-Es ist möglich, dass die originalen Endpunkte durch eine Quantisierung verworfen wurden. Das bedeutet, wenn man den Fehler für den allgemeinen Fall berechnet, am Anfang und am Ende Originalpunkte existieren, für die nie eine Distanz berechnet wurde. Deshalb müssen die Ränder speziell behandelt werden.\\
-Anfangsrand\\
-endrand
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/testsetup/randbehandlung.png}
+	\caption{Darstellung der Fehlerberechnung. Die Punkte sind die Originaldaten, die Quadrate sind die Punkte nach der Kompression.}
+	\label{testsetup:ablauf:randbehandlung:diagramm}
+\end{figure}
+Es ist möglich, dass die originalen Endpunkte durch eine Quantisierung verworfen wurden. Das bedeutet, wenn man den Fehler für den allgemeinen Fall berechnet, am Anfang und am Ende Originalpunkte existieren, für die nie eine Distanz berechnet wurde. Die Abbildung \ref{testsetup:ablauf:randbehandlung:diagramm} zeigt das Problem. Deshalb müssen die Abstände der Ränder von der Komprimierten- zur Original-Linie noch berechnet werden. Der Abstand vom ersten komprimierten Punkt (in der Abbildung P0) zu seinem Original wird schon im allgemeinen Fall berechnet.
 
 \subsubsection{Berechnung der Standardabweichung}
+Wurzel der VArianz
+varianz
+variable x, Wert nach der Kompression, erwartungswert von x, Originalwert

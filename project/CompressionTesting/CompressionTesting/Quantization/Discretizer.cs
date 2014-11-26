@@ -16,10 +16,45 @@ namespace CompressionTesting.Quantization
                 for(int i = offset; i < l.points.Count;i++)
                 {
                     PFSSPoint p = l.points[i];
-                    p.x = (short)p.x;
-                    p.y = (short)p.y;
-                    p.z = (short)p.z;
+                    p.x = (short)Math.Truncate(p.x);
+                    p.y = (short)Math.Truncate(p.y);
+                    p.z = (short)Math.Truncate(p.z);
                 }
+            }
+        }
+
+        public static void ToInt(PFSSData data, int offset)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                for (int i = offset; i < l.points.Count; i++)
+                {
+                    PFSSPoint p = l.points[i];
+                    p.x = (int)Math.Truncate(p.x);
+                    p.y = (int)Math.Truncate(p.y);
+                    p.z = (int)Math.Truncate(p.z);
+                }
+            }
+        }
+
+        public static void DividePoint(PFSSData data, double factor, int index)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                PFSSPoint p = l.points[0];
+                p.x = (float)(p.x / factor);
+                p.y = (float)(p.y / factor);
+                p.z = (float)(p.z / factor);
+            }
+        }
+        public static void MultiplyPoint(PFSSData data, double factor, int index)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                PFSSPoint p = l.points[0];
+                p.x = (float)(p.x * factor);
+                p.y = (float)(p.y * factor);
+                p.z = (float)(p.z * factor);
             }
         }
 
@@ -81,6 +116,21 @@ namespace CompressionTesting.Quantization
                     div += factor;
                 }
             }
+        }
+
+        public static void Cut(PFSSData data, int offset)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                for (int i = offset; i < l.points.Count; i++)
+                {
+                    PFSSPoint p = l.points[i];
+                    p.x = 0;
+                    p.y = 0;
+                    p.z = 0;
+                }
+            }
+
         }
     }
 }

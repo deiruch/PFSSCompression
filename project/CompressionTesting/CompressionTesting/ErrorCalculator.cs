@@ -77,9 +77,9 @@ namespace CompressionTesting
 
         public class Point
         {
-            float x;
-            float y;
-            float z;
+            public float x;
+            public float y;
+            public float z;
 
             public Point(float x, float y, float z)
             {

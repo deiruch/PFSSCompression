@@ -26,8 +26,8 @@ public class PCA {
 	private int inputDim;
 	
 	private Matrix<float> whiteningTransformation;
-    private Matrix<float> pcaRotationTransformation;
-    private Matrix<float> v;
+    internal Matrix<float> pcaRotationTransformation;
+    internal Matrix<float> v;
 	/** Part of the original SVD vector that is responsible for transforming the
 	 * input data into a vector of zeros.*/
     internal Matrix<float> zerosRotationTransformation;
@@ -68,6 +68,7 @@ public class PCA {
         this.v = transformation;
         this.pcaRotationTransformation = transformation;
         this.means = means;
+        centerMatrix = true;
     }
 
     public Matrix<float> run(Matrix<float> centeredData)

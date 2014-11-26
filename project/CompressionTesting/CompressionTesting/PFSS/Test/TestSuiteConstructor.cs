@@ -34,9 +34,9 @@ namespace CompressionTesting.PFSS.Test
                 lineEnd = ptr.Length - 1;
             }
 
-            if (ptr[startLine] > 8192 * 1.05)
+            if (ptr[startLine] > 1 * 1.05)
                 return TYPE.OUTSIDE_TO_SUN;
-            else if (ptr[lineEnd] > 8192 * 1.05)
+            else if (ptr[lineEnd] > 1 * 1.05)
                 return TYPE.SUN_TO_OUTSIDE;
             else
                 return TYPE.SUN_TO_SUN;
