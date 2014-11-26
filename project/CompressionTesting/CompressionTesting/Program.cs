@@ -20,8 +20,8 @@ namespace CompressionTesting
 
         static void Main(string[] args)
         {
-            //run();
-            testExampleLine();
+            run();
+            //testExampleLine();
             //pcatryout2();
             //printLine();
         }
@@ -151,7 +151,7 @@ namespace CompressionTesting
 
         private static void run()
         {
-            ISolution solution = new Solution0();
+            ISolution solution = new Solution1();
             bool testOneFile = false;
 
             string fitsOutputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp";

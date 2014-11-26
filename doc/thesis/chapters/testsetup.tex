@@ -1,18 +1,10 @@
 \section{Qualitätsmessung der Kompression}
-Um die Datenmenge der Feldlinien zu verringern werden verlustbehaftete Kompressionsverfahren angewendet. Trotz des Dateverlustes sollen die dekomprimierten Linien möglichst ihren Originalen ähneln. Kleine Abweichungen werden von den Sonnenforschern toleriert. Ihnen ist wichtig, dass vorallem die Form der Kurve möglichst erhalten bleibt. Grosse Abweichungen, die selten eintreten, können aber das Aussehen einer Kurve grundlegend verändern.\\
+Um die Datenmenge der Feldlinien zu verringern werden verlustbehaftete Kompressionsverfahren angewendet. Trotz des Dateverlustes sollen die dekomprimierten Linien möglichst ihren Originalen ähneln. Kleine Abweichungen werden in der Sonnenforschung toleriert. Es ist wichtig, dass die Form der Kurve erhalten bleibt. Grosse, seltene Abweichungen sollten vermieden werden, da sie das Aussehen der Feldlinie verändern können.\\
 [\baselineskip]
-Zusammen mit den Sonnenforschern wurden zwei Fehlermasse bestimmt: Der absolute maximale Fehler und die Standardabweichung von der komprimierten Linie zum Original. 
-formel der Standardabweichung, grosse Abweichungen werden stärker gewichtet.\\
-Der absolute maximale Fehler wird noch als Absicherung gemessen. In den meisten Fällen wird die Kompression mit der tieferen Standardabweichung auch den kleineren maximalen Fehler haben. Da aber die Messung über ein paar hunderttausend Punkte durchgeführt wird, ist das Gegenteil denkbar. Eine gute Kompression muss es einen minimalen absoluten Fehler haben und eine minimale Standardabweichung bei minimalem Platzbedarf.\\
+Zusammen mit Sonnenforschern wurden zwei Fehlermasse bestimmt: Der absolute maximale Fehler und die Standardabweichung von der komprimierten Linie zum Original. Die Standardabweichung ist für diesen Fall geeignet: Grosse, seltene Abweichungen werden stärker gewichtet, als kleine dafür häufige Abweichungen.\\
+Der absolute maximale Fehler wird noch als Absicherung gemessen. In den meisten Fällen wird die Kompression mit der tieferen Standardabweichung auch den kleineren maximalen Fehler haben. Da aber die Messung über ein paar hunderttausend Punkte durchgeführt wird, ist das Gegenteil denkbar.\\
 [\baselineskip]
-Eine feste Grenze für die Genauigkeit ist leider nicht objektiv festzulegen. Auch wenn eine Grenze gefunden wird, kann diese sich in der Zeit verändern. Im Fall der Feldlinien ist die Internetverbindung der Flaschenhals. Es kann sein, dass in Zukunft mehr Präzision bei mehr Platzbedarf verlangt wird. Deshalb werden die Verfahren, wenn möglich, mit unterschiedlichen Qualitätsstufen getestet und verglichen.
-\begin{figure}[!htbp]
-	\center
-	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/testsetup/Beispielgraph.png}
-	\caption{Beispiel eines Vergleichsdiagramms. Auf der X-Achse ist die durchschnittliche Anzahl Bytes pro Feldlinie dargestellt. Die Y-Achse zeigt die Standardabweichung in Meter an. Die rote und blaue Kurven sind Beispieldaten}
-	\label{testsetup:beispielgraph}
-\end{figure} 
-Die Abbildung \ref{testsetup:beispielgraph} zeigt ein Vergleichsiagramm, welches im Abschnitt \ref{resultate} verwendet wird. Es werden die Standardabweichungen von zwei Beispielansätzen mit der Lösung 0 verglichen. Der Violette Punkt stellt die Lösung 0 dar, der grüne Strich ist eine hilfslinie und zeigt die Genauigkeit der Lösung 0 an. Damit eine Kompression besser ist, muss sie links und unterhalb des Violetten Punktes hingelangen.
+Eine Grenze für die Genauigkeit ist nicht festzulegen. Auch wenn eine Grenze gefunden wird, kann diese sich in der Zeit verändern. Im Fall der Feldlinien ist die Internetverbindung der Flaschenhals. Es kann sein, dass in Zukunft mehr Präzision bei mehr Platzbedarf verlangt wird. Deshalb werden die Verfahren, wenn möglich, mit unterschiedlichen Qualitätsstufen getestet und verglichen.
 
 \subsection{Auswahl und Erhebung der Testdaten}
 Die Testdaten sollen zu einem alle Randfälle abdecken, als auch durchschnittliche Fälle enthalten. Aus diesem Grund wurden insgesamt zehn Datensätze ausgewählt: Vier Datensätze mit hoher Sonnenaktivität, zwei mit wenig und vier zufällig. Für die vier Datensätzen mit hoher Aktivität wurde in den Jahren 2014 und 2013 nach den grössten Solare Flares gesucht. Für die Datensätze mit wenig Aktivität wurde das Gegenteil gemacht, nach Zeiträumen mit möglichst kleinen Solar Flares gesucht.\\
@@ -20,7 +12,7 @@ Die feldlinien werden aber nur alle sechs Stunden berechnet und Solar Flares sin
 [\baselineskip]
 Wie im Abschnitt \ref{konzept:ist-komprimierung} beschrieben, führt der IDL-Code schon eine Quantisierung durch. Diese wurde entfern und  deshalb wurde der IDL Code angepasst. Die Quantisierung wurde für die Testdaten entfernt. Die Punkte werden nun mit 32 Bit Floating-Point Genauigkeit gespeichert.
 
-\subsection{Aublauf des Tests und Messung des Fehlers}
+\subsection{Aublauf des Tests und Messung des Fehlers}\label{testsetup:ablauf}
 Float daten werden geladen. Daten kopiert und Kompression/Dekompression durchgeführt für alle Testdaten. Die kopierten Daten wissen aber noch, welches ihr Originalpunkt ist.
 Zwei Mengen, Originalpunkte $O$, dekomprimierte Punkte $D$. Es gibt immer gleich viele oder mehr Originalpunkte wie dekomprimierte Punkte. Die Fehlerberechnung muss der allgemeine Fall und die Randbehandlung unterschieden werden.
 
@@ -57,6 +49,8 @@ Wenn das nicht möglich ist, wird der kürzere Distanz von $P$ zu einem der Eckp
 Es ist möglich, dass die originalen Endpunkte durch eine Quantisierung verworfen wurden. Das bedeutet, wenn man den Fehler für den allgemeinen Fall berechnet, am Anfang und am Ende Originalpunkte existieren, für die nie eine Distanz berechnet wurde. Die Abbildung \ref{testsetup:ablauf:randbehandlung:diagramm} zeigt das Problem. Deshalb müssen die Abstände der Ränder von der Komprimierten- zur Original-Linie noch berechnet werden. Der Abstand vom ersten komprimierten Punkt (in der Abbildung P0) zu seinem Original wird schon im allgemeinen Fall berechnet.
 
 \subsubsection{Berechnung der Standardabweichung}
-Wurzel der VArianz
-varianz
-variable x, Wert nach der Kompression, erwartungswert von x, Originalwert
+\begin{center}
+$\sigma(X) = \sqrt(variance(X))$\\
+$variance(X) = \sum{(x_i - E(x_i))^2}$
+\end{center}
+Die Standardabweichung $\sigma$ einer Beobachtungsreihe $X$ $(x_1,x_2,x_3,\ldots, x_n-1)$ ergibt sich aus der Wurzel der Varianz von $X$. Die Varianz von $X$ kann errechnet werden, wenn man den Distanz jeder Beobachtung $x_i$ mit dem Erwartungswert $E(x_i)$ berechnet und quadriert. Die Beobachtung ist im diesen Fall ein Punkt der dekomprimierten Linie, während der Erwartungswert der Originalpunkt ist. Die Distanz wird mit dem besprochnen Verfahren \ref{testsetup:ablauf} berechnet. Die Summe der quadratischen Abstände ergibt die Varianz. Die Varianz wird über alle Testdaten berechnet, somit erhält man für einen Test genau eine Standardabweichung.
