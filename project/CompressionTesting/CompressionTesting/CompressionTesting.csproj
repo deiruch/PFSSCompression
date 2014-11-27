@@ -55,6 +55,8 @@
     <Compile Include="Compression\ZipCompression.cs" />
     <Compile Include="DebugOutput\MedianWriter.cs" />
     <Compile Include="DebugOutput\Printer.cs" />
+    <Compile Include="Encoding\DCTCoder.cs" />
+    <Compile Include="Encoding\LZ77.cs" />
     <Compile Include="ErrorCalculator.cs" />
     <Compile Include="FileWriter\InterleavedWriter.cs" />
     <Compile Include="FileWriter\PCAWriter.cs" />

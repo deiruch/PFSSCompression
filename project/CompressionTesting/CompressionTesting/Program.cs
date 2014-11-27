@@ -11,6 +11,7 @@ using CompressionTesting.PFSS.Test;
 using MathNet.Numerics.LinearAlgebra;
 using CompressionTesting.Transformation;
 using CompressionTesting.Quantization;
+using CompressionTesting.Encoding;
 
 namespace CompressionTesting
 {
@@ -20,6 +21,9 @@ namespace CompressionTesting
 
         static void Main(string[] args)
         {
+            /*short[] data = new short[] { -250, 16383, 1, 250, 0, 0 };
+            byte[] d = DCTCoder.Encode(data);
+            short[] copy = DCTCoder.Decode(d,data.Length);*/
             run();
             //testExampleLine();
             //pcatryout2();
@@ -152,7 +156,7 @@ namespace CompressionTesting
         private static void run()
         {
             ISolution solution = new Solution1();
-            bool testOneFile = false;
+            bool testOneFile = true;
 
             string fitsOutputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp";
             string outputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\testresult";
