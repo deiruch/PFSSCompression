@@ -16,7 +16,7 @@ namespace CompressionTesting.Solutions
     {
         public int GetQualityLevels()
         {
-            return 1;//6;
+            return 6;
         }
 
         public string GetName()
@@ -222,7 +222,7 @@ namespace CompressionTesting.Solutions
             
             Discretizer.DividePoint(data, 70000, 0);
             Discretizer.Divide(data, 1000, 1);
-            Discretizer.DivideLinear(data, 2 * (qualityLevel + 8), 1);
+            Discretizer.DivideLinear(data, 2 * (qualityLevel + 7), 1);
             PCACoefficient.ForwardQuantization(data);
             Discretizer.ToShorts(data, 1);
             /*DebugOutput.MedianWriter.AnalyzePerCurveType(data,TYPE.OUTSIDE_TO_SUN,0,new FileInfo(Path.Combine(folder, this.GetName()+"_ots.csv")));
@@ -235,7 +235,7 @@ namespace CompressionTesting.Solutions
             result.lineCount = data.lines.Count;
 
             PCACoefficient.BackwardQuantization(data);
-            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 8), 1);
+            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 7), 1);
             Discretizer.Multiply(data, 1000, 1);
             //Residualizer.UndoResiduals(data, 3);
             Discretizer.MultiplyPoint(data, 70000, 0);
@@ -298,7 +298,7 @@ namespace CompressionTesting.Solutions
             //DCTQuantization.SetToZero(data, zeroCount);
             Discretizer.DividePoint(data, 50000, 0);
             Discretizer.Divide(data, 1000, 1);
-            Discretizer.DivideLinear(data, 2 * (qualityLevel + 9), 1);
+            Discretizer.DivideLinear(data, 2 * (qualityLevel + 7), 1);
             Discretizer.ToShorts(data, 1);
 
 
@@ -307,7 +307,7 @@ namespace CompressionTesting.Solutions
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 9), 1);
+            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 7), 1);
             Discretizer.Multiply(data, 1000, 1);
             Discretizer.MultiplyPoint(data, 50000, 0);
             DCTransformer.Backward(data, 1);
