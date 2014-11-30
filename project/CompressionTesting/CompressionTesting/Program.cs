@@ -21,11 +21,8 @@ namespace CompressionTesting
 
         static void Main(string[] args)
         {
-            /*short[] data = new short[] { -250, 16383, 1, 250, 0, 0 };
-            byte[] d = DCTCoder.Encode(data);
-            short[] copy = DCTCoder.Decode(d,data.Length);*/
-            run();
-            //testExampleLine();
+            //run();
+            testExampleLine();
             //pcatryout2();
             //printLine();
         }

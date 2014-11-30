@@ -16,7 +16,7 @@ namespace CompressionTesting.Solutions
     {
         public int GetQualityLevels()
         {
-            return 6;
+            return 1;
         }
 
         public string GetName()
@@ -27,7 +27,7 @@ namespace CompressionTesting.Solutions
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return Six(data, qualityLevel, folder);
+            return One(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
