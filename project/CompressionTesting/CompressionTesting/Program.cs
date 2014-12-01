@@ -21,8 +21,8 @@ namespace CompressionTesting
 
         static void Main(string[] args)
         {
-            //run();
-            testExampleLine();
+            run();
+            //testExampleLine();
             //pcatryout2();
             //printLine();
         }

@@ -16,7 +16,7 @@ namespace CompressionTesting.Solutions
     {
         public int GetQualityLevels()
         {
-            return 1;
+            return 7;
         }
 
         public string GetName()
@@ -27,7 +27,7 @@ namespace CompressionTesting.Solutions
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return One(data, qualityLevel, folder);
+            return Six(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -296,11 +296,15 @@ namespace CompressionTesting.Solutions
 
             //int zeroCount = GetZeroCount(data, qualityLevel + 16);
             //DCTQuantization.SetToZero(data, zeroCount);
-            Discretizer.DividePoint(data, 50000, 0);
+            foreach (PFSSLine l in data.lines)
+            {
+                Spherical.ForwardToSpherical(l.points[0]);
+                Spherical.ForwardMoveSpherical(l.points[0]);
+            }
+            //Discretizer.DividePoint(data, 50000, 0);
             Discretizer.Divide(data, 1000, 1);
             Discretizer.DivideLinear(data, 2 * (qualityLevel + 7), 1);
             Discretizer.ToShorts(data, 1);
-
 
             InterleavedWriter.WriteDCTByteFits(data, fits);
             long size = RarCompression.DoRar(rarFits, fits);
@@ -309,7 +313,12 @@ namespace CompressionTesting.Solutions
 
             Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 7), 1);
             Discretizer.Multiply(data, 1000, 1);
-            Discretizer.MultiplyPoint(data, 50000, 0);
+            //Discretizer.MultiplyPoint(data, 50000, 0);
+            foreach (PFSSLine l in data.lines)
+            {
+                Spherical.BackwardMoveSpherical(l.points[0]);
+                Spherical.BackwardToSpherical(l.points[0],data);
+            }
             DCTransformer.Backward(data, 1);
             Residualizer.UndoResiduals(data, 1);
 

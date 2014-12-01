@@ -145,7 +145,9 @@ namespace CompressionTesting.FileWriter
         public static void WriteDCTByteFits(PFSSData input, FileInfo output)
         {
             short[] ptr_nz_len = new short[input.lines.Count];
-            short[] startPoints = new short[input.lines.Count * 3];
+            short[] ptr = new short[input.lines.Count];
+            short[] ptph = new short[input.lines.Count];
+            short[] ptth = new short[input.lines.Count];
 
             int totalCount = 0;
             int byteCountX = 0;
@@ -164,6 +166,8 @@ namespace CompressionTesting.FileWriter
                 byteCountZ += line[2].Length;
                 temp.Add(line);
             }
+
+            //byte[] ptr_nz_len_byte = DCTCoder.Encode(ptr_nz_len);
             byte[][] channels = new byte[3][];
             channels[0] = new byte[byteCountX];
             channels[1] = new byte[byteCountY];
@@ -175,9 +179,10 @@ namespace CompressionTesting.FileWriter
             for (int i = 0; i < input.lines.Count; i++)
             {
                 PFSSLine l = input.lines[i];
-                startPoints[startPointIndex++] = (short)l.points[0].x;
-                startPoints[startPointIndex++] = (short)l.points[0].y;
-                startPoints[startPointIndex++] = (short)l.points[0].z;
+                ptr[startPointIndex] = (short)l.points[0].x;
+                ptph[startPointIndex] = (short)l.points[0].y;
+                ptth[startPointIndex] = (short)l.points[0].z;
+                startPointIndex++;
 
                 List<byte[]> bytePoints = temp[i];
                 for (int j = 0; j < channels.Length;j++ ) 
@@ -199,7 +204,7 @@ namespace CompressionTesting.FileWriter
             Double[] b0a = new Double[] { input.b0 };
             Double[] l0a = new Double[] { input.l0 };
             Object[][] data = new Object[1][];
-            Object[] dataRow = new Object[] { b0a, l0a, startPoints, ptr_nz_len, channels[0], channels[1], channels[2] };
+            Object[] dataRow = new Object[] { b0a, l0a, ptr, ptph, ptth, ptr_nz_len, channels[0], channels[1], channels[2] };
             data[0] = dataRow;
 
             BinaryTable table = new BinaryTable(data);
@@ -208,12 +213,14 @@ namespace CompressionTesting.FileWriter
             BinaryTableHDU bhdu = (BinaryTableHDU)fits.GetHDU(1);
             bhdu.SetColumnName(0, "B0", null);
             bhdu.SetColumnName(1, "L0", null);
-            bhdu.SetColumnName(2, "StartPoints", null);
-            bhdu.SetColumnName(3, "PTR_NZ_LEN", null);
-            bhdu.SetColumnName(4, "ptr_comp_len", null);
-            bhdu.SetColumnName(5, "PTR", null);
-            bhdu.SetColumnName(6, "PTPH", null);
-            bhdu.SetColumnName(7, "PTTH", null);
+            bhdu.SetColumnName(2, "StartPointR", null);
+            bhdu.SetColumnName(3, "StartPointPhi", null);
+            bhdu.SetColumnName(4, "StartPointTheta", null);
+            bhdu.SetColumnName(5, "PTR_NZ_LEN", null);
+            bhdu.SetColumnName(6, "ptr_comp_len", null);
+            bhdu.SetColumnName(7, "PTR", null);
+            bhdu.SetColumnName(8, "PTPH", null);
+            bhdu.SetColumnName(9, "PTTH", null);
 
             BufferedDataStream f = new BufferedDataStream(new FileStream(output.FullName, FileMode.Create));
             fits.Write(f);

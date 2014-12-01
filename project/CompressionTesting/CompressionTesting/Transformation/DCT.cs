@@ -12,13 +12,15 @@ namespace CompressionTesting
         private static readonly double size2 = 2d*size;
         private static readonly float halfSize = 2/(float)size;
         private static readonly float[] coefficients = {1,1,2,2,8,16,24,32,20,30,40,50,60,80,100,120};
+        private float[,] dctFactors = null;
+        
 
-        public static float[] slow_fdct(float[] value)
+        private float[] fdct(float[] value)
         {
             int adaptiveSize = value.Length;
-            float halfAdaptive = 2/(float)adaptiveSize;
+            float halfAdaptive = 2 / (float)adaptiveSize;
             float[] output = new float[adaptiveSize];
-            double adaptive2 = 2d * adaptiveSize;
+            double length2 = 2d * adaptiveSize;
 
             for (int k = 0; k < adaptiveSize; k++)
             {
@@ -26,19 +28,50 @@ namespace CompressionTesting
                 double inner = 0;
                 for (int i = 0; i < adaptiveSize; i++)
                 {
-                    inner += value[i] * Math.Cos(((2 * i + 1) * k * Math.PI) / adaptive2);
+                    inner += value[i] *  dctFactors[k,i] / Math.Cos(length2);
                 }
                 output[k] *= (float)inner;
-                
-                //quantization
-                /*if (coefficients[k] != 1)
+
+            }
+            return output;
+        }
+
+        public float[] idct(float[] value)
+        {
+            int adaptiveSize = value.Length;
+            float halfAdaptive = 2 / (float)adaptiveSize;
+            double length2 = 2d * adaptiveSize;
+
+            float[] output = new float[adaptiveSize];
+            for (int k = 0; k < adaptiveSize; k++)
+            {
+                for (int i = 1; i < adaptiveSize; i++)
                 {
-                    output[k] = (float)Math.Floor(output[k]/coefficients[k]);
+                    output[k] += (float)(value[i] * dctFactors[i,k] / Math.Cos(length2));
                 }
-                else
+
+                output[k] += value[0] / 2f;
+
+            }
+            return output;
+        }
+
+        public static float[] slow_fdct(float[] value)
+        {
+            int adaptiveSize = value.Length;
+            float halfAdaptive = 2/(float)adaptiveSize;
+            float[] output = new float[adaptiveSize];
+            double length2 = 2d * adaptiveSize;
+
+            for (int k = 0; k < adaptiveSize; k++)
+            {
+                output[k] = halfAdaptive;
+                double inner = 0;
+                for (int i = 0; i < adaptiveSize; i++)
                 {
-                    output[k] = (float)Math.Floor(output[k]);
-                }*/
+                    inner += value[i] * Math.Cos(((2 * i + 1) * k * Math.PI) / length2);
+                }
+                output[k] *= (float)inner;
 
             }
             return output;
