@@ -17,18 +17,18 @@ namespace CompressionTesting.Solutions
     {
         public int GetQualityLevels()
         {
-            return 7;
+            return 1;
         }
 
         public string GetName()
         {
-            return "Solution1_Six";
+            return "Solution1_Seven";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return Six(data, qualityLevel, folder);
+            return Seven(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -331,15 +331,15 @@ namespace CompressionTesting.Solutions
             TestResult result = new TestResult();
 
             Subsampling.Subsample(data, 4);
-            DCTImprover.AddExtraPoints(data, 10000000);
+            DCTImprover.AddExtraPoints(data, 100000);
             DCTransformer.ForwardExtra(data, 0, new FileInfo(Path.Combine(folder, this.GetName() + "_extra_points.csv")));
             
             //int zeroCount = GetZeroCount(data, qualityLevel + 16);
             //DCTQuantization.SetToZero(data, zeroCount);
             
-            Discretizer.DividePoint(data, 10000 , 0);
+            Discretizer.DividePoint(data, 20000 , 0);
             Discretizer.DivideExtra(data, 1000);
-            Discretizer.DivideLinearExtra(data, 2 * (qualityLevel*10 + 30),1);
+            Discretizer.DivideLinearExtra(data, 2 * (qualityLevel*10 + 60),1);
             Discretizer.ToShortsExtra(data);
             
             StandardWriter.WriteDCTByteFits(data, fits);
@@ -347,9 +347,9 @@ namespace CompressionTesting.Solutions
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            Discretizer.MultiplyLinearExtra(data, 2 * (qualityLevel*10 + 30),1);
+            Discretizer.MultiplyLinearExtra(data, 2 * (qualityLevel*10 + 60),1);
             Discretizer.MultiplyExtra(data, 1000);
-            Discretizer.MultiplyPoint(data, 10000, 0);
+            Discretizer.MultiplyPoint(data, 20000, 0);
             DCTransformer.BackwardExtra(data, 0);
             //Residualizer.UndoResiduals(data, 1);
 

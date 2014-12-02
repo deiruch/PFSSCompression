@@ -90,14 +90,14 @@ namespace CompressionTesting
                 l.extraY = y;
                 l.extraZ = z;
 
-                iX = l.extra[0].startLength; iY = l.extra[1].startLength; iZ = l.extra[2].startLength;
+                /*iX = l.extra[0].startLength; iY = l.extra[1].startLength; iZ = l.extra[2].startLength;
                 for (int i = pointOffset; i < l.points.Count; i++)
                 {
                     PFSSPoint current = l.points[i];
                     current.x = x[iX++];
                     current.y = y[iY++];
                     current.z = z[iZ++];
-                }
+                }*/
             }
         }
 
@@ -136,11 +136,11 @@ namespace CompressionTesting
         {
             foreach (PFSSLine l in data.lines)
             {
-
                 l.extraX = DCT.slow_idct(l.extraX);
                 l.extraY = DCT.slow_idct(l.extraY);
                 l.extraZ = DCT.slow_idct(l.extraZ);
                 int iX = l.extra[0].startLength, iY = l.extra[1].startLength, iZ = l.extra[2].startLength;
+
                 iX += pointOffset; iY += pointOffset; iZ += pointOffset;
                 for (int i = pointOffset; i < l.points.Count; i++)
                 {

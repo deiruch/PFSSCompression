@@ -105,20 +105,20 @@ namespace CompressionTesting.Quantization
         {
             foreach (PFSSLine l in data.lines)
             {
-                for (int i = 0; i < l.points.Count; i++)
+                for (int i = 0; i < l.extraX.Length; i++)
                 {
-                    PFSSPoint p = l.points[i];
+
                     l.extraX[i] = (float)(l.extraX[i] / factor);
                 }
-                for (int i = 0; i < l.points.Count; i++)
+                for (int i = 0; i < l.extraY.Length; i++)
                 {
-                    PFSSPoint p = l.points[i];
+
                     l.extraY[i] = (float)(l.extraY[i] / factor);
                 }
 
-                for (int i = 0; i < l.points.Count; i++)
+                for (int i = 0; i < l.extraZ.Length; i++)
                 {
-                    PFSSPoint p = l.points[i];
+
                     l.extraZ[i] = (float)(l.extraZ[i] / factor);
                 }
             }
@@ -128,20 +128,20 @@ namespace CompressionTesting.Quantization
         {
             foreach (PFSSLine l in data.lines)
             {
-                for (int i = 0; i < l.points.Count; i++)
+                for (int i = 0; i < l.extraX.Length; i++)
                 {
-                    PFSSPoint p = l.points[i];
+
                     l.extraX[i] = (float)(l.extraX[i] * factor);
                 }
-                for (int i = 0; i < l.points.Count; i++)
+                for (int i = 0; i < l.extraY.Length; i++)
                 {
-                    PFSSPoint p = l.points[i];
+
                     l.extraY[i] = (float)(l.extraY[i] * factor);
                 }
 
-                for (int i = 0; i < l.points.Count; i++)
+                for (int i = 0; i < l.extraZ.Length; i++)
                 {
-                    PFSSPoint p = l.points[i];
+
                     l.extraZ[i] = (float)(l.extraZ[i] * factor);
                 }
             }
@@ -183,23 +183,20 @@ namespace CompressionTesting.Quantization
             foreach (PFSSLine l in data.lines)
             {
                 double div = factor;
-                for (int i = offset; i < l.points.Count; i++)
+                for (int i = offset; i < l.extraX.Length; i++)
                 {
-                    PFSSPoint p = l.points[i];
                     l.extraX[i] = (float)(l.extraX[i] / div);
                     div += factor;
                 }
                 div = factor;
-                for (int i = offset; i < l.points.Count; i++)
+                for (int i = offset; i < l.extraY.Length; i++)
                 {
-                    PFSSPoint p = l.points[i];
                     l.extraY[i] = (float)(l.extraY[i] / div);
                     div += factor;
                 }
                 div = factor;
-                for (int i = offset; i < l.points.Count; i++)
+                for (int i = offset; i < l.extraZ.Length; i++)
                 {
-                    PFSSPoint p = l.points[i];
                     l.extraZ[i] = (float)(l.extraZ[i] / div);
                     div += factor;
                 }
@@ -212,23 +209,20 @@ namespace CompressionTesting.Quantization
             foreach (PFSSLine l in data.lines)
             {
                 double div = factor;
-                for (int i = offset; i < l.points.Count; i++)
+                for (int i = offset; i < l.extraX.Length; i++)
                 {
-                    PFSSPoint p = l.points[i];
                     l.extraX[i] = (float)(l.extraX[i] * div);
                     div += factor;
                 }
                 div = factor;
-                for (int i = offset; i < l.points.Count; i++)
+                for (int i = offset; i < l.extraY.Length; i++)
                 {
-                    PFSSPoint p = l.points[i];
                     l.extraY[i] = (float)(l.extraY[i] * div);
                     div += factor;
                 }
                 div = factor;
-                for (int i = offset; i < l.points.Count; i++)
+                for (int i = offset; i < l.extraZ.Length; i++)
                 {
-                    PFSSPoint p = l.points[i];
                     l.extraZ[i] = (float)(l.extraZ[i] * div);
                     div += factor;
                 }

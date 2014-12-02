@@ -152,7 +152,7 @@ namespace CompressionTesting
         private static void run()
         {
             ISolution solution = new Solution1();
-            bool testOneFile = false;
+            bool testOneFile = true;
 
             string fitsOutputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp";
             string outputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\testresult";
