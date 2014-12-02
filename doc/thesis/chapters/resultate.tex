@@ -63,7 +63,8 @@ Die DCT Koeffizienten und die X,Y und Z Kanäle der Startpunkte weren mit 16 Bit
 	\caption{Vergleich der DCT Kompression der Ableitung mit der DCT Kompression}
 	\label{resultate:loesung1:dct:artefakte}
 \end{figure}
-Kann gut Quantisiert werden, deutliche Verbesserung zur Lösung 0. Ebenfalls deutlich besser zur lösung 1. Aber noch mehr möglich. Momentan ist die Information gleichmässig auf alle Kanäle verteilt. Die Linien liegen aber oft auf einer Ebene im 3d Raum. Die Komprimierung könnte verbessert werden, wenn die Feldlinien nicht im Sonnenkoordinatensystem, sondern im Lokalen Komprimiert werden. Wenn eine Linie in einer Ebene liegt, ist eine Komponente 0.
+Die abgeleiteten Feldlinien können sehr gut quantisiert werden. Im Vergleich zur Lösung 0 braucht diese Variante etwa 15 Byte weniger um eine Feldlinie darzustellen. Durchschnittlich ist jetzt eine PFSS Simulation auf 72 KiByte komprimiert.\\
+Die Feldlinien liegen meist auf einer Ebene im dreidimensionalen Raum. Wenn die X,Y und Z Kanäle Kosinus-Transformiert werden, ist die Information etwa gleichmässig auf den Kanälen verteilt. Eine Linie könnte sich durch weniger Kosinus-Funktionen approximieren lassen, wenn die Linie zuerst in ein lokales Koordinatensystem transformiert wird. Die Koordinatenachsen können für jede Linie so gelegt werden, dass der X und Y Kanal den Grossteil der Informationen beinhalten. Der Z Kanal könnte für viele Feldlinien Null sein. Es wird vermutet, dass mit einem lokalen Koordinatensystem X und Y Kanäle etwa gleich viele Kosinus-Funktionen brauchen, aber der Z Kanal so gut wie keine. 
 
 \subsubsection{Feldlinien Ableiten mit PCA und DCT}
 Mit einer vorhergehenden Principal Component Analysis (PCA) \cite{abdi2010principal} werden die Feldlinien vom Sonnen-Koordinatensystem in ihr lokales System transformiert. 
@@ -74,25 +75,25 @@ PCA ist ein Verfahren aus der Statistik, welches Daten in ein neues koordinatens
 	\caption{Vergleich der PCA DCT Kompression der Ableitung mit der DCT Kompression der Ableitung}
 	\label{resultate:loesung1:dct:pca}
 \end{figure}
-Der Vergleich \ref{resultate:loesung1:dct:pca} zeigt deutlich, dass sich der Mehraufwand nicht lohnt, obwohl die PCA vielversprechend scheint. Wenn man quantisierte DCT-Koeffizienten einzelner Feldlinien analysiert, so fällt auf dass von etwa 200 Koeffizienten zwischen 180 und 195 Nullen sind. Die selben Linien mit der PCA-Transformation weisen tendenziell tiefere, aber ähnlich viele Koeffizienten. Die PCA-Transformierten Feldlinien brauchen aber noch zusätzlich Werte der neuen Koordinatenachsen und der Verschiebung.\\
-Die PCA-Variante könnte noch verkleinert werden. Die Verschiebung kann Quantisiert werden, oder man kann weniger Genauigkeit für die Koordinatenachsen verwenden. Die PCA-Variante ist aber nicht genauer wie die Ableitung+DCT Variante. Unter dem Strich hat die PCA keine Verbesserung erbracht.\\
+Der Vergleich \ref{resultate:loesung1:dct:pca} zeigt deutlich, dass sich der Mehraufwand nicht lohnt, obwohl die PCA vielversprechend scheint. Eine Feldlinie lässt sich mit 5 bis maximal 20 Kosinus-Funktionen pro Kanal approximieren. Durch die PCA-Transformation lässt sich das noch minim verkleinern, aber die zusätzlichen Informationen wie die Werte für neuen Koordinatenachsen und für die Verschiebung verbrauchen mehr speicher, als durch die Transformation gewonnen werden kann.\\
+Die PCA-Variante könnte noch verkleinert werden. Die Verschiebung kann Quantisiert werden, oder man kann weniger Genauigkeit für die Koordinatenachsen verwenden. Die PCA-Variante ist aber nicht genauer wie die Ableitung+DCT Variante. Wie auch in \ref{resultate:loesung1:dct:pca} ersichtlich, ist die PCA-Variante bei vergleichbarer Kompressionsgrad ungenauer. Unter dem Strich hat die PCA keine Verbesserung erbracht.\\
 [\baselineskip]
-Da sich die Feldlinien
-Weitere Verfahren lohnen sich beinahe nicht. Aufwand grösser als Nutzen
-Nur unterschiedliche Kurven Speichern: Transformation beinahe teurer als Kurve selbst. Verschiebung + Rotation wenn bei ähnlichen Kurven nur eine abespeichert werden soll.
-Median DCT Kurve
-Ableitung der DCT?
+Es sind noch viele Vefahren denkbar, welche die Kompression verbessern können. Beispielsweise könnte die Eigenschaft genutzt werden, dass eine Feldlinie durch Verschiebung, Rotation und Skalierung eine gute Approximation einer Anderen darstellt. Für diese 3 transformationen müssen 12 neue Werte gespeichert werden. Sie müssen so abgespeichert werden, dass sie weniger Platz verbrauchen als die quantisierten DCT-Koeffizienten zu mindestens der selben genauigkeit. es sind zu wenige DCT-koeffizienten, als dass hier noch viel herausgeholt werden kann, deshalb wird jetzt die Kodierung geschaut.
 
-\subsubsection{Feldlinien Ableiten mit DCT und Byte-Codierung}
+\subsubsection{Feldlinien Ableiten mit DCT und Adaptiver Byte-Codierung}
 wieder \ref{resultate:dct:ableitung_dct}, nur mit einer Byte-Codierung.
 Meistens sehr tiefe Koeffizienten, aber ein paar wenige Ausreisser. Adaptive Genauigkeit. Für die meisten Fällen wird ein Byte benutzt, wenn mehr genauigkeit gebraucht wird kommt ein Byte hinzu.
-Speicherung bis zum letzten nicht-null koeffizienten.
+Einfaches RLE: Länge der Feldlinien wird gespeichert. Speicherung der Länge bis zum letzten Nicht-null Koeffizienten. Länge kann in einem Byte gespeichert werden.
+
 figure vergleich.
-gute resultate. Zeigt, wie tief die eigentlichen komponenten sind.
-Byte RLE, rar sollte das für mich übernehmen, oder?
-Artefakte Problem gelöst?
-(Vergleich der Artefakte). 
-Nicht schlecht, artefakte sind bei Lösung 0 schon nicht von auge her sichtbar. Die Ränder sind auch gut, jedoch scheint die pure DCT die Kurve besser approximieren zu können, falls die Ränder nicht wären.
+Deutliche Verbesserung, Zeigt, wie tief die komponenten sind. momentane dateigrösse bei $1200$ Feldlinien. Artefakte Problem gelöst?
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-4/loesung1_4.png}
+	\caption{Artefakte der DCT Kompression der Ableitung}
+	\label{resultate:loesung1:dct:byte:artefakte:}
+\end{figure} 
+Die Abweichung ist in der selben Grössenordnung wie die der Lösung 0 \ref{resultate:loesung0:artefakte}. Von blossem Auge sind diese Artefakte nicht zu erkennen. Die Form er Linie wird erhalten. Ränder sind auch gut. jedoch scheint die pure DCT die Kurve besser approximieren zu können, falls die Ränder nicht wären.
 
 \subsubsection{DCT mit Byte-Codierung}
 Zum Vergleich wird das jetzt noch gemacht.

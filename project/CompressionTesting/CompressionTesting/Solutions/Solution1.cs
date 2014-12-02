@@ -9,6 +9,7 @@ using CompressionTesting.Transformation;
 using CompressionTesting.FileWriter;
 using CompressionTesting.Compression;
 using CompressionTesting.PFSS;
+using CompressionTesting.DebugOutput;
 
 namespace CompressionTesting.Solutions
 {
@@ -21,13 +22,13 @@ namespace CompressionTesting.Solutions
 
         public string GetName()
         {
-            return "Solution1_Six";
+            return "Solution1_Seven";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return Six(data, qualityLevel, folder);
+            return Seven(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -77,9 +78,8 @@ namespace CompressionTesting.Solutions
             return result;
         }
 
+
         #region intermediate solutions
-
-
         public TestResult Zero(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             FileInfo fits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".fits"));
@@ -283,7 +283,6 @@ namespace CompressionTesting.Solutions
             return result;
         }
 
-
         public TestResult Six(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             FileInfo fits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".fits"));
@@ -321,6 +320,38 @@ namespace CompressionTesting.Solutions
             }
             DCTransformer.Backward(data, 1);
             Residualizer.UndoResiduals(data, 1);
+
+            return result;
+        }
+
+        public TestResult Seven(PFSS.PFSSData data, int qualityLevel, string folder)
+        {
+            FileInfo fits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".fits"));
+            FileInfo rarFits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".rar"));
+            TestResult result = new TestResult();
+
+            Subsampling.Subsample(data, 4);
+            DCTImprover.AddExtraPoints(data, 10000000);
+            DCTransformer.ForwardExtra(data, 0, new FileInfo(Path.Combine(folder, this.GetName() + "_extra_points.csv")));
+            
+            //int zeroCount = GetZeroCount(data, qualityLevel + 16);
+            //DCTQuantization.SetToZero(data, zeroCount);
+            
+            Discretizer.DividePoint(data, 10000 , 0);
+            Discretizer.DivideExtra(data, 1000);
+            Discretizer.DivideLinearExtra(data, 2 * (qualityLevel*10 + 30),1);
+            Discretizer.ToShortsExtra(data);
+            
+            StandardWriter.WriteDCTByteFits(data, fits);
+            long size = RarCompression.DoRar(rarFits, fits);
+            result.fileSize = size;
+            result.lineCount = data.lines.Count;
+
+            Discretizer.MultiplyLinearExtra(data, 2 * (qualityLevel*10 + 30),1);
+            Discretizer.MultiplyExtra(data, 1000);
+            Discretizer.MultiplyPoint(data, 10000, 0);
+            DCTransformer.BackwardExtra(data, 0);
+            //Residualizer.UndoResiduals(data, 1);
 
             return result;
         }

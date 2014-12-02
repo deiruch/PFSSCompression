@@ -17,10 +17,9 @@ namespace CompressionTesting
 {
     class Program
     {
-         
-
         static void Main(string[] args)
         {
+            //DCTImprover.HandleCurve(-515478700, -517611300, 200000,100);
             run();
             //testExampleLine();
             //pcatryout2();
@@ -112,7 +111,7 @@ namespace CompressionTesting
 
 
             solution.DoTestRun(data, 1, fitsOutputFolder);
-            StreamWriter w = new StreamWriter(new FileStream(Path.Combine(fitsOutputFolder, solution.GetName() + ".csv"), FileMode.Create));
+            StreamWriter w = new StreamWriter(new FileStream(Path.Combine(fitsOutputFolder, solution.GetName() + "_Line.csv"), FileMode.Create));
             l = data.lines[0];
             w.Write("X;Y;Z\n");
             foreach (PFSSPoint p in l.points)

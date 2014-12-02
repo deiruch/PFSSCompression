@@ -1,4 +1,5 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using CompressionTesting.Transformation;
+using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,11 @@ namespace CompressionTesting.PFSS
     {
         internal TYPE Type { get; private set; }
         internal List<PFSSPoint> points { get; private set; }
+
+        internal float[] extraX;
+        internal float[] extraY;
+        internal float[] extraZ;
+        internal ExtraPoints[] extra;
 
         internal Matrix<float> pcaTransform;
         internal float[] means;

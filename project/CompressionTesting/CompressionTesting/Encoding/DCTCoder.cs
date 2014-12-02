@@ -126,5 +126,16 @@ namespace CompressionTesting.Encoding
             output.Add(Encode(z));
             return output;
         }
+
+        public static byte[] Encode(float[] data)
+        {
+            short[] copy = new short[data.Length];
+            for (int i = 0; i < data.Length; i++)
+            {
+                copy[i] = (short)data[i];
+            }
+
+            return Encode(copy);
+        }
     }
 }

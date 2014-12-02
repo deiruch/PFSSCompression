@@ -167,7 +167,7 @@ namespace CompressionTesting.FileWriter
                 temp.Add(line);
             }
 
-            //byte[] ptr_nz_len_byte = DCTCoder.Encode(ptr_nz_len);
+            byte[] ptr_nz_len_byte = DCTCoder.Encode(ptr_nz_len);
             byte[][] channels = new byte[3][];
             channels[0] = new byte[byteCountX];
             channels[1] = new byte[byteCountY];
@@ -204,7 +204,7 @@ namespace CompressionTesting.FileWriter
             Double[] b0a = new Double[] { input.b0 };
             Double[] l0a = new Double[] { input.l0 };
             Object[][] data = new Object[1][];
-            Object[] dataRow = new Object[] { b0a, l0a, ptr, ptph, ptth, ptr_nz_len, channels[0], channels[1], channels[2] };
+            Object[] dataRow = new Object[] { b0a, l0a, ptr, ptph, ptth, ptr_nz_len_byte, channels[0], channels[1], channels[2] };
             data[0] = dataRow;
 
             BinaryTable table = new BinaryTable(data);

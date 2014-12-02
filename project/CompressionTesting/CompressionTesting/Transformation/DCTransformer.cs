@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CompressionTesting.PFSS;
+using System.IO;
 
 namespace CompressionTesting
 {
@@ -39,6 +40,67 @@ namespace CompressionTesting
             }
         }
 
+        public static void ForwardExtra(PFSSData data, int pointOffset, FileInfo outFile)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                float[] x = new float[l.points.Count - pointOffset + l.extra[0].startLength + l.extra[0].endLength];
+                float[] y = new float[l.points.Count - pointOffset + l.extra[1].startLength + l.extra[1].endLength];
+                float[] z = new float[l.points.Count - pointOffset + l.extra[2].startLength + l.extra[2].endLength];
+                int iX= 0, iY = 0,iZ= 0;
+
+                foreach (float f in l.extra[0].start)
+                    x[iX++] = f;
+                foreach (float f in l.extra[1].start)
+                    y[iY++] = f;
+                foreach (float f in l.extra[2].start)
+                    z[iZ++] = f;
+                    
+                for (int i = pointOffset; i < l.points.Count; i++)
+                {
+                    PFSSPoint current = l.points[i];
+                    x[iX++] = (float)current.x;
+                    y[iY++] = (float)current.y;
+                    z[iZ++] = (float)current.z;
+                }
+
+                foreach (float f in l.extra[0].end)
+                    x[iX++] = f;
+                foreach (float f in l.extra[1].end)
+                    y[iY++] = f;
+                foreach (float f in l.extra[2].end)
+                    z[iZ++] = f;
+
+                /*StreamWriter w = new StreamWriter(new FileStream(outFile.FullName, FileMode.Create));
+                //print analyzation
+                w.Write("R;P;T\n");
+                for (int i = 0; i < x.Length; i++)
+                {
+                    w.Write(x[i]); w.Write(";");
+                    w.Write(y[i]); w.Write(";");
+                    w.Write(z[i]); w.Write("\n");
+                }
+                w.Close();*/
+
+                x = DCT.slow_fdct(x);
+                y = DCT.slow_fdct(y);
+                z = DCT.slow_fdct(z);
+
+                l.extraX = x;
+                l.extraY = y;
+                l.extraZ = z;
+
+                iX = l.extra[0].startLength; iY = l.extra[1].startLength; iZ = l.extra[2].startLength;
+                for (int i = pointOffset; i < l.points.Count; i++)
+                {
+                    PFSSPoint current = l.points[i];
+                    current.x = x[iX++];
+                    current.y = y[iY++];
+                    current.z = z[iZ++];
+                }
+            }
+        }
+
         public static void Backward(PFSSData data,int pointOffset)
         {
             foreach (PFSSLine l in data.lines)
@@ -69,43 +131,23 @@ namespace CompressionTesting
             }
         }
 
-        public static void QuantizeRepeat(PFSSData data, int start)
+
+        public static void BackwardExtra(PFSSData data, int pointOffset)
         {
             foreach (PFSSLine l in data.lines)
             {
-                for (int i = start; i < l.points.Count; i++)
+
+                l.extraX = DCT.slow_idct(l.extraX);
+                l.extraY = DCT.slow_idct(l.extraY);
+                l.extraZ = DCT.slow_idct(l.extraZ);
+                int iX = l.extra[0].startLength, iY = l.extra[1].startLength, iZ = l.extra[2].startLength;
+                iX += pointOffset; iY += pointOffset; iZ += pointOffset;
+                for (int i = pointOffset; i < l.points.Count; i++)
                 {
-                    l.points[i].x = Math.Sign(l.points[i].x) * Math.Abs(l.points[start - 1].x);
-                    l.points[i].y = Math.Sign(l.points[i].y) * Math.Abs(l.points[start - 1].y);
-                    l.points[i].z = Math.Sign(l.points[i].z) * Math.Abs(l.points[start - 1].z);
-
-                }
-            }
-        }
-
-        public static void Discretize(PFSSData data, int start)
-        {
-            foreach (PFSSLine l in data.lines)
-            {
-                for (int i = start; i < l.points.Count; i++)
-                {
-                    l.points[i].x = (float)(Math.Round(l.points[i].x / 1000) * 1000);
-                    l.points[i].y = (float)(Math.Round(l.points[i].y / 1000) * 1000);
-                    l.points[i].z = (float)(Math.Round(l.points[i].z / 1000) * 1000);
-                }
-            }
-        }
-
-        public static void Quantize(PFSSData data, int start)
-        {
-            foreach (PFSSLine l in data.lines)
-            {
-                for (int i = start; i < l.points.Count; i++)
-                {
-                    l.points[i].x = 0;
-                    l.points[i].y = 0;
-                    l.points[i].z = 0;
-
+                    PFSSPoint current = l.points[i];
+                    current.x = l.extraX[iX++];
+                    current.y = l.extraY[iY++];
+                    current.z = l.extraZ[iZ++];
                 }
             }
         }
