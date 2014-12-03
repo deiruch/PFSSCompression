@@ -337,9 +337,9 @@ namespace CompressionTesting.Solutions
             //int zeroCount = GetZeroCount(data, qualityLevel + 16);
             //DCTQuantization.SetToZero(data, zeroCount);
             
-            Discretizer.DividePoint(data, 20000 , 0);
+            Discretizer.DividePoint(data, 500, 0);
             Discretizer.DivideExtra(data, 1000);
-            Discretizer.DivideLinearExtra(data, 2 * (qualityLevel*10 + 60),1);
+            Discretizer.DivideLinearExtra(data, 2 * (qualityLevel*10 + 100),1);
             Discretizer.ToShortsExtra(data);
             
             StandardWriter.WriteDCTByteFits(data, fits);
@@ -347,9 +347,9 @@ namespace CompressionTesting.Solutions
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            Discretizer.MultiplyLinearExtra(data, 2 * (qualityLevel*10 + 60),1);
+            Discretizer.MultiplyLinearExtra(data, 2 * (qualityLevel*10 + 100),1);
             Discretizer.MultiplyExtra(data, 1000);
-            Discretizer.MultiplyPoint(data, 20000, 0);
+            Discretizer.MultiplyPoint(data, 500, 0);
             DCTransformer.BackwardExtra(data, 0);
             //Residualizer.UndoResiduals(data, 1);
 

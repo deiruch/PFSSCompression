@@ -61,7 +61,7 @@ namespace CompressionTesting.Transformation
 
             //factor = Math.Sign(rise) < 0 ? factor : -factor;
             //(int)Math.Ceiling(Math.Abs(rise / factor))
-            int proposedLen = (int)Math.Ceiling(Math.Abs(rise / factor)) ;
+            int proposedLen = (int)(Math.Abs(rise / factor)) ;
             int len = proposedLen > length / 5 ? length / 5 : proposedLen;
             float[] output = new float[len];
             float oldPoint = p0;
