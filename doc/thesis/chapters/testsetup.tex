@@ -6,11 +6,11 @@ Der absolute maximale Fehler wird noch als Absicherung gemessen. In den meisten 
 [\baselineskip]
 Eine Grenze für die Genauigkeit ist nicht festzulegen. Auch wenn eine Grenze gefunden wird, kann diese sich in der Zeit verändern. Im Fall der Feldlinien ist die Internetverbindung der Flaschenhals. Es kann sein, dass in Zukunft mehr Präzision bei mehr Platzbedarf verlangt wird. Deshalb werden die Verfahren, wenn möglich, mit unterschiedlichen Qualitätsstufen getestet und verglichen.
 
-\subsection{Auswahl und Erhebung der Testdaten}
+\subsection{Auswahl und Erhebung der Testdaten}\label{testsetup:auswahl_erhebung}
 Die Testdaten sollen zu einem alle Randfälle abdecken, als auch durchschnittliche Fälle enthalten. Aus diesem Grund wurden insgesamt zehn Datensätze ausgewählt: Vier Datensätze mit hoher Sonnenaktivität, zwei mit wenig und vier zufällig. Für die vier Datensätzen mit hoher Aktivität wurde in den Jahren 2014 und 2013 nach den grössten Solare Flares gesucht. Für die Datensätze mit wenig Aktivität wurde das Gegenteil gemacht, nach Zeiträumen mit möglichst kleinen Solar Flares gesucht.\\
 Die feldlinien werden aber nur alle sechs Stunden berechnet und Solar Flares sind sehr spontane Ereignisse. Auch eine grosse Flare kann während den sechs Stunden angefangen und wieder aufgehört haben. Für die grossen Solar Flares wurde deshalb beachtet, dass die Datensätze vor dem Ereignis verwendet wurden. Grosse Solar Flares entladen das Feld, vor dem Ereignis ist das Magnetfeld komplexer.\\
 [\baselineskip]
-Wie im Abschnitt \ref{konzept:ist-komprimierung} beschrieben, führt der IDL-Code schon eine Quantisierung durch. Diese wurde entfern und  deshalb wurde der IDL Code angepasst. Die Quantisierung wurde für die Testdaten entfernt. Die Punkte werden nun mit 32 Bit Floating-Point Genauigkeit gespeichert.
+Wie im Abschnitt \ref{konzept:ist-komprimierung} beschrieben, führt der IDL-Code schon eine Quantisierung und ein Subsampling durch. Für die Testdaten wurde das Subsampling und die Quantisierung entfernt. Für jede Dimension eines Punktes wird anstatt 16 Bit 32 Bit Genauigkeit verwendet. Die rohe Datenmenge ist dementsprechend Angewachsen auf etwa 10 MiByte pro Aufnahme.
 
 \subsection{Aublauf des Tests und Messung des Fehlers}\label{testsetup:ablauf}
 Float daten werden geladen. Daten kopiert und Kompression/Dekompression durchgeführt für alle Testdaten. Die kopierten Daten wissen aber noch, welches ihr Originalpunkt ist.

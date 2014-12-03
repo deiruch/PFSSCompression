@@ -102,7 +102,7 @@ namespace CompressionTesting.Transformation
             }
 
             Array.Sort(r);
-            return r[r.Length/2];
+            return r[r.Length / 2];
         }
 
         public static double GetRiseY(PFSSLine l, int startIndex, int endIndex)

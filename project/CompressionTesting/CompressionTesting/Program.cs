@@ -20,8 +20,8 @@ namespace CompressionTesting
         static void Main(string[] args)
         {
             //DCTImprover.HandleCurve(-515478700, -517611300, 200000,100);
-            run();
-            //testExampleLine();
+            //run();
+            testExampleLine();
             //pcatryout2();
             //printLine();
         }

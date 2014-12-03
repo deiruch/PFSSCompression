@@ -23,24 +23,43 @@ Clientseitig wieder ein subsampling und umrechnung ins kartesische System xyz, d
 	
 \subsection{Lösung 0, Angle-Subsampling}
 Subsampling 5Grad auf dem Server
-Minimale Lösung, ziel ist es diese Lösungen zu schlagen.
+Kodierung mittels rar
+\subsubsection{Subsampling}\label{konzept:loesung0:subsampling}
+
+\subsubsection{Ablegung ins Fits Format} \label{konzept:loesung0:fits}
+
+\subsubsection{Entropie Kodierung} \label{konzept:loesung0:kodierung}
+Rar hat sich bewährt bei der purer Feldlinien kompression im Vergleich zu anderen Verfahren wie LZ77/gZip
 
 \subsection{Lösung 1, Diskrete Kosinus Transformation}
 DCT, da alles nahe an harmonischen Halbwellen
+kartesische Koordinaten --> kein wrap around,
 
-subsampling
-koordinatentransformation --> kein wrap around,
-Ableitung
+Es ist auch möglich die Punkte im sphärischen Koordinatensystem in den Frequenzraum zu überführen. Der $\phi$-Kanal ist jedoch schwierig durch tiefe Kosinus Schwingungen darzustellen: Wie im Abschnitt \ref{konzept:ist-komprimierung} besprochen, beinhaltet der Kanal Sprünge bei der Passierung des Nullpunktes. Das führt zu sehr hochfrequenten Schwingungsanteile in der DCT. Nach einer Quantisierung sind dabei Artefakte nicht vermeidbar. Im kartesischen System hingegen sind alle Kanäle stetig und lassen sich einfacher durch Kosinus-Funktionen approximieren.\\
+
+\subsubsection{Subsampling} \label{konzept:loesung1:subsampling}
+Wie im Abschnitt \ref{testsetup:auswahl_erhebung} beschrieben, wurde aus den Testdaten die Quantisierung und das Subsampling entfernt. Die Feldlinien der Testdaten haben das vier Mal mehr Puntke, als beim Ist-Zustand übertragen werden. Die DCT-Implementierung weist eine Komplexität von $O(n^2)$ auf. Vor der Kosinus-Transformation wird deshalb das selbe Subsampling durchgeführt, wie im Ist-Zustand. So kann der Rechenaufwand in Grenzen gehalten werden.\\
+Falls die Laufzeit der Dekompression verbessert werden soll, kann die Fast-Cosine-Transformation umgesetzt werden. Diese hat eine Komplexität von $O(n log(n))$. Der Nachteil ist, dass nur Daten der Länge $2^n$ transformiert werden können, was zusätzliche Programmlogik braucht. Falls die Fast-Cosine-Transformation nicht ausreicht, können die Linien in Blöcken mit einer bestimmten Anzahl von Punkten unterteilt werden. Dadurch wird die Komplexität auf $O(n)$ gesenkt. Jedoch ist es wahrscheinlich, dass durch die Unterteilung die Kompressionsrate leidet. Vermutlich braucht es für die Approximation der Blöcke insgesamt mehr Kosinus-Funktionen, als für die Approximation der gesamten Feldlinie.\\
+
+\subsubsection{Randbehandlung} \label{konzept:loesung1:randbehandlung}
+
+\subsubsection{Cosinus-Transformation} \label{konzept:loesung1:kosinus}
 Cosinus-Transformation
+	DCT 2
+	idct ist dct3
+	
+\subsubsection{Quantisierung}
 
-DCT 2
-idct ist dct3
+\subsubsection{Ablegung ins Fits Format}
 
-Quantisierung
+\subsubsection{Entropie Kodierung}\label{konzept:loesung1:kodierung}
+Kodierung
+	Zuerst einfaches Run-length
 
-speicherung für Entropie encoding, alles was ähnlich ist zusammen.
+	Weitere Kodierung mittels Rar.
+		Rar hat sich bewährt bei der purer Feldlinien kompression im Vergleich zu anderen Verfahren wie LZ77/gZip
 
-encoding-> rar
+
 
 
 

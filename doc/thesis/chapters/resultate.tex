@@ -10,34 +10,32 @@ Wie im Kapitel \ref{konzept} wird erwähnt, dass der Ist-Zustand die Feldlinien 
 \label{resultate:fits_table}
 \end{table}
 Die Resultate \ref{resultate:fits_table} zeigen keinen signifikanten Unterschied des Speicherverbrauchs. Pro Feldlinie liegt der Unterschied bei $0.6$ Bytes. Hochgerechnet auf $1200$ Feldlinien sind es 0.7 KiBytes, welches das Fits-Format für sich beansprucht. Fits erlaubt es, den Datenreihen einen Namen so wie eine kurze Beschreibung anzuhänken. Diese Strings sind Optional und können auch weggelassen werden.\\
-Der wesentliche Vorteil von FITS ist, dass es bereits Plattformunabhängig ist. Probleme wie Endianness \cite{wiki:endianess} werden vom Format gelöst. Aus diesen Gründen wurde entschieden das Format beizubehalten.
+Der wesentliche Vorteil von FITS ist, dass das Format bereits Plattformunabhängig ist. Probleme wie Endianness \cite{wiki:endianess} werden vom Format gelöst. Aus diesem Grund wurde entschieden das FITS Format beizubehalten.
 
 \subsection{Lösung 0, Angle-Subsampling} \label{resultate:loesung0}
-Das Angle-Subsampling führt der JHelioviewer selbst durch. Für die Lösung 0 soll nun das Subsampling vor der Dateiübertragung vorgenommen werden. Dazu werden die Punkte in das kartesische Koordinatensystem umgerechnet, das Angle-Subsampling durchgeführt und anschliessend wird in das sphärische System rücktransformiert. Die resultierende FITS-Datei wird mittels Rar kodiert.
+Der Ist-Zustand wird das Angle-Subsampling\footnote{siehe Abschnitt \ref{konzept:loesung0:subsampling}} im JHelioviewer durchgeführt. Diese Variante führt das Subsampling vor der Dateiübertragung durch. Die resultierende FITS-Datei wird mittels Rar kodiert\footnote{siehe Abschnitt\ref{konzept:loesung0:kodierung}};
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung0/loesung0_0.png}
 	\caption{Vergleich der Lösung 0 zum Ist-Zustand.}
 	\label{resultate:loesung0:loesung0_0}
 \end{figure}
-Wie im Diagramm \ref{resultate:loesung0:loesung0_0} erkennbar ist, verbraucht die Lösung 0 um grössenordnungen weniger Speicher. Zu einem wird durch das Angle-Subsampling weniger Daten gespeichert,etwa nur ein Viertel der ursprünglichen Punkte. Zum anderen erbringt Rar die bessere Kompression. Die Komplexität der Kompression und Dekompression bleibt in der Grössenordnung $O(n)$ ($n$ ist die Anzahl Punkte). Da bei der Dekompression $n$ etwa vier Mal weniger Punkte bearbeiten muss, ist die Dekompression sogar schneller als die Ist-Lösung.
+Wie im Diagramm \ref{resultate:loesung0:loesung0_0} erkennbar ist, verbraucht die Lösung 0 deutlich weniger Speicher. Das Angle-Subsampling reduziert deutlich die Anzahl Punkte, während die Rar eine bessere Kompression erbringt. Die Komplexität der Kompression und Dekompression bleibt in der Grössenordnung $O(n)$ ($n$ ist die Anzahl Punkte). Da bei der Dekompression $n$ etwa vier Mal weniger Punkte bearbeiten muss, ist die Dekompression sogar schneller als die Ist-Lösung.\\
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung0/loesung0_artefakte.png}
 	\caption{Artefakte der Lösung 0}
 	\label{resultate:loesung0:artefakte}
 \end{figure}
-Die Abbildung \ref{resultate:loesung0:artefakte} zeigt die Artefakte, die bei der Komprimierung der Lösung 0 entstehen. Aus dem JHelioviewer sind diese Artefakte kaum sichtbar.
+Die Abbildung \ref{resultate:loesung0:artefakte} zeigt die Artefakte, die bei der Komprimierung der Lösung 0 entstehen. Es ist anzumerken, dass der Ist-Zustand die selben Artefakte aufweist.
 
 \subsection{Lösung 1, Diskrete Kosinus Transformation}
-Das Ziel ist eine bessere Kompression zu erreichen, indem die Feldlinien mit Kosinusfunktionen approximiert werden. 
-Die DCT-Implementierung für die Tests weist eine Komplexität von $O(n^2)$. Bei etwa $600$ Punke pro Linie ist das zu erheblichen Rechenaufwand. Deshalb wird vor der DCT deshalb ein Subsampling durch. Falls die Laufzeit der Dekompression verbessert werden soll, kann die Fast-Cosine-Transformation umgesetzt werden. Diese hat eine Komplexität von $O(n logn)$. Falls das nicht ausreicht, können die Linien in Blöcken mit einer bestimmten Anzahl von Punkten unterteilt werden. Das senkt die Komplexität auf $O(n)$. Die Unterteilung könnte negative Effekte auf die Kompression haben.\\
+In den folgenden Abschnitten werden die Resultate verschiedener Varianten vorgestellt. Alle Varianten bestehen grob aus fünf Teilschritten: Einem Subsampling\footnote{siehe Abschnitt \ref{konzept:loesung1:subsampling}}, einer Folge von verschiedenen Transformationen, bei der eine die Diskrete Kosinus Transformation ist, Abspeicherung ins Fits Format\footnote{siehe Abschnitt \ref{konzept:loesung0:fits}} undeiner Quantisierung und einer Entropie Kodierung mit Rar\footnote{siehe Abschnitt \ref{konzept:loesung0:kodierung}}.\\
 [\baselineskip]
 In den Tests wurde eine lineare Quantisierung verwendet. Jeder DCT Koeffizient wird durch einen Faktor geteilt, der sich stetig ehöht. Zum Beispiel wird der erste Koeffizient durch zwei geteilt, der zweite durch Vier, der Dritte durch Sechse etc.  Die Kompressionsrate kann durch einen höheren oder tieferen Faktor gesteuert werden. Diese Quantifizierung ist nicht das Optimum. Eine bessere Quantifizierung wird für die beste Lösung ausgearbeitet.
 
 \subsubsection{DCT}\label{resultate:dct}
-Nach dem Subsampling wird auf den Punkten (im kartesischen Koordinatensystem) die Diskrete Kosinus Transformation ausgeführt. Es ist auch möglich die Punkte im sphärischen Koordinatensystem in den Frequenzraum zu überführen. Der $\phi$-Kanal ist jedoch schwierig durch tiefe Kosinus schwingungen darzustellen: Wie im Abschnitt \ref{konzept:ist-komprimierung} besprochen, beinhaltet der Kanal Sprünge bei der Passierung des Nullpunktes. Das führt zu sehr hochfrequenten Schwingungsanteile in der DCT. Nach einer Quantisierung sind dabei Artefakte nicht vermeidbar. Im kartesischen System hingegen sind alle Kanäle stetig und haben somit wenige hochfrequente Anteile.\\
-Die Anzahl Punkte pro Linie werden zuerst als 16 Bit Integer Array abgelegt, gefolgt von allen DCT Koeffizienten des X Kanals, danach des Y und zum Schluss des Z Kanals mit 32 Bit Genauigkeit.\\
+verwendet als Transformation nur DCT. Eizige Veränderung, jeder Kanal wird mit 32 Bit Integer anstatt mit 16 Bit abgespeichert. DCT-Koeffizienten sind sonst zu gross.
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-0/loesung1_0.png}
@@ -51,24 +49,24 @@ Die Abbildung \ref{resultate:loesung1:dct:resultate} zeigt den Vergleich der DCT
 	\caption{Artefakte der DCT Dekompression}
 	\label{resultate:loesung1:dct:artefakte}
 \end{figure}
-Die Darstellung der Artefakte \ref{resultate:loesung1:dct:artefakte} zeigen das Problem: in den meisten Fällen kann die DCT die Feldlinie gut approximieren. Bei dieser Feldlinie wird der Anfang der Kurve nicht richtig dargestellt. Das ist ein typisches Problem der DCT: Die Transformation nimmt an, dass das Signal sich am Anfang und am Ende in umgekehrter Reihenfolge wiederholt \cite{wiki:dct}. Gerade beim Anfang bedeutet das ein Unterbruch, welche sich nur durch hochfrequente Anteile darstellen lässt.\\
-Eine Möglichkeit ist die Feldlinie um Punkte zu erweitern, welche die Transformation vereinfachen. Wenn die Punkte geschickt gewählt werden, sollte eine Feldlinie nach der Transformation und Quantisierung ähnlich viele Bytes benötigen. Durch eine andere Darstellung könnten diese Probleme ebenfalls gelöst werden, weshalb zuerst weitere Transformationen analysiert werden.
+Die Darstellung der Artefakte \ref{resultate:loesung1:dct:artefakte} zeigen das Problem: in den meisten Fällen kann die DCT die Feldlinie gut approximieren. Bei dieser Feldlinie wird der Anfang der Kurve nicht richtig dargestellt. Das ist ein typisches Problem der DCT. In diesem Fall wird für die Transformation angenommen, dass sich das Signal am Anfang und am Ende in umgekehrter Reihenfolge wiederholt \cite{wiki:dct}. Das führt am Anfang der Kurve zu einer grossen Spitze, welche sich nur durch sehr hochfrequente Schwingungen darstellen lässt.  Wenn diese Anteile durch die Quantisierung verschwinden, entstehen solche Artefatkte.\\
+Eine Möglichkeit ist die Feldlinie um Punkte zu erweitern. Wenn die Feldlinie am Anfang und am Ende abflacht, sollte die resultierende Transformation weniger hochfrequente Schwingungen enthalten. Durch eine andere Darstellung könnten diese Probleme ebenfalls gelöst werden.
 
 \subsubsection{Feldlinien Ableiten mit DCT}\label{resultate:dct:ableitung_dct}
-Bevor die Feldlinie Kosinus-Transformiert und Quantisiert wird, soll sie abgeleitet werden. Die Kosinustransformation wird auf den Steigungen ausgeführt. Damit die Operation umkehrbar ist, wird der Startpunkt der Feldlinie im kartesischen Koordinatensystem gespeichert. Mit der Ableitung sollen zu einem die Koeffizienten gedämpft werden, sodass sie sich mit weniger Genauigkeit quantisieren lassen. Zum Anderen soll das Randproblem dargestellt in \ref{resultate:loesung1:dct:artefakte} gelöst werden. Die Steigungen sind kleinere Zahlen, was nicht so einen starken Wechsel verursachen sollte. Der Nachteil ist, dass Ungenauigkeiten sich durch die Kurve durchziehen und summieren. Anfangs stimmen komprimierte und Originalkurve sehr genau überein. Aber gegen Ende können sie immer mehr abweichen.\\
-Die DCT Koeffizienten und die X,Y und Z Kanäle der Startpunkte weren mit 16 Bit quantisierten getrennt abgelegt. Die DCT, die Quantisierung sowie die Entropie Kodierung ist die Selbe wie bei \ref{resultate:dct}.
+Bevor die Feldlinie Kosinus-Transformiert und Quantisiert wird, soll sie abgeleitet werden. Die Kosinustransformation wird auf den Steigungen ausgeführt. Damit die Operation umkehrbar ist, wird neu jeder Startpunkt der Feldlinie mit in die Fits Datei abgelegt. Die DCT-Koeffizienten werden mit 16 Bit Genauigkeit abgelegt.\\
+Mit der Ableitung soll das Randproblem dargestellt in \ref{resultate:loesung1:dct:artefakte} gelöst werden. Die Steigungen sind kleinere Zahlen, was an den Rändern keine grosse Spitze verursachen sollte. Der Nachteil ist, dass Ungenauigkeiten sich durch die Kurve durchziehen und summieren. Anfangs stimmen komprimierte und Originalkurve sehr genau überein. Aber gegen Ende können sie immer mehr abweichen.\\
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-1/loesung1_1.png}
 	\caption{Vergleich der DCT Kompression der Ableitung mit der DCT Kompression}
 	\label{resultate:loesung1:dct:artefakte}
 \end{figure}
-Die abgeleiteten Feldlinien können sehr gut quantisiert werden. Im Vergleich zur Lösung 0 braucht diese Variante etwa 15 Byte weniger um eine Feldlinie darzustellen. Durchschnittlich ist jetzt eine PFSS Simulation auf 72 KiByte komprimiert.\\
-Die Feldlinien liegen meist auf einer Ebene im dreidimensionalen Raum. Wenn die X,Y und Z Kanäle Kosinus-Transformiert werden, ist die Information etwa gleichmässig auf den Kanälen verteilt. Eine Linie könnte sich durch weniger Kosinus-Funktionen approximieren lassen, wenn die Linie zuerst in ein lokales Koordinatensystem transformiert wird. Die Koordinatenachsen können für jede Linie so gelegt werden, dass der X und Y Kanal den Grossteil der Informationen beinhalten. Der Z Kanal könnte für viele Feldlinien Null sein. Es wird vermutet, dass mit einem lokalen Koordinatensystem X und Y Kanäle etwa gleich viele Kosinus-Funktionen brauchen, aber der Z Kanal so gut wie keine. 
+Die abgeleiteten Feldlinien können sehr gut quantisiert werden. Im Vergleich zur Lösung 0 braucht diese Variante etwa $15$ Byte weniger um eine Feldlinie darzustellen. Durchschnittlich ist jetzt eine PFSS Simulation auf $72$ KiByte komprimiert. Die Ränder können dargestellt werden, eine Darstellung der Artefakte ist auf der Abbildung \ref{resultate:loesung1:dct:byte:artefakte} zu finden.\\
+Die Feldlinien liegen meist auf einer Ebene im dreidimensionalen Raum. Wenn die X,Y und Z Kanäle Kosinus-Transformiert werden, ist die Information etwa gleichmässig auf den Kanälen verteilt. Eine Linie könnte sich durch weniger Kosinus-Funktionen approximieren lassen, wenn die Linie zuerst in ein lokales Koordinatensystem transformiert wird. Die Koordinatenachsen können für jede Linie so gelegt werden, dass der X und Y Kanal den grossteil der Informationen beinhalten. Es wird vermutet, dass für Approximation des X und Y Kanals mit etwa gleich viele Kosinus-Funktionen gebraucht werden, aber für den Z Kanal bedeutend weniger.
 
-\subsubsection{Feldlinien Ableiten mit PCA und DCT}
-Mit einer vorhergehenden Principal Component Analysis (PCA) \cite{abdi2010principal} werden die Feldlinien vom Sonnen-Koordinatensystem in ihr lokales System transformiert. 
-PCA ist ein Verfahren aus der Statistik, welches Daten in ein neues koordinatensystem Transformiert. Dabei werden die Achsen so gelegt, dass die Daten entlang der ersten Achse die grösste Varianz aufweisen. Entlang der zweiten Achse, welche orthogonal zur ersten liegt, die zweithöchste Varianz etc. Wenn das Vefahren auf die Feldlinien angewandt wird, werden die Feldlinien in ein lokales System transformiert indem der Z-Kanal 0 ist, wenn die Feldlinie in einer Ebene liegt. Der Nachteil ist, dass für die Rücktransformation pro Feldlinie die Koordinatenachsen und die Koordinatenverschiebung abgespeichert werden. Für Achsen werden 16 Bit Genauigkeit und für die Verschiebung 32 Bit verwendet.
+\subsubsection{Feldlinien Ableiten mit PCA und DCT} 
+Principal Component Analysis (PCA)\cite{abdi2010principal} ist ein Verfahren aus der Statistik, welches Daten in ein neues koordinatensystem Transformiert. Dabei werden die Achsen so gelegt, dass die Daten entlang der ersten Achse die grösste Varianz aufweisen. Entlang der zweiten Achse, welche orthogonal zur ersten liegt, die zweithöchste Varianz etc. Wenn das Vefahren auf die Feldlinien angewandt wird, werden die Feldlinien in ein lokales System transformiert indem der Z-Kanal 0 ist, wenn die Feldlinie in einer Ebene liegt. Der Nachteil ist, dass für die Rücktransformation pro Feldlinie die Koordinatenachsen und die Koordinatenverschiebung abgespeichert werden.\\
+Vor der DCT wird nun eine PCA durchgeführt. Die sechs Faktoren der neuen Koordinatenachsen werdenmit  16 Bit Genauigkeit in die Fits-Datei abgelegt und die drei Verschiebung-Faktoren mit 32 Bit.
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-4/loesung1_4.png}
@@ -78,23 +76,43 @@ PCA ist ein Verfahren aus der Statistik, welches Daten in ein neues koordinatens
 Der Vergleich \ref{resultate:loesung1:dct:pca} zeigt deutlich, dass sich der Mehraufwand nicht lohnt, obwohl die PCA vielversprechend scheint. Eine Feldlinie lässt sich mit 5 bis maximal 20 Kosinus-Funktionen pro Kanal approximieren. Durch die PCA-Transformation lässt sich das noch minim verkleinern, aber die zusätzlichen Informationen wie die Werte für neuen Koordinatenachsen und für die Verschiebung verbrauchen mehr speicher, als durch die Transformation gewonnen werden kann.\\
 Die PCA-Variante könnte noch verkleinert werden. Die Verschiebung kann Quantisiert werden, oder man kann weniger Genauigkeit für die Koordinatenachsen verwenden. Die PCA-Variante ist aber nicht genauer wie die Ableitung+DCT Variante. Wie auch in \ref{resultate:loesung1:dct:pca} ersichtlich, ist die PCA-Variante bei vergleichbarer Kompressionsgrad ungenauer. Unter dem Strich hat die PCA keine Verbesserung erbracht.\\
 [\baselineskip]
-Es sind noch viele Vefahren denkbar, welche die Kompression verbessern können. Beispielsweise könnte die Eigenschaft genutzt werden, dass eine Feldlinie durch Verschiebung, Rotation und Skalierung eine gute Approximation einer Anderen darstellt. Für diese 3 transformationen müssen 12 neue Werte gespeichert werden. Sie müssen so abgespeichert werden, dass sie weniger Platz verbrauchen als die quantisierten DCT-Koeffizienten zu mindestens der selben genauigkeit. es sind zu wenige DCT-koeffizienten, als dass hier noch viel herausgeholt werden kann, deshalb wird jetzt die Kodierung geschaut.
+Es gibt weitere Transformationen, welche die Feldlinien so darstellen, dass weniger Kosinus-Funktionen für die selbe Approximation gebraucht werden. 
+Es sind noch viele Vefahren denkbar, welche die Kompression verbessern können. Beispielsweise könnte die Eigenschaft genutzt werden, dass eine Feldlinie durch Verschiebung, Rotation und Skalierung eine gute Approximation einer Anderen darstellt.  Für die drei Transformationen müssen 12 neue Werte gespeichert werden. 
 
-\subsubsection{Feldlinien Ableiten mit DCT und Adaptiver Byte-Codierung}
-wieder \ref{resultate:dct:ableitung_dct}, nur mit einer Byte-Codierung.
-Meistens sehr tiefe Koeffizienten, aber ein paar wenige Ausreisser. Adaptive Genauigkeit. Für die meisten Fällen wird ein Byte benutzt, wenn mehr genauigkeit gebraucht wird kommt ein Byte hinzu.
-Einfaches RLE: Länge der Feldlinien wird gespeichert. Speicherung der Länge bis zum letzten Nicht-null Koeffizienten. Länge kann in einem Byte gespeichert werden.
+Die Schwierigkeit ist aber, dass für eine Feldlinie nur wenige DCT-Koeffizienten abgespeichert werden müssen. Die drei Transfomationen dürfen nicht mehr Platz verbrauchen, als sie einsparen. Sie müssen so abgespeichert werden, dass sie weniger Platz verbrauchen als die quantisierten DCT-Koeffizienten zu mindestens der selben Genauigkeit. es sind zu wenige DCT-koeffizienten, als dass hier noch viel herausgeholt werden kann, deshalb wird jetzt die Kodierung geschaut.
 
-figure vergleich.
-Deutliche Verbesserung, Zeigt, wie tief die komponenten sind. momentane dateigrösse bei $1200$ Feldlinien. Artefakte Problem gelöst?
+\subsubsection{Feldlinien Ableiten mit DCT und Byte Kodierung}
+Es wird versucht, mit einer Byte Kodierung die DCT-Koeffizienten der Variante \ref{resultate:dct:ableitung_dct} besser zu komprimieren. Die Koeffizenten werden mit zwei Verfahren kodiert: Mit einer simplen Run-Length Kodierung und einer adaptiven Byte Kodierung. Die adaptive Byte Kodierung versucht jeden koeffizienten mit einem Byte darzustellen. Wenn die Genauigkeit nicht ausreicht, wird ein weiteres Byte hinzugenommen. Die Kodierung ist im Abschnitt \ref{konzept:loesung1:kodierung} beschrieben.
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-4/loesung1_4.png}
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-6/loesung1_6.png}
+	\caption{Vergleich der Kompression mit und ohne Byte-Kodierung}
+	\label{resultate:loesung1:dct:kodierung}
+\end{figure}
+\ref{resultate:loesung1:dct:kodierung} zeigt eine deutliche Verbesserung der Kompressionsrate, wenn die Koeffizienten mit der unter \ref{konzept:loesung1:kodierung} beschriebenen Verfahren kodiert werden. Bei ähnlicher Genauigkeit wie der Ist-Zustand braucht diese Variante durchschnittlich $35$ Bytes pro Feldlinie. Bei $1200$ Feldlinien eine ergibt das eine Dateigrösse von $42$ KiByte pro Aufnahme. Im Vergleich zum Ist-Zustand sind die Dateien um das 24 Fache kleiner.\\
+[\baselineskip]
+Bei der Variante \ref{resultate:dct} war das Problem, dass die Ränder schlecht darzustellen waren. Es stellt sich die Frage, was für Artefakte diese Kompression aufweist.
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-6/artefakte.png}
 	\caption{Artefakte der DCT Kompression der Ableitung}
-	\label{resultate:loesung1:dct:byte:artefakte:}
+	\label{resultate:loesung1:dct:byte:artefakte}
 \end{figure} 
-Die Abweichung ist in der selben Grössenordnung wie die der Lösung 0 \ref{resultate:loesung0:artefakte}. Von blossem Auge sind diese Artefakte nicht zu erkennen. Die Form er Linie wird erhalten. Ränder sind auch gut. jedoch scheint die pure DCT die Kurve besser approximieren zu können, falls die Ränder nicht wären.
+Die Abweichung ist in der selben Grössenordnung wie die der Lösung 0. In der Abbildung\ref{resultate:loesung1:dct:byte:artefakte} ist deutlich zu sehen, dass die Kurve durch die Quantisierung gedämpft wird. Die Maximum der Kurve ist tiefer, sowie das lokale Minima der letzten Halbwelle höher. Der Vorteil dieser Variante ist, dass die resultierende Feldline sehr glatt verläuft. Ohne die Originalkurve währen die Artefakte nicht zu identifizieren.\\
+Wenn man die Artefakte von \ref{resultate:loesung1:dct:byte:artefakte} und \ref{resultate:loesung0:artefakte} vergleicht, fällt auf dass die Variante \ref{resultate:dct} die Feldlinie genauer approximiert. Wenn die Ränder besser dargestellt werden, ist es Denkbar, dass die Variante \ref{resultate:dct} wenigere Kosinus-Funktionen braucht für eine ähnlich genaue Approximation.
 
 \subsubsection{DCT mit Byte-Codierung}
-Zum Vergleich wird das jetzt noch gemacht.
+Zum Vergleich wird das jetzt noch gemacht. \ref{konzept:loesung1:randbehandlung}
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-7/loesung1_7.png}
+	\caption{Vergleich der Kompression mit und ohne Byte-Kodierung}
+	\label{resultate:loesung1:dct:randbehandlung}
+\end{figure}
 
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-7/artefakte.png}
+	\caption{Artefakte der DCT Kompression der Ableitung}
+	\label{resultate:loesung1:puredct:byte:artefakte:}
+\end{figure} 
