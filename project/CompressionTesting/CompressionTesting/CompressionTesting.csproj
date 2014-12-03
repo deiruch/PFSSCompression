@@ -64,6 +64,7 @@
     <Compile Include="PFSS\Test\TestLine.cs" />
     <Compile Include="PFSS\Test\TestPoint.cs" />
     <Compile Include="PFSS\Test\TestSuite.cs" />
+    <Compile Include="Quantization\ExtraPointDiscretizer.cs" />
     <Compile Include="Quantization\PCACoefficient.cs" />
     <Compile Include="Quantization\Subsampling.cs" />
     <Compile Include="Quantization\Discretizer.cs" />

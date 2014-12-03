@@ -61,7 +61,7 @@ namespace CompressionTesting.Transformation
 
             //factor = Math.Sign(rise) < 0 ? factor : -factor;
             //(int)Math.Ceiling(Math.Abs(rise / factor))
-            int proposedLen = (int)(Math.Abs(rise / factor)) ;
+            int proposedLen = (int)(Math.Abs(rise / factor));
             int len = proposedLen > length / 5 ? length / 5 : proposedLen;
             float[] output = new float[len];
             float oldPoint = p0;
@@ -82,14 +82,14 @@ namespace CompressionTesting.Transformation
         }
 
         public static double GetRiseX(PFSSLine l,int startIndex,int endIndex) {
-            if(l.points.Count/5 <= (endIndex-startIndex)) {
+            if(l.points.Count/10 <= (endIndex-startIndex)) {
                 if(startIndex == 0) 
                 {
-                    return -l.points[startIndex].x + l.points[startIndex + 1].x;
+                    endIndex = (int)Math.Ceiling(l.points.Count / 10f);
                 }
                 else
                 {
-                    return -l.points[endIndex-1].x + l.points[endIndex].x;
+                    startIndex = endIndex - (int)Math.Ceiling(l.points.Count / 10f);
                 }
                     
             }
@@ -101,20 +101,21 @@ namespace CompressionTesting.Transformation
                 r[i - startIndex] = -l.points[i].x + l.points[i + 1].x;
             }
 
+            Array.Sort(r);
             return r[r.Length/2];
         }
 
         public static double GetRiseY(PFSSLine l, int startIndex, int endIndex)
         {
-            if (l.points.Count / 5 <= (endIndex - startIndex))
+            if (l.points.Count / 10 <= (endIndex - startIndex))
             {
                 if (startIndex == 0)
                 {
-                    return -l.points[startIndex].x + l.points[startIndex + 1].x;
+                    endIndex = (int)Math.Ceiling(l.points.Count / 10f);
                 }
                 else
                 {
-                    return -l.points[endIndex - 1].x + l.points[endIndex].x;
+                    startIndex = endIndex - (int)Math.Ceiling(l.points.Count / 10f);
                 }
 
             }
@@ -125,21 +126,23 @@ namespace CompressionTesting.Transformation
                 r[i - startIndex] = -l.points[i].y + l.points[i + 1].y;
             }
 
+            Array.Sort(r);
             return r[r.Length / 2];
         }
 
         public static double GetRiseZ(PFSSLine l, int startIndex, int endIndex)
         {
-            if(l.points.Count/5 <= (endIndex-startIndex)) {
-                if(startIndex == 0) 
+            if (l.points.Count / 10 <= (endIndex - startIndex))
+            {
+                if (startIndex == 0)
                 {
-                    return -l.points[startIndex].x + l.points[startIndex + 1].x;
+                    endIndex = (int)Math.Ceiling(l.points.Count / 10f);
                 }
                 else
                 {
-                    return -l.points[endIndex-1].x + l.points[endIndex].x;
+                    startIndex = endIndex - (int)Math.Ceiling(l.points.Count / 10f);
                 }
-                    
+
             }
             float[] r = new float[endIndex - startIndex];
 
@@ -148,6 +151,7 @@ namespace CompressionTesting.Transformation
                 r[i - startIndex] = -l.points[i].z + l.points[i + 1].z;
             }
 
+            Array.Sort(r);
             return r[r.Length / 2];
         }
 

@@ -17,7 +17,7 @@ namespace CompressionTesting.Solutions
     {
         public int GetQualityLevels()
         {
-            return 1;
+            return 1;//9;
         }
 
         public string GetName()
@@ -336,20 +336,20 @@ namespace CompressionTesting.Solutions
             
             //int zeroCount = GetZeroCount(data, qualityLevel + 16);
             //DCTQuantization.SetToZero(data, zeroCount);
-            
-            Discretizer.DividePoint(data, 500, 0);
-            Discretizer.DivideExtra(data, 1000);
-            Discretizer.DivideLinearExtra(data, 2 * (qualityLevel*10 + 100),1);
-            Discretizer.ToShortsExtra(data);
+
+            ExtraPointDiscretizer.DividePoint(data, 500, 0);
+            ExtraPointDiscretizer.DivideExtra(data, 1000);
+            ExtraPointDiscretizer.DivideLinearExtra(data, 2 * (qualityLevel * 10 + 140), 1);
+            ExtraPointDiscretizer.ToShortsExtra(data);
             
             StandardWriter.WriteDCTByteFits(data, fits);
             long size = RarCompression.DoRar(rarFits, fits);
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            Discretizer.MultiplyLinearExtra(data, 2 * (qualityLevel*10 + 100),1);
-            Discretizer.MultiplyExtra(data, 1000);
-            Discretizer.MultiplyPoint(data, 500, 0);
+            ExtraPointDiscretizer.MultiplyLinearExtra(data, 2 * (qualityLevel * 10 + 140), 1);
+            ExtraPointDiscretizer.MultiplyExtra(data, 1000);
+            ExtraPointDiscretizer.MultiplyPoint(data, 500, 0);
             DCTransformer.BackwardExtra(data, 0);
             //Residualizer.UndoResiduals(data, 1);
 
