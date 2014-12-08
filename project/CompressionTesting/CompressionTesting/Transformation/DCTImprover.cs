@@ -9,15 +9,23 @@ namespace CompressionTesting.Transformation
 {
     class DCTImprover
     {
+        public static int percentSearch = 20;
+        public static int maxSearch = 45;
+        public static int maxPercentLength = 25;
+
+        public static int plusLength = 15;
+        public static double factorStatic = 20000;
+        
+
         public static void AddExtraPoints(PFSSData data, double factor)
         {
             foreach (PFSSLine l in data.lines)
             {
                 l.extra = new ExtraPoints[3];
                 int length = l.points.Count;
-                double rise = GetRiseX(l, 0, 20);
+                double rise = GetRiseX(l, 0, maxSearch);
                 float[] start = HandleCurve(l.points[0].x,rise,factor,length);
-                rise = -GetRiseX(l, l.points.Count - 21, l.points.Count-1);
+                rise = -GetRiseX(l, l.points.Count - 1 - maxSearch, l.points.Count - 1);
                 float[] end = HandleCurve(l.points[length - 1].x, rise, factor, length);
                 Array.Reverse(start);
                 ExtraPoints e = new ExtraPoints();
@@ -27,10 +35,9 @@ namespace CompressionTesting.Transformation
                 e.endLength = end.Length;
                 l.extra[0] =e;
 
-
-                rise = GetRiseY(l, 0, 20);
+                rise = GetRiseY(l, 0, maxSearch);
                 start = HandleCurve(l.points[0].y, rise, factor, length);
-                rise = -GetRiseY(l, l.points.Count - 21, l.points.Count - 1);
+                rise = -GetRiseY(l, l.points.Count - 1 - maxSearch, l.points.Count - 1);
                 end = HandleCurve(l.points[length - 1].y, rise, factor, length);
                 Array.Reverse(start);
                 e = new ExtraPoints();
@@ -42,7 +49,7 @@ namespace CompressionTesting.Transformation
 
                 rise = GetRiseZ(l, 0, 20);
                 start = HandleCurve(l.points[0].z, rise, factor, length);
-                rise = -GetRiseZ(l, l.points.Count - 21, l.points.Count - 1);
+                rise = -GetRiseZ(l, l.points.Count - 1 - maxSearch, l.points.Count - 1);
                 end = HandleCurve(l.points[length - 1].z, rise, factor, length);
                 Array.Reverse(start);
                 e = new ExtraPoints();
@@ -61,8 +68,8 @@ namespace CompressionTesting.Transformation
 
             //factor = Math.Sign(rise) < 0 ? factor : -factor;
             //(int)Math.Ceiling(Math.Abs(rise / factor))
-            int proposedLen = (int)(Math.Abs(rise / factor));
-            int len = proposedLen > length / 5 ? length / 5 : proposedLen;
+            int proposedLen = (int)(Math.Abs(rise / factorStatic)) + plusLength;
+            int len = proposedLen > length / maxPercentLength ? length / maxPercentLength : proposedLen;
             float[] output = new float[len];
             float oldPoint = p0;
             //float diff = (float)factor;
@@ -73,7 +80,7 @@ namespace CompressionTesting.Transformation
                 //diff += (float)factor;
                 var f = 1-i / (float)(output.Length);
                 float cos = (float)Math.Cos(Math.PI * f);
-                float r = (float)(rise * (1 - cos * 0.5-0.5));
+                float r = (float)(rise * (0.5 - cos * 0.5));
                 output[i] = oldPoint - r;
                 oldPoint = output[i];
             }
@@ -82,14 +89,15 @@ namespace CompressionTesting.Transformation
         }
 
         public static double GetRiseX(PFSSLine l,int startIndex,int endIndex) {
-            if(l.points.Count/10 <= (endIndex-startIndex)) {
+            if (l.points.Count / percentSearch <= (endIndex - startIndex))
+            {
                 if(startIndex == 0) 
                 {
-                    endIndex = (int)Math.Ceiling(l.points.Count / 10f);
+                    endIndex = (int)Math.Ceiling(l.points.Count / (float)percentSearch);
                 }
                 else
                 {
-                    startIndex = endIndex - (int)Math.Ceiling(l.points.Count / 10f);
+                    startIndex = endIndex - (int)Math.Ceiling(l.points.Count / (float)percentSearch);
                 }
                     
             }
@@ -107,15 +115,15 @@ namespace CompressionTesting.Transformation
 
         public static double GetRiseY(PFSSLine l, int startIndex, int endIndex)
         {
-            if (l.points.Count / 10 <= (endIndex - startIndex))
+            if (l.points.Count / percentSearch <= (endIndex - startIndex))
             {
                 if (startIndex == 0)
                 {
-                    endIndex = (int)Math.Ceiling(l.points.Count / 10f);
+                    endIndex = (int)Math.Ceiling(l.points.Count / (float)percentSearch);
                 }
                 else
                 {
-                    startIndex = endIndex - (int)Math.Ceiling(l.points.Count / 10f);
+                    startIndex = endIndex - (int)Math.Ceiling(l.points.Count / (float)percentSearch);
                 }
 
             }
@@ -132,15 +140,15 @@ namespace CompressionTesting.Transformation
 
         public static double GetRiseZ(PFSSLine l, int startIndex, int endIndex)
         {
-            if (l.points.Count / 10 <= (endIndex - startIndex))
+            if (l.points.Count / percentSearch <= (endIndex - startIndex))
             {
                 if (startIndex == 0)
                 {
-                    endIndex = (int)Math.Ceiling(l.points.Count / 10f);
+                    endIndex = (int)Math.Ceiling(l.points.Count / (float)percentSearch);
                 }
                 else
                 {
-                    startIndex = endIndex - (int)Math.Ceiling(l.points.Count / 10f);
+                    startIndex = endIndex - (int)Math.Ceiling(l.points.Count / (float)percentSearch);
                 }
 
             }

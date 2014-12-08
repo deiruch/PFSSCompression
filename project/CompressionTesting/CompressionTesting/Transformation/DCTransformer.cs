@@ -40,7 +40,7 @@ namespace CompressionTesting
             }
         }
 
-        public static void ForwardExtra(PFSSData data, int pointOffset, FileInfo outFile)
+        public static void ForwardExtra(PFSSData data, int pointOffset)
         {
             foreach (PFSSLine l in data.lines)
             {
@@ -71,20 +71,9 @@ namespace CompressionTesting
                 foreach (float f in l.extra[2].end)
                     z[iZ++] = f;
 
-                /*StreamWriter w = new StreamWriter(new FileStream(outFile.FullName, FileMode.Create));
-                //print analyzation
-                w.Write("R;P;T\n");
-                for (int i = 0; i < x.Length; i++)
-                {
-                    w.Write(x[i]); w.Write(";");
-                    w.Write(y[i]); w.Write(";");
-                    w.Write(z[i]); w.Write("\n");
-                }
-                w.Close();*/
-
-                x = DCT.slow_fdct(x);
-                y = DCT.slow_fdct(y);
-                z = DCT.slow_fdct(z);
+                x = DCT.fdct(x);
+                y = DCT.fdct(y);
+                z = DCT.fdct(z);
 
                 l.extraX = x;
                 l.extraY = y;
@@ -136,9 +125,9 @@ namespace CompressionTesting
         {
             foreach (PFSSLine l in data.lines)
             {
-                l.extraX = DCT.slow_idct(l.extraX);
-                l.extraY = DCT.slow_idct(l.extraY);
-                l.extraZ = DCT.slow_idct(l.extraZ);
+                l.extraX = DCT.idct(l.extraX);
+                l.extraY = DCT.idct(l.extraY);
+                l.extraZ = DCT.idct(l.extraZ);
                 int iX = l.extra[0].startLength, iY = l.extra[1].startLength, iZ = l.extra[2].startLength;
 
                 iX += pointOffset; iY += pointOffset; iZ += pointOffset;

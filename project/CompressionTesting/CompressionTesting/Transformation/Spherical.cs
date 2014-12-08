@@ -17,7 +17,7 @@ namespace CompressionTesting.Transformation
                 rCopy = 0;
             }
 
-            p.x = (rCopy - 12288f);
+            p.x = (rCopy);
             p.y = (p.y - 16384f);
             p.z = (p.z - 8192f);
         }
@@ -32,7 +32,7 @@ namespace CompressionTesting.Transformation
 
         public static void BackwardMoveSpherical(PFSSPoint p)
         {
-            p.x = (p.x + 12288f + 8192f);
+            p.x = (p.x+ 8192f);
             p.y = (p.y + 16384f);
             p.z = (p.z + 8192f);
         }

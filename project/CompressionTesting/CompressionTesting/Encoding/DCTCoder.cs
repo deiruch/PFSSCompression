@@ -13,40 +13,73 @@ namespace CompressionTesting.Encoding
         public const byte signFlag = 64;
         public const short maxValue = 63;
         public const short minValue = -64;
-        public static byte[] Encode(short[] data)
+        public const int dataBitCount = 7;
+
+        public static short[] EncodeRLE(short[] data)
         {
             int length = FindLastValue(data) + 1;
-            int continues = CountContinues(data, length);
-            byte[] output = new byte[length + continues + 1];
+            short[] copy = new short[length + 1];
+            Array.Copy(data, 0, copy, 1, length);
+            copy[0] = (short)length;
+            return copy;
+        }
+
+        public static byte[] EncodeAdaptiveUnsigned(short[] data)
+        {
+            int length = data.Length;
+            int continues = CalcLengthUnsigned(data, length);
+            byte[] output = new byte[length + continues];
 
             int outIndex = 0;
-            for (int i = 1; i < length; i++)
+            for (int i = 0; i < length; i++)
             {
                 byte current = 0;
+                int extraBytes = CountExtraBytesUnsigned(data[i]);
+                int value = data[i];
 
-                //use 2 bytes for saving value
-                if (data[i] > maxValue || data[i] < minValue)
-                {
-                    short copy = data[i];
-                    byte next = (byte)(255 & copy);
-                    copy = (short)(copy >> 8);
-                    current += (byte)(copy & maxValue);
-                    current += continueFlag;
-                    current += Math.Sign(data[i]) < 0 ? signFlag : (byte)0;
+                current = (byte)((value >> (extraBytes * dataBitCount)) & continueFlag - 1);
+                current += extraBytes > 0 ? continueFlag : (byte)0;
+                output[outIndex++] = current;
 
-                    output[outIndex++] = current;
-                    output[outIndex++] = next;
-                }
-                else
+                for (int j = 0; j < extraBytes; j++)
                 {
-                    //use one byte
-                    current += Math.Sign(data[i]) < 0 ? signFlag : (byte)0;
-                    current += (byte)(data[i] & maxValue);
+                    current = 0;
+                    current = (byte)((value << (extraBytes - j - 1) * dataBitCount) & continueFlag - 1);
+                    current += j + 1 < extraBytes ? continueFlag : (byte)0;
                     output[outIndex++] = current;
                 }
             }
 
-            output[0] = (byte)length;
+            return output;
+        }
+
+        public static byte[] EncodeAdaptive(short[] data)
+        {
+            int length = data.Length;
+            int continues = CalcLength(data, length);
+            byte[] output = new byte[length+ continues];
+
+            int outIndex = 0;
+            for (int i = 0; i < length; i++)
+            {
+                byte current = 0;
+                int extraBytes = CountExtraBytes(data[i]);
+                int value = data[i];
+                
+                current = (byte)((value >> (extraBytes * dataBitCount)) & signFlag-1);
+                current += Math.Sign(data[i]) < 0 ? signFlag : (byte)0;
+                current += extraBytes > 0 ? continueFlag : (byte)0;
+                output[outIndex++] = current;
+                
+                for (int j = 0; j < extraBytes; j++)
+                {
+                    current = 0;
+                    current = (byte)((value << (extraBytes - j - 1) * dataBitCount) & continueFlag - 1);
+                    current += j+1 < extraBytes ? continueFlag : (byte)0;
+                    output[outIndex++] = current;
+                }
+            }
+
             return output;
         }
 
@@ -67,42 +100,76 @@ namespace CompressionTesting.Encoding
             return lastIndex;
         }
 
-        private static int CountContinues(short[] data,int length)
+        private static int CountExtraBytes(int value)
+        {
+            int counter = 0;
+            int maxV = maxValue;
+            int minV = minValue;
+            while (value > maxValue || value < minValue)
+            {
+                value >>= dataBitCount;
+                counter++;
+            }
+
+            return counter;
+        }
+
+        private static int CountExtraBytesUnsigned(int value)
+        {
+            int counter = 0;
+            int maxV = continueFlag-1;
+
+            while (value > maxValue)
+            {
+                value >>= dataBitCount;
+                counter++;
+            }
+
+            return counter;
+        }
+
+        private static int CalcLength(short[] data,int length)
         {
             int counter = 0;
             for (int i = 0; i < length; i++)
-            {
-                if (data[i] > maxValue || data[i] < minValue)
-                    counter++;
-            }
+                counter += CountExtraBytes(data[i]);
+            
+            return counter;
+        }
 
+        private static int CalcLengthUnsigned(short[] data, int length)
+        {
+            int counter = 0;
+            for (int i = 0; i < length; i++)
+                counter += CountExtraBytesUnsigned(data[i]);
 
             return counter;
         }
 
         public static short[] Decode(byte[] data,int decLen)
         {
+            //count length
             short[] output = new short[decLen];
             int outIndex = 0;
-            for (int i = 1; i < data.Length; i++)
+            for (int i = 0; i < data.Length; i++)
             {
                 byte current = data[i];
-                short value = (short)(current & (signFlag-1));
-                
-                if (current >= continueFlag)
+                int value = (short)(current & (signFlag-1));
+                int minus = -(current & signFlag);
+                bool run = current >= continueFlag;
+                while (run)
                 {
-                    //2 byte value
-                    value <<= 8;
-                    value += data[i + 1];
-                    value -= (signFlag & current) != 0 ? (short)16384:(short)0;
-                    i++;
+                    if (run) 
+                    { 
+                        i++;
+                        current = data[i];
+                    }
+                    run = current >= continueFlag;
+                    minus <<= dataBitCount;
+                    value <<= dataBitCount;
+                    value += current & (continueFlag - 1);
                 }
-                else
-                {
-                    value -= (signFlag & current) != 0 ? signFlag : (short)0;
-                }
-                
-                output[outIndex++] = value;
+                output[outIndex++] = (short)(value + minus);
             }
 
             return output;
@@ -121,9 +188,12 @@ namespace CompressionTesting.Encoding
                 y[i] = (short)line.points[i].y;
                 z[i] = (short)line.points[i].z;
             }
-            output.Add(Encode(x));
-            output.Add(Encode(y));
-            output.Add(Encode(z));
+            x = EncodeRLE(x);
+            y = EncodeRLE(y);
+            z = EncodeRLE(z);
+            output.Add(EncodeAdaptive(x));
+            output.Add(EncodeAdaptive(y));
+            output.Add(EncodeAdaptive(z));
             return output;
         }
 
@@ -134,8 +204,16 @@ namespace CompressionTesting.Encoding
             {
                 copy[i] = (short)data[i];
             }
+            copy = EncodeRLE(copy);
 
-            return Encode(copy);
+            return EncodeAdaptive(copy);
+        }
+
+        public static byte[] Encode(short[] data)
+        {
+            short[] copy = EncodeRLE(data);
+
+            return EncodeAdaptive(copy);
         }
     }
 }

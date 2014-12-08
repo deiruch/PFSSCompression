@@ -19,78 +19,11 @@ namespace CompressionTesting
     {
         static void Main(string[] args)
         {
-            //DCTImprover.HandleCurve(-515478700, -517611300, 200000,100);
-            //run();
-            testExampleLine();
-            //pcatryout2();
+            run();
+            //Testing();
+            //testExampleLine();
             //printLine();
         }
-        private static void pcatryout2()
-        {
-            Matrix<float> bla = Matrix<float>.Build.Dense(11, 3);
-            Matrix<float> bla2 = Matrix<float>.Build.Dense(2, 3);
-            string[] line = File.ReadAllLines(@"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp\line.csv");
-            List<PFSSPoint> points = new List<PFSSPoint>();
-            for (int i = 1; i < line.Length; i++)
-            {
-                string[] stuff = line[i].Split(';');
-                PFSSPoint point = new PFSSPoint(float.Parse(stuff[0]),float.Parse(stuff[1]),float.Parse(stuff[2]));
-                points.Add(point);
-                bla[i - 1, 0] = float.Parse(stuff[0]);
-                bla[i - 1, 1] = float.Parse(stuff[1]);
-                bla[i - 1, 2] = float.Parse(stuff[2]);
-            }
-            PFSSLine l = new PFSSLine(TYPE.OUTSIDE_TO_SUN, points);
-            List<PFSSLine> lines = new List<PFSSLine>();
-            lines.Add(l);
-            PFSSData d = new PFSSData(0, 0, lines);
-            PCATransform.Forward(d, 0);
-
-            PCA p = new PCA(bla, true);
-            Matrix<float> result = p.transform(bla, PCA.TransformationType.ROTATION);
-
-            for (int i = 0; i < bla.RowCount; i++)
-            {
-                System.Console.Write(result[i, 0] + " ");
-                System.Console.Write(result[i, 1]+" ");
-                System.Console.Write(result[i, 2] + " ");
-                System.Console.WriteLine();
-            }
-            System.Console.WriteLine();
-            for (int i = 0; i < d.lines[0].points.Count; i++)
-            {
-                System.Console.Write(d.lines[0].points[i].x + " ");
-                System.Console.Write(d.lines[0].points[i].y + " ");
-                System.Console.Write(d.lines[0].points[i].z + " ");
-                System.Console.WriteLine();
-                
-            }
-            System.Console.WriteLine();
-            PCACoefficient.Backwards(d);
-            PCATransform.Backwards(d, 0);
-            for (int i = 0; i < d.lines[0].points.Count; i++)
-            {
-                System.Console.Write(d.lines[0].points[i].x + " ");
-                System.Console.Write(d.lines[0].points[i].y + " ");
-                System.Console.Write(d.lines[0].points[i].z + " ");
-                System.Console.WriteLine();
-            }
-            System.Console.WriteLine();
-
-            
-            result = p.inverseTransform(result, PCA.TransformationType.ROTATION);
-           
-            for (int i = 0; i < bla.RowCount; i++)
-            {
-                for (int j = 0; j < bla.ColumnCount; j++)
-                    System.Console.Write(result[i, j] + " ");
-                System.Console.WriteLine();
-            }
-            System.Console.WriteLine();
-
-            System.Console.WriteLine();
-        }
-
         private static void testExampleLine()
         {
             ISolution solution = new Solution1();
@@ -153,6 +86,7 @@ namespace CompressionTesting
         {
             ISolution solution = new Solution1();
             bool testOneFile = false;
+            DCT.DiscreteCosineTransform(400);
 
             string fitsOutputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp";
             string outputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\testresult";
@@ -198,6 +132,91 @@ namespace CompressionTesting
             }
 
             w.Close();
+        }
+
+        private static void Testing()
+        {
+            DCT.DiscreteCosineTransform(400);
+            ISolution solution = new Solution1();
+            bool testOneFile = true;
+
+            string fitsOutputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp";
+            string outputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\testresult";
+            string[] expectedFiles = Directory.GetFiles(@"C:\dev\git\bachelor\test\testdata\raw");
+            TestSuite[] testData = testOneFile ? new TestSuite[1] : new TestSuite[expectedFiles.Length];
+
+            //load data
+            for (int i = 0; i < testData.Length; i++)
+            {
+                testData[i] = FitsReader.ReadFloatFits(new FileInfo(expectedFiles[i]));
+            }
+
+            Tuple<double, double> max = new Tuple<double, double>(double.MaxValue, double.MaxValue);
+            int bla0 = 0;
+            int bla1 = 0;
+            int bla2 = 0;
+            int bla3 = 0;
+            int bla4 = 0;
+            int bla5 = 0;
+            for (int percentSearch = 0; percentSearch < 5; percentSearch++)
+            {
+                for (int maxSearch = 15; maxSearch < 50; maxSearch += 10)
+                {
+                    for (int maxPercentLength = 2; maxPercentLength < 25; maxPercentLength += 5)
+                    {
+                        for (int plusLength = 0; plusLength < 10; plusLength += 5)
+                        {
+                            for (int lenFactor = 0; lenFactor < 25; lenFactor += 10)
+                            {
+                                DCTImprover.maxSearch = maxSearch;
+                                DCTImprover.percentSearch = 5 + percentSearch * 6;
+                                DCTImprover.maxPercentLength = maxPercentLength;
+                                DCTImprover.plusLength = plusLength;
+                                DCTImprover.factorStatic = (lenFactor + 1) * 20000;
+
+                                TestResult[] result = new TestResult[testData.Length];
+                                PFSSData[] data = new PFSSData[testData.Length];
+                                for (int j = 0; j < data.Length; j++)
+                                {
+                                    data[j] = testData[j].GetData();
+                                    result[j] = solution.DoTestRun(data[j], 1, fitsOutputFolder);
+                                }
+                                Tuple<double, double> overall = ErrorCalculator.CalculateOverallError(testData, data);
+                                long lineCount = 0;
+                                long fileSize = 0;
+                                foreach (TestResult res in result)
+                                {
+                                    fileSize += res.fileSize;
+                                    lineCount += res.lineCount;
+                                }
+                                double averageLineSize = fileSize / (double)lineCount;
+                                if (averageLineSize <= max.Item1 && overall.Item2 <= 6000000)
+                                {
+                                    Tuple<double, double> newMax = new Tuple<double, double>(averageLineSize, overall.Item2);
+                                    max = newMax;
+                                    System.Console.Write("maxSearch: " + maxSearch);
+                                    System.Console.Write("maxPercentLength: " + maxPercentLength);
+                                    System.Console.Write("plusLength: " + plusLength);
+                                    System.Console.Write("factorStatic: " + (lenFactor * 2 + 1) * 20000);
+                                    System.Console.WriteLine("--------------------------------");
+
+                                    bla0 = percentSearch;
+                                    bla1 = maxSearch;
+                                    bla2 = maxPercentLength;
+                                    bla3 = plusLength;
+                                    bla4 = lenFactor;
+                                }
+
+
+
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            System.Console.ReadLine();
         }
     }
 }

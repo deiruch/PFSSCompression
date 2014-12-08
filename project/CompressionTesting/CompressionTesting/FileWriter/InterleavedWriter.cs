@@ -149,36 +149,42 @@ namespace CompressionTesting.FileWriter
             short[] ptph = new short[input.lines.Count];
             short[] ptth = new short[input.lines.Count];
 
+            List<PFSSLine> lines = new List<PFSSLine>(input.lines);
+            lines.Sort();
+
             int totalCount = 0;
             int byteCountX = 0;
             int byteCountY = 0;
             int byteCountZ = 0;
-            List<List<byte[]>> temp = new List<List<byte[]>>(input.lines.Count);
+
+            List<List<byte[]>> temp = new List<List<byte[]>>(lines.Count);
             for (int i = 0; i < ptr_nz_len.Length; i++)
             {
-                int count = input.lines[i].points.Count - 1;
+                int count = lines[i].points.Count - 1;
                 totalCount += count;
                 ptr_nz_len[i] = (short)count;
 
-                List<byte[]> line = DCTCoder.Encode(input.lines[i], 1);
+                List<byte[]> line = DCTCoder.Encode(lines[i], 1);
                 byteCountX += line[0].Length;
                 byteCountY += line[1].Length;
                 byteCountZ += line[2].Length;
                 temp.Add(line);
             }
 
-            byte[] ptr_nz_len_byte = DCTCoder.Encode(ptr_nz_len);
+            byte[] ptr_nz_len_byte = DCTCoder.EncodeAdaptive(ptr_nz_len);
             byte[][] channels = new byte[3][];
             channels[0] = new byte[byteCountX];
             channels[1] = new byte[byteCountY];
             channels[2] = new byte[byteCountZ];
 
+            //do startpoints;
 
+            //do channels
             int[] channelIndices = new int[3];
             int startPointIndex = 0;
-            for (int i = 0; i < input.lines.Count; i++)
+            for (int i = 0; i < lines.Count; i++)
             {
-                PFSSLine l = input.lines[i];
+                PFSSLine l = lines[i];
                 ptr[startPointIndex] = (short)l.points[0].x;
                 ptph[startPointIndex] = (short)l.points[0].y;
                 ptth[startPointIndex] = (short)l.points[0].z;
@@ -204,7 +210,7 @@ namespace CompressionTesting.FileWriter
             Double[] b0a = new Double[] { input.b0 };
             Double[] l0a = new Double[] { input.l0 };
             Object[][] data = new Object[1][];
-            Object[] dataRow = new Object[] { b0a, l0a, ptr, ptph, ptth, ptr_nz_len_byte, channels[0], channels[1], channels[2] };
+            Object[] dataRow = new Object[] { b0a, l0a, DCTCoder.Encode(ptr),DCTCoder.Encode(ptph), DCTCoder.Encode(ptth), ptr_nz_len_byte, channels[0], channels[1], channels[2] };
             data[0] = dataRow;
 
             BinaryTable table = new BinaryTable(data);

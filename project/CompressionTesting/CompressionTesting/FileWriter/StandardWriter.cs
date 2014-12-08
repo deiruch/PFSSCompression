@@ -131,7 +131,7 @@ namespace CompressionTesting.FileWriter
         public static void WriteDCTByteFits(PFSSData input, FileInfo output)
         {
             short[] ptr_nz_len = new short[input.lines.Count];
-            byte[] startEnd = new byte[input.lines.Count * 6];
+            short[] startEnd = new short[input.lines.Count * 6];
 
             int totalCount = 0;
             int byteCountX = 0;
@@ -155,7 +155,7 @@ namespace CompressionTesting.FileWriter
                 temp.Add(line);
             }
 
-            byte[] ptr_nz_len_byte = DCTCoder.Encode(ptr_nz_len);
+            byte[] ptr_nz_len_byte = DCTCoder.EncodeAdaptiveUnsigned(ptr_nz_len);
             byte[][] channels = new byte[3][];
             channels[0] = new byte[byteCountX];
             channels[1] = new byte[byteCountY];
@@ -188,7 +188,7 @@ namespace CompressionTesting.FileWriter
             Double[] b0a = new Double[] { input.b0 };
             Double[] l0a = new Double[] { input.l0 };
             Object[][] data = new Object[1][];
-            Object[] dataRow = new Object[] { b0a, l0a, startEnd, ptr_nz_len_byte, channels[0], channels[1], channels[2] };
+            Object[] dataRow = new Object[] { b0a, l0a, DCTCoder.EncodeAdaptiveUnsigned(startEnd), ptr_nz_len_byte, channels[0], channels[1], channels[2] };
             data[0] = dataRow;
 
             BinaryTable table = new BinaryTable(data);

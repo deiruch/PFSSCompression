@@ -15,7 +15,7 @@ namespace CompressionTesting.PFSS
         OUTSIDE_TO_SUN
     }
 
-    class PFSSLine
+    class PFSSLine : IComparable<PFSSLine>
     {
         internal TYPE Type { get; private set; }
         internal List<PFSSPoint> points { get; private set; }
@@ -35,5 +35,16 @@ namespace CompressionTesting.PFSS
         }
 
 
+
+        public int CompareTo(PFSSLine other)
+        {
+            if (other.Type == this.Type)
+                return 0;
+            if (this.Type == TYPE.OUTSIDE_TO_SUN)
+                return -1;
+            if (other.Type == TYPE.OUTSIDE_TO_SUN)
+                return 1;
+            return 0;
+        }
     }
 }

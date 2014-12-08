@@ -6,16 +6,34 @@ neuer Ordner auf Share
 
 
 \subsection{Asynchrone Dekomprimierung im JHelioviewer}
-alter zustand?
+Im PFSS Plugin gibt es zwei Flaschenhälse: Das Herunterladen der Komprimierten Feldlinien und das Dekomprimieren. Das Herunterladen beansprucht vorallem Zeit, während das Dekomprimieren Speicher und Rechenaufwändig ist. In der Ist-Implementation wurde bereits versucht, mit den Flaschenhälsen umzugehen. Es wird analysiert, was für Massnahmen getroffen wurden und wo es noch Optimierungspotential gibt.\\
+[\baselineskip]
+Um das Herunterladen zu beschleunigen, wird ein Read Ahead durchgeführt. Eine sehr alte Strategie, um Übetragungen zu beschleunigen. Anstatt nur die angeforderten Daten herunterzuladen, werden ebenfalls die nächsten X Pakete ebenfalls geladen. Da die Feldlinien meistens sequenzell angefordert werden, sind die Feldlinien bereits heruntergeladen, wenn sie benötigt werden. Das Herunterladen geschieht in einem Thread pro Feldliniendatei.\\
+Die Dekompression erfolgt synchron und wird dann angestossen, wenn die Feldlinien visualisiert werden sollen. Das führt zu kleinen Verzögerungen bei jedem Bildwechsel.\\
+Daten werden nicht gecached, wenn der Benutzer zu einem alten Zeitpunkt springt, werden die Feldlinien nochmals neu heruntergeladen.\\
+[\baselineksip]
+Folgende Massnahmen werden umgesetzt um die Darstellung zu beschleunigen:
+\begin{enumerate}
+	\item Read-Ahead der Dekomprimierten Feldlinien.
+	\item Asynchrone Dekompression.
+	\item Zweistufiges Caching.
+\end{enumerate}
+Die dekomprimierten Feldlinien sollen bereit stehen, bevor sie gebraucht werden.\\ Damit die Visualisierung durch das Read-Ahead dekomprimieren nicht unterbrochen wird, wird die Dekompression neu Asynchron ausgeführt. Zusätzlich führt die Asynchrone Implementation zu Performanceverbesserung, da die Dekompression paralellisiert werden kann.\\
+Durch das CachingDie unkomprimierten sowie die komprimierten Feldlinien werden im Arbeitsspeicher zwischengespeichert. Wenn der Benutzer nun ''Zurückspuhlt´´ in der Visualisierung, kann im besten Fall auf unkomprimierte FEldlinien zurückgegriffen werden. Im zweitbesten muss nur noch die Dekompression erfolgen. Im schlechtesten müssen wieder Feldlinien hinzugeladen werden.Sonderfall, bei sehr langsamen verbindungen möchte man alle Daten cachen: Möglichkeit alle komprimierten Feldlinien im Speicher zu cachen.\\
 
-neuer Zustand
-DAtenfluss, FileDescriptor
-Ziel, Asynchroner Ablauf. Daten werden Asynchron vom Server heruntergeladen, dekomprimiert und auf die Grafikkarte geladen.
+was nicht gemacht wurde, mehrere Dateien zusammengefasst.
 
-Klassendiagramm
 
-Read ahead Frames
-Cache
+\subsection{Software Architektur}
+Neuer Datenfluss
+Repräsentiert jeden Zustand einer FEldlinie. Auf dem SErver, komprimiert heruntergeladen, dekomprimiert. Zustand Decompressor stellt den Zustandswechsel von Komprimiert zu Dekomprimiert dar. Da dieser Wechsel komplex ist, wurde dafür eine eigene Klasse erstellt. Alles Asynchron, threadsafe , runnable implementation, damit sie in einem eigenen Thread gelassen werden können.\\
 
-PfssData Read ahead + cache
+UML Diagramm
+
+
+Asynchron mit Executor services
+
+
+Caching
+
 

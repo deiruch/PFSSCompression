@@ -24,23 +24,23 @@ namespace CompressionTesting.Quantization
             }
         }
 
-        public static void DivideLinearExtra(PFSSData data, double factor, int offset)
+        public static void DivideLinearExtra(PFSSData data, double factor, int offset, int start)
         {
             foreach (PFSSLine l in data.lines)
             {
-                double div = factor;
+                double div = factor*start;
                 for (int i = offset; i < l.extraX.Length; i++)
                 {
                     l.extraX[i] = (float)(l.extraX[i] / div);
                     div += factor;
                 }
-                div = factor;
+                div = factor * start;
                 for (int i = offset; i < l.extraY.Length; i++)
                 {
                     l.extraY[i] = (float)(l.extraY[i] / div);
                     div += factor;
                 }
-                div = factor;
+                div = factor * start;
                 for (int i = offset; i < l.extraZ.Length; i++)
                 {
                     l.extraZ[i] = (float)(l.extraZ[i] / div);
@@ -50,23 +50,23 @@ namespace CompressionTesting.Quantization
             }
         }
 
-        public static void MultiplyLinearExtra(PFSSData data, double factor, int offset)
+        public static void MultiplyLinearExtra(PFSSData data, double factor, int offset, int start)
         {
             foreach (PFSSLine l in data.lines)
             {
-                double div = factor;
+                double div = factor*start;
                 for (int i = offset; i < l.extraX.Length; i++)
                 {
                     l.extraX[i] = (float)(l.extraX[i] * div);
                     div += factor;
                 }
-                div = factor;
+                div = factor * start;
                 for (int i = offset; i < l.extraY.Length; i++)
                 {
                     l.extraY[i] = (float)(l.extraY[i] * div);
                     div += factor;
                 }
-                div = factor;
+                div = factor * start;
                 for (int i = offset; i < l.extraZ.Length; i++)
                 {
                     l.extraZ[i] = (float)(l.extraZ[i] * div);
