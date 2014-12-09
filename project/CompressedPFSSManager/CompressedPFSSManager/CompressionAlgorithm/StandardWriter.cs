@@ -30,9 +30,9 @@ namespace CompressedPFSSManager
                 ptr_nz_len[i] = (short)count;
 
                 List<byte[]> line = new List<byte[]>(3);
-                line.Add(DCTCoder.Encode(l.extraX));
-                line.Add(DCTCoder.Encode(l.extraY));
-                line.Add(DCTCoder.Encode(l.extraZ));
+                line.Add(DCTCoder.EncodeChannel(l.extraX));
+                line.Add(DCTCoder.EncodeChannel(l.extraY));
+                line.Add(DCTCoder.EncodeChannel(l.extraZ));
                 byteCountX += line[0].Length;
                 byteCountY += line[1].Length;
                 byteCountZ += line[2].Length;

@@ -19,6 +19,10 @@ namespace CompressionTesting
     {
         static void Main(string[] args)
         {
+            short[] data = new short[] {128,255,0};
+            data = DCTCoder.EncodeRLE(data);
+            byte[] actual = DCTCoder.EncodeAdaptiveUnsigned(data);
+            
             run();
             //Testing();
             //testExampleLine();

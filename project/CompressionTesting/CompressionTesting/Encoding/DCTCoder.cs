@@ -119,7 +119,7 @@ namespace CompressionTesting.Encoding
             int counter = 0;
             int maxV = continueFlag-1;
 
-            while (value > maxValue)
+            while (value > maxV)
             {
                 value >>= dataBitCount;
                 counter++;

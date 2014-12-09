@@ -15,6 +15,18 @@ namespace CompressedPFSSManager
         public const short minValue = -64;
         public const int dataBitCount = 7;
 
+        public static byte[] EncodeChannel(float[] data)
+        {
+            short[] copy = new short[data.Length];
+            for (int i = 0; i < data.Length; i++)
+            {
+                copy[i] = (short)data[i];
+            }
+            copy = EncodeRLE(copy);
+
+            return EncodeAdaptive(copy);
+        }
+
         public static short[] EncodeRLE(short[] data)
         {
             int length = FindLastValue(data) + 1;
@@ -83,6 +95,7 @@ namespace CompressedPFSSManager
             return output;
         }
 
+        #region helper methods
         private static int FindLastValue(short[] data)
         {
             int lastIndex = data.Length - 1;
@@ -94,7 +107,7 @@ namespace CompressedPFSSManager
                     lastIndex = i;
                     break;
                 }
-                    
+
             }
 
             return lastIndex;
@@ -117,9 +130,9 @@ namespace CompressedPFSSManager
         private static int CountExtraBytesUnsigned(int value)
         {
             int counter = 0;
-            int maxV = continueFlag-1;
+            int maxV = continueFlag - 1;
 
-            while (value > maxValue)
+            while (value > maxV)
             {
                 value >>= dataBitCount;
                 counter++;
@@ -128,12 +141,12 @@ namespace CompressedPFSSManager
             return counter;
         }
 
-        private static int CalcLength(short[] data,int length)
+        private static int CalcLength(short[] data, int length)
         {
             int counter = 0;
             for (int i = 0; i < length; i++)
                 counter += CountExtraBytes(data[i]);
-            
+
             return counter;
         }
 
@@ -145,75 +158,6 @@ namespace CompressedPFSSManager
 
             return counter;
         }
-
-        public static short[] Decode(byte[] data,int decLen)
-        {
-            //count length
-            short[] output = new short[decLen];
-            int outIndex = 0;
-            for (int i = 0; i < data.Length; i++)
-            {
-                byte current = data[i];
-                int value = (short)(current & (signFlag-1));
-                int minus = -(current & signFlag);
-                bool run = current >= continueFlag;
-                while (run)
-                {
-                    if (run) 
-                    { 
-                        i++;
-                        current = data[i];
-                    }
-                    run = current >= continueFlag;
-                    minus <<= dataBitCount;
-                    value <<= dataBitCount;
-                    value += current & (continueFlag - 1);
-                }
-                output[outIndex++] = (short)(value + minus);
-            }
-
-            return output;
-        }
-
-        public static List<byte[]> Encode(PFSSLine line, int offset)
-        {
-            List<byte[]> output = new List<byte[]>(3);
-
-            short[] x = new short[line.points.Count];
-            short[] y = new short[line.points.Count];
-            short[] z = new short[line.points.Count];
-            for (int i = offset; i < line.points.Count; i++) 
-            {
-                x[i] = (short)line.points[i].x;
-                y[i] = (short)line.points[i].y;
-                z[i] = (short)line.points[i].z;
-            }
-            x = EncodeRLE(x);
-            y = EncodeRLE(y);
-            z = EncodeRLE(z);
-            output.Add(EncodeAdaptive(x));
-            output.Add(EncodeAdaptive(y));
-            output.Add(EncodeAdaptive(z));
-            return output;
-        }
-
-        public static byte[] Encode(float[] data)
-        {
-            short[] copy = new short[data.Length];
-            for (int i = 0; i < data.Length; i++)
-            {
-                copy[i] = (short)data[i];
-            }
-            copy = EncodeRLE(copy);
-
-            return EncodeAdaptive(copy);
-        }
-
-        public static byte[] Encode(short[] data)
-        {
-            short[] copy = EncodeRLE(data);
-
-            return EncodeAdaptive(copy);
-        }
+        #endregion
     }
 }
