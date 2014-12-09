@@ -342,7 +342,7 @@ namespace CompressionTesting.Solutions
 
             ExtraPointDiscretizer.DividePoint(data, 800, 0);
             ExtraPointDiscretizer.DivideExtra(data, 1000);
-            ExtraPointDiscretizer.DivideLinearExtra(data, 2 * (qualityLevel * 10 + 140), 1, 1);
+            ExtraPointDiscretizer.DivideLinearExtra(data, 2 * (qualityLevel * 10 + 180), 1, 1);
             ExtraPointDiscretizer.ToShortsExtra(data);
 
             StandardWriter.WriteDCTByteFits(data, fits);
@@ -351,7 +351,7 @@ namespace CompressionTesting.Solutions
             result.lineCount = data.lines.Count;
 
             //140
-            ExtraPointDiscretizer.MultiplyLinearExtra(data, 2 * (qualityLevel * 10 + 140), 1, 1);
+            ExtraPointDiscretizer.MultiplyLinearExtra(data, 2 * (qualityLevel * 10 + 180), 1, 1);
             ExtraPointDiscretizer.MultiplyExtra(data, 1000);
             ExtraPointDiscretizer.MultiplyPoint(data, 800, 0);
             DCTransformer.BackwardExtra(data, 0);
