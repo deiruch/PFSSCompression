@@ -72,6 +72,7 @@ namespace CompressionTesting
             {
                 for (int i = 1; i < adaptiveSize; i++)
                 {
+                    float bla = (float)(value[i] * Math.Cos(getDctFactor(i, k) / length2));
                     output[k] += (float)(value[i] * Math.Cos(getDctFactor(i, k) / length2));
                 }
 

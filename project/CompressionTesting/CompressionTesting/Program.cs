@@ -19,10 +19,9 @@ namespace CompressionTesting
     {
         static void Main(string[] args)
         {
-            short[] data = new short[] {128,255,0};
-            data = DCTCoder.EncodeRLE(data);
-            byte[] actual = DCTCoder.EncodeAdaptiveUnsigned(data);
-            
+            int[] data = new int[] { 362,-127001, 6105,8827 };
+            byte[] result = DCTCoder.EncodeAdaptive(data);
+            int[] res = DCTCoder.Decode(result, 4);
             run();
             //Testing();
             //testExampleLine();
@@ -89,8 +88,8 @@ namespace CompressionTesting
         private static void run()
         {
             ISolution solution = new Solution1();
-            bool testOneFile = false;
-            DCT.DiscreteCosineTransform(400);
+            bool testOneFile = true;
+            //DCT.DiscreteCosineTransform(400);
 
             string fitsOutputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp";
             string outputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\testresult";

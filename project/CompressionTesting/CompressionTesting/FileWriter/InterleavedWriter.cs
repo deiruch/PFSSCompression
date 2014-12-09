@@ -144,10 +144,10 @@ namespace CompressionTesting.FileWriter
 
         public static void WriteDCTByteFits(PFSSData input, FileInfo output)
         {
-            short[] ptr_nz_len = new short[input.lines.Count];
-            short[] ptr = new short[input.lines.Count];
-            short[] ptph = new short[input.lines.Count];
-            short[] ptth = new short[input.lines.Count];
+            int[] ptr_nz_len = new int[input.lines.Count];
+            int[] ptr = new int[input.lines.Count];
+            int[] ptph = new int[input.lines.Count];
+            int[] ptth = new int[input.lines.Count];
 
             List<PFSSLine> lines = new List<PFSSLine>(input.lines);
             lines.Sort();

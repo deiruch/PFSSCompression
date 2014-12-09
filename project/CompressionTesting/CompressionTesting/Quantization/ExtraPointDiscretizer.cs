@@ -24,6 +24,20 @@ namespace CompressionTesting.Quantization
             }
         }
 
+        public static void ToIntsExtra(PFSSData data)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                for (int i = 0; i < l.extraX.Length; i++)
+                    l.extraX[i] = (int)Math.Truncate(l.extraX[i]);
+                for (int i = 0; i < l.extraY.Length; i++)
+                    l.extraY[i] = (int)Math.Truncate(l.extraY[i]);
+                for (int i = 0; i < l.extraZ.Length; i++)
+                    l.extraZ[i] = (int)Math.Truncate(l.extraZ[i]);
+
+            }
+        }
+
         public static void DivideLinearExtra(PFSSData data, double factor, int offset, int start)
         {
             foreach (PFSSLine l in data.lines)

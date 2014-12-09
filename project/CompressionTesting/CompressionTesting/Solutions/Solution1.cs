@@ -342,16 +342,16 @@ namespace CompressionTesting.Solutions
 
             ExtraPointDiscretizer.DividePoint(data, 800, 0);
             ExtraPointDiscretizer.DivideExtra(data, 1000);
-            ExtraPointDiscretizer.DivideLinearExtra(data, 2 * (qualityLevel * 10 + 180), 1, 1);
-            ExtraPointDiscretizer.ToShortsExtra(data);
+            //ExtraPointDiscretizer.DivideLinearExtra(data, 2 * (qualityLevel * 10 + 150), 1, 1);
+            ExtraPointDiscretizer.ToIntsExtra(data);
 
             StandardWriter.WriteDCTByteFits(data, fits);
             long size = RarCompression.DoRar(rarFits, fits);
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            //140
-            ExtraPointDiscretizer.MultiplyLinearExtra(data, 2 * (qualityLevel * 10 + 180), 1, 1);
+            //140,180
+            //ExtraPointDiscretizer.MultiplyLinearExtra(data, 2 * (qualityLevel * 10 + 150), 1, 1);
             ExtraPointDiscretizer.MultiplyExtra(data, 1000);
             ExtraPointDiscretizer.MultiplyPoint(data, 800, 0);
             DCTransformer.BackwardExtra(data, 0);
