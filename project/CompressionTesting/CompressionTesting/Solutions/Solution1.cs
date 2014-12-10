@@ -15,7 +15,6 @@ namespace CompressionTesting.Solutions
 {
     class Solution1 : ISolution
     {
-        public static double factor = 130;
         public int GetQualityLevels()
         {
             return 1;
@@ -23,13 +22,13 @@ namespace CompressionTesting.Solutions
 
         public string GetName()
         {
-            return "Solution1_Seven";
+            return "Solution1_Eight";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return Seven(data, qualityLevel, folder);
+            return Eight(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -296,16 +295,14 @@ namespace CompressionTesting.Solutions
             Residualizer.DoResiduals(data, 1);
             DCTransformer.Forward(data, 1);
 
-            //int zeroCount = GetZeroCount(data, qualityLevel + 16);
-            //DCTQuantization.SetToZero(data, zeroCount);
             foreach (PFSSLine l in data.lines)
             {
                 Spherical.ForwardToSpherical(l.points[0]);
                 Spherical.ForwardMoveSpherical(l.points[0]);
             }
-            //Discretizer.DividePoint(data, 50000, 0);
+            Discretizer.HandleR(data, 0, 8192 * 0.05);
             Discretizer.Divide(data, 1000, 1);
-            Discretizer.DivideLinear(data, 2 * (qualityLevel + 11), 1);
+            Discretizer.DivideLinear(data, 2 * (qualityLevel + 9), 1);
             Discretizer.ToShorts(data, 1);
 
             InterleavedWriter.WriteDCTByteFits(data, fits);
@@ -313,7 +310,7 @@ namespace CompressionTesting.Solutions
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 11), 1);
+            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 9), 1);
             Discretizer.Multiply(data, 1000, 1);
             //Discretizer.MultiplyPoint(data, 50000, 0);
             foreach (PFSSLine l in data.lines)
@@ -342,7 +339,8 @@ namespace CompressionTesting.Solutions
 
             ExtraPointDiscretizer.DividePoint(data, 800, 0);
             ExtraPointDiscretizer.DivideExtra(data, 1000);
-            //ExtraPointDiscretizer.DivideLinearExtra(data, 2 * (qualityLevel * 10 + 150), 1, 1);
+            ExtraPointDiscretizer.DivideLinearExtra(data, 2 * (qualityLevel * 10 + 90), 1, 1);
+            ExtraPointDiscretizer.Cut(data, 20);
             ExtraPointDiscretizer.ToIntsExtra(data);
 
             StandardWriter.WriteDCTByteFits(data, fits);
@@ -351,11 +349,57 @@ namespace CompressionTesting.Solutions
             result.lineCount = data.lines.Count;
 
             //140,180
-            //ExtraPointDiscretizer.MultiplyLinearExtra(data, 2 * (qualityLevel * 10 + 150), 1, 1);
+            ExtraPointDiscretizer.MultiplyLinearExtra(data, 2 * (qualityLevel * 10 + 90), 1, 1);
             ExtraPointDiscretizer.MultiplyExtra(data, 1000);
             ExtraPointDiscretizer.MultiplyPoint(data, 800, 0);
             DCTransformer.BackwardExtra(data, 0);
             //Residualizer.UndoResiduals(data, 1);
+
+            return result;
+        }
+
+        public TestResult Eight(PFSS.PFSSData data, int qualityLevel, string folder)
+        {
+            FileInfo fits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".fits"));
+            FileInfo rarFits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".rar"));
+            TestResult result = new TestResult();
+
+            Subsampling.Subsample(data, 4);
+            Residualizer.DoResiduals(data, 1);
+            DCTransformer.Forward(data, 1);
+
+            foreach (PFSSLine l in data.lines)
+            {
+                Spherical.ForwardToSpherical(l.points[0]);
+                Spherical.ForwardMoveSpherical(l.points[0]);
+            }
+            Discretizer.HandleR(data, 0, 8192 * 0.05);
+            Discretizer.Divide(data, 1000, 1);
+            Discretizer.DivideLinear(data, 30, 8, 1, 10);
+            Discretizer.DivideLinear(data, 120, 0, 11, 5);
+            Discretizer.DivideLinear(data, 120, 20, 16, 5);
+            Discretizer.DivideLinear(data, 400, 20, 21, 15);
+            Discretizer.Cut(data, 36);
+            Discretizer.ToShorts(data, 1);
+
+            InterleavedWriter.WriteDCTByteFits(data, fits);
+            long size = RarCompression.DoRar(rarFits, fits);
+            result.fileSize = size;
+            result.lineCount = data.lines.Count;
+
+            Discretizer.MultiplyLinear(data, 30, 8, 1, 10);
+            Discretizer.MultiplyLinear(data, 120,0, 11, 5);
+            Discretizer.MultiplyLinear(data, 120, 20, 16, 5);
+            Discretizer.MultiplyLinear(data, 400, 20, 21, 15);
+            Discretizer.Multiply(data, 1000, 1);
+            //Discretizer.MultiplyPoint(data, 50000, 0);
+            foreach (PFSSLine l in data.lines)
+            {
+                Spherical.BackwardMoveSpherical(l.points[0]);
+                Spherical.BackwardToSpherical(l.points[0], data);
+            }
+            DCTransformer.Backward(data, 1);
+            Residualizer.UndoResiduals(data, 1);
 
             return result;
         }

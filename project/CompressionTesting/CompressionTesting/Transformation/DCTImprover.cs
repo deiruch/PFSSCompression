@@ -13,7 +13,7 @@ namespace CompressionTesting.Transformation
         public static int maxSearch = 45;
         public static int maxPercentLength = 25;
 
-        public static int plusLength = 15;
+        public static int plusLength = 5;
         public static double factorStatic = 20000;
         
 

@@ -9,6 +9,18 @@ namespace CompressionTesting.Quantization
 {
     class Discretizer
     {
+        public static void HandleR(PFSSData data, int index, double factor) 
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                PFSSPoint p = l.points[index];
+                if (p.x < factor)
+                {
+                    p.x = 0;
+                }
+            }
+        }
+
         public static void ToShorts(PFSSData data,int offset)
         {
             foreach (PFSSLine l in data.lines)
@@ -106,6 +118,39 @@ namespace CompressionTesting.Quantization
             }
         }
 
+        public static void DivideLinear(PFSSData data, double start,double increase, int offset,int length)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                double div = start;
+                for (int i = offset; i < offset+length && i < l.points.Count; i++)
+                {
+                    PFSSPoint p = l.points[i];
+                    p.x = (float)(p.x / div);
+                    p.y = (float)(p.y / div);
+                    p.z = (float)(p.z / div);
+                    div += increase;
+                }
+            }
+        }
+
+
+        public static void MultiplyLinear(PFSSData data, double start, double increase, int offset, int length)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                double div = start;
+                for (int i = offset; i < offset + length && i < l.points.Count; i++)
+                {
+                    PFSSPoint p = l.points[i];
+                    p.x = (float)(p.x * div);
+                    p.y = (float)(p.y * div);
+                    p.z = (float)(p.z * div);
+                    div += increase;
+                }
+            }
+        }
+
         public static void MultiplyLinear(PFSSData data, double factor, int offset)
         {
             foreach (PFSSLine l in data.lines)
@@ -136,5 +181,7 @@ namespace CompressionTesting.Quantization
             }
 
         }
+
+
     }
 }

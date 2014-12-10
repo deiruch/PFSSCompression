@@ -46,19 +46,18 @@ namespace CompressionTesting.Quantization
                 for (int i = offset; i < l.extraX.Length; i++)
                 {
                     l.extraX[i] = (float)(l.extraX[i] / div);
-                    div += factor;
+                    
                 }
-                div = factor * start;
+
                 for (int i = offset; i < l.extraY.Length; i++)
                 {
                     l.extraY[i] = (float)(l.extraY[i] / div);
-                    div += factor;
+
                 }
                 div = factor * start;
                 for (int i = offset; i < l.extraZ.Length; i++)
                 {
                     l.extraZ[i] = (float)(l.extraZ[i] / div);
-                    div += factor;
                 }
 
             }
@@ -72,19 +71,18 @@ namespace CompressionTesting.Quantization
                 for (int i = offset; i < l.extraX.Length; i++)
                 {
                     l.extraX[i] = (float)(l.extraX[i] * div);
-                    div += factor;
+
                 }
                 div = factor * start;
                 for (int i = offset; i < l.extraY.Length; i++)
                 {
                     l.extraY[i] = (float)(l.extraY[i] * div);
-                    div += factor;
+    
                 }
                 div = factor * start;
                 for (int i = offset; i < l.extraZ.Length; i++)
                 {
                     l.extraZ[i] = (float)(l.extraZ[i] * div);
-                    div += factor;
                 }
 
             }
@@ -141,10 +139,12 @@ namespace CompressionTesting.Quantization
         {
             foreach (PFSSLine l in data.lines)
             {
-
-                l.extraX[index] = (float)(l.extraX[index] / factor);
-                l.extraY[index] = (float)(l.extraY[index] / factor);
-                l.extraZ[index] = (float)(l.extraZ[index] / factor);
+                if (index < l.points.Count)
+                {
+                    l.extraX[index] = (float)(l.extraX[index] / factor);
+                    l.extraY[index] = (float)(l.extraY[index] / factor);
+                    l.extraZ[index] = (float)(l.extraZ[index] / factor);
+                }
 
             }
         }
@@ -152,11 +152,37 @@ namespace CompressionTesting.Quantization
         {
             foreach (PFSSLine l in data.lines)
             {
-                l.extraX[index] = (float)(l.extraX[index] * factor);
-                l.extraY[index] = (float)(l.extraY[index] * factor);
-                l.extraZ[index] = (float)(l.extraZ[index] * factor);
-
+                if (index < l.points.Count)
+                {
+                    l.extraX[index] = (float)(l.extraX[index] * factor);
+                    l.extraY[index] = (float)(l.extraY[index] * factor);
+                    l.extraZ[index] = (float)(l.extraZ[index] * factor);
+                }
             }
+        }
+
+        public static void Cut(PFSSData data, int offset)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                for (int i = offset; i < l.extraX.Length; i++)
+                {
+
+                    l.extraX[i] = 0;
+                }
+                for (int i = offset; i < l.extraY.Length; i++)
+                {
+
+                    l.extraY[i] = 0;
+                }
+
+                for (int i = offset; i < l.extraZ.Length; i++)
+                {
+
+                    l.extraZ[i] = 0;
+                }
+            }
+
         }
     }
 }

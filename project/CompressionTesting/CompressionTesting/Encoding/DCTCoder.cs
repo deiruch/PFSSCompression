@@ -175,18 +175,18 @@ namespace CompressionTesting.Encoding
             return output;
         }
 
-        public static List<byte[]> Encode(PFSSLine line, int offset)
+        public static List<byte[]> EncodeChannels(PFSSLine line, int offset)
         {
             List<byte[]> output = new List<byte[]>(3);
 
-            int[] x = new int[line.points.Count];
-            int[] y = new int[line.points.Count];
-            int[] z = new int[line.points.Count];
+            int[] x = new int[line.points.Count -offset];
+            int[] y = new int[line.points.Count - offset];
+            int[] z = new int[line.points.Count - offset];
             for (int i = offset; i < line.points.Count; i++) 
             {
-                x[i] = (int)line.points[i].x;
-                y[i] = (int)line.points[i].y;
-                z[i] = (int)line.points[i].z;
+                x[i - offset] = (int)line.points[i].x;
+                y[i - offset] = (int)line.points[i].y;
+                z[i - offset] = (int)line.points[i].z;
             }
             x = EncodeRLE(x);
             y = EncodeRLE(y);
@@ -209,11 +209,14 @@ namespace CompressionTesting.Encoding
             return EncodeAdaptive(copy);
         }
 
-        public static byte[] Encode(int[] data)
+        public static byte[] EncodeStartPointChannel(int[] data)
         {
             int[] copy = EncodeRLE(data);
+            //remove size, not needed in this situation
+            int[] copy2 = new int[copy.Length - 1];
+            Array.Copy(copy, 1, copy2, 0, copy2.Length);
 
-            return EncodeAdaptive(copy);
+            return EncodeAdaptive(copy2);
         }
     }
 }
