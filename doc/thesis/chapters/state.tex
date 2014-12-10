@@ -1,10 +1,20 @@
 \section{State of the Art}
+Grob betrachtet können verlustbehaftete Kompressionen in drei Teilschritte aufgeteilt werden: Transformation, Quantisierung und Entropie Kodierung. Die Abbildung \ref{state:aufbau} zeigt eine vereinfachte Abfolge. Die Inputdaten werden zuerst duch ein oder mehrere Verfahren transformiert. So transformieren, dass in der Quantisierung unwichtige Informationen gelöscht werden können. Hier geschieht der Datenverlust. Danach werden die Daten Entropie Kodiert, was wieder verlustfrei ist. Unterschiedliche Verfahren für jeden Teilschritt. Meist auch mehrere Transformationen, oder Transformation Quantisierung Transformation Quantisierung.\\
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/state/aufbau.png}
+	\caption{Typische Teilschritte einer Kompression}
+	\label{state:aufbau}
+\end{figure}
+Folgend werden Kompressionsverfahren oder typische Algorithmen für einen Teilschritt beschrieben.
+
 \subsection{JPEG/JFIF Kompression}
+Weit verbreitete Bild
+YCbCr, DCT, Quantisierung, Entropie Kodierung.
 
 \subsection{3d Mesh Kompression}
-In der Computergrafik müssen alle Gegenstände und Akteure in der virtuellen Welt modelliert werden. So wird ein Mensch eine Menge von Dreiecken, das Mesh, modelliert. Jeder Punkt eines Dreieck kann zusätzliche Informationen gespeichert haben wie Texturkoordinaten, Farbe oder Oberflächen-Normalen. Je nach Anwendungsfall kann ein Modell aus ein paar hundert oder mehreren hunderttausend Dreiecken bestehen. Um diese Datenmenge zu verkleinern versuchen Formate wie OpenCTM \cite{website:openctm} die Datenmenge verlustfrei oder verlustbehaftet zu komprimieren.\\[\baselineskip]
+In der Computergrafik müssen alle Gegenstände und Akteure in der virtuellen Welt modelliert werden. So wird ein Mensch eine Menge von Dreiecken, das Mesh, modelliert. Jeder Punkt eines Dreieck kann zusätzliche Informationen gespeichert haben wie Texturkoordinaten, Farbe oder Oberflächen-Normalen. Je nach Anwendungsfall kann ein Modell aus ein paar hundert oder mehreren hunderttausend Dreiecken bestehen. Um diese Datenmenge zu verkleinern versuchen Formate wie OpenCTM \cite{website:openctm} die Datenmenge verlustfrei oder verlustbehaftet zu komprimieren.\\
 wie funktioniert es\\
-[\baselineskip]
 
 wie es verwendet werden könnte
 

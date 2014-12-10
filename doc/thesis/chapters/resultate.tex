@@ -1,16 +1,5 @@
 \section{Resultate}\label{resultate}
-Wie im Kapitel \ref{konzept} wird erwähnt, dass der Ist-Zustand die Feldlinien im FITS-Dateiformat abspeichert. Es wurde geprüft, wie viel Speicher das Format nach der Entropie-Kodierung beansprucht. Für den Test wurde die Komprimierung \ref{resultate:loesung0} werwendet. Zum Vergleich wurden die Daten im FITS-Dateiformat und als Binärdatei abgelegt.
-\begin{table}[!htbp]
-\center
-\begin{tabular}{c|c}
-	 Bytes pro Feldlinie (FITS) & Bytes pro Feldlinie (Binär)\\\hline
-	$74.2$ Bytes & $73.6$ Bytes\\
-\end{tabular}
-\caption{Einfluss des FITS Formates auf den Speicherverbrauch}
-\label{resultate:fits_table}
-\end{table}
-Die Resultate \ref{resultate:fits_table} zeigen keinen signifikanten Unterschied des Speicherverbrauchs. Pro Feldlinie liegt der Unterschied bei $0.6$ Bytes. Hochgerechnet auf $1200$ Feldlinien sind es 0.7 KiBytes, welches das Fits-Format für sich beansprucht. Fits erlaubt es, den Datenreihen einen Namen so wie eine kurze Beschreibung anzuhänken. Diese Strings sind Optional und können auch weggelassen werden.\\
-Der wesentliche Vorteil von FITS ist, dass das Format bereits Plattformunabhängig ist. Probleme wie Endianness \cite{wiki:endianess} werden vom Format gelöst. Aus diesem Grund wurde entschieden das FITS Format beizubehalten.
+Es gibt x Lösungen,
 
 \subsection{Lösung 0, Angle-Subsampling} \label{resultate:loesung0}
 Der Ist-Zustand wird das Angle-Subsampling\footnote{siehe Abschnitt \ref{konzept:loesung0:subsampling}} im JHelioviewer durchgeführt. Diese Variante führt das Subsampling vor der Dateiübertragung durch. Die resultierende FITS-Datei wird mittels Rar kodiert\footnote{siehe Abschnitt\ref{konzept:loesung0:kodierung}};

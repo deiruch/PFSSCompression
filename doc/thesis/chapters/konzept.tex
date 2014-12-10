@@ -1,7 +1,13 @@
-\section{Eigenschaften und Kompression der Feldlinien} \label{konzept}
-Jede Simulation beinhaltet 1200 Feldlinien und insgesamt etwa 60'000 Punkte. Fits format \cite{website:fits}
+\section{Kompressionsverfahren der Feldlinien} \label{konzept}
+Ist Kompression bereits vorhanden, zwei Lösungsansätze
 
 \subsection{Ist-Komprimierung} \label{konzept:ist-komprimierung}
+Quantisierung und Kodierung. 
+Ist-Kompression. Jeder Kanal wird in 16-Bit Integer quantisiert.
+Abspeicherung: Jeder Kanal am Stück, sodass die Entropie Kodierung greifen kann. Entropiekodierung mittels gzip.
+
+Subsampling auf JHelioviewer \ref{konzept:loesung0:subsampling}
+
 Der JHelioviewer bietet an, die Feldlinien zu einem gegebenen Zeitpunkt darzustellen. Damit der Benutzer eine vernünftige Zeit auf die Feldlinien wartet, wurde bereits im Vorfeld eine Kompression implementiert. Zuerst werden die Daten im sphärischen Koordinatensystem(Radius, Längengrad $\phi$ und Breitengrad $\theta$) auf dem Server quantisiert und mit GZip verlustfrei komprimiert. Der JHelioviewer dekomprimiert die Daten und transformiert sie in das kartesische Koordinatensystem um. Die Punktmenge wäre für schwächere Grafikkarten zu gross, weshalb der JHelioviewer eine weitere Quantisierung durchführt.\\
 [\baselineskip]
 \textbf{Quantisierung und Dateiformat auf dem Server}\\
