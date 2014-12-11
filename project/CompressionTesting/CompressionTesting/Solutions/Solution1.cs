@@ -375,10 +375,11 @@ namespace CompressionTesting.Solutions
             }
             Discretizer.HandleR(data, 0, 8192 * 0.05);
             Discretizer.Divide(data, 1000, 1);
-            Discretizer.DivideLinear(data, 30, 8, 1, 10);
-            Discretizer.DivideLinear(data, 120, 0, 11, 5);
-            Discretizer.DivideLinear(data, 120, 20, 16, 5);
-            Discretizer.DivideLinear(data, 400, 20, 21, 15);
+            Discretizer.DivideLinear(data, 30, 5, 1, 10);
+            Discretizer.DivideLinear(data, 100, 0, 11, 8);
+            Discretizer.DivideLinear(data, 110, 5, 19, 7);
+            Discretizer.DivideLinear(data, 155, 15, 26, 10);
+            //Discretizer.DivideLinear(data, 400, 20, 21, 15);
             Discretizer.Cut(data, 36);
             Discretizer.ToShorts(data, 1);
 
@@ -387,10 +388,10 @@ namespace CompressionTesting.Solutions
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            Discretizer.MultiplyLinear(data, 30, 8, 1, 10);
-            Discretizer.MultiplyLinear(data, 120,0, 11, 5);
-            Discretizer.MultiplyLinear(data, 120, 20, 16, 5);
-            Discretizer.MultiplyLinear(data, 400, 20, 21, 15);
+            Discretizer.MultiplyLinear(data, 30, 5, 1, 10);
+            Discretizer.MultiplyLinear(data, 100, 2, 11, 8);
+            Discretizer.MultiplyLinear(data, 120, 0, 19, 17);
+            //Discretizer.MultiplyLinear(data, 400, 20, 21, 15);
             Discretizer.Multiply(data, 1000, 1);
             //Discretizer.MultiplyPoint(data, 50000, 0);
             foreach (PFSSLine l in data.lines)
