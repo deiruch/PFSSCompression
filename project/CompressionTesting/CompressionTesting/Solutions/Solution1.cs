@@ -378,9 +378,9 @@ namespace CompressionTesting.Solutions
             Discretizer.DivideLinear(data, 30, 5, 1, 10);
             Discretizer.DivideLinear(data, 100, 0, 11, 8);
             Discretizer.DivideLinear(data, 110, 5, 19, 7);
-            Discretizer.DivideLinear(data, 155, 15, 26, 10);
+            Discretizer.DivideLinear(data, 155, 0, 26, 10);
             //Discretizer.DivideLinear(data, 400, 20, 21, 15);
-            Discretizer.Cut(data, 36);
+            Discretizer.Cut(data, 31);
             Discretizer.ToShorts(data, 1);
 
             InterleavedWriter.WriteDCTByteFits(data, fits);
