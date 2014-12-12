@@ -11,10 +11,10 @@ namespace CompressionTesting
     class psnr_hvs
     {
         private static double[] factors = null;
-        private static int max = 80; //only look at 35 coefficients
+        private static int max = 80; 
         private static readonly double maxI = 20* Math.Log10(4 * PFSSPoint.SunRadius);
-        private const int eNorm = 3500;
-        private const int maskNorm = 35+35;
+        private const double eNorm = 80 * 20 * 1000;
+        private const double maskNorm = 80;
 
         private static void calcFactors()
         {
@@ -22,7 +22,7 @@ namespace CompressionTesting
             factors = new double[max];
             factors[0] = 10 / 100d * 10 / 100d;
             index++;
-            double factor = 35;
+            double factor = 20;
             for (int i = 1; i < 10;i++) 
             {
                 factors[index] = 10/factor;
@@ -32,20 +32,21 @@ namespace CompressionTesting
             }
             
 
-            factor = 10d/100d;
+            factor = 10d/40d;
             factor *= factor;
             for (int i = 0; i < 8;i++) 
             {
                 factors[index++] = factor;
             }
 
-            factor = 10d / 25d;
+            factor = 10d / 20d;
             factor *= factor;
             for(int i = 0; i < 22;i++) {
                 factors[index++] = factor;
             }
 
-            factor = 1;
+            factor = 10d / 11d;
+            factor *= factor;
             while (index < factors.Length)
             {
                 factors[index++] = factor;
@@ -95,15 +96,15 @@ namespace CompressionTesting
                 {
                     double error = 0;
                     double maskFactor =  mask/factors[j];
-                    if (Math.Abs(ex[0] - ac[0]) > maskFactor)
+                    if (Math.Abs(ex[j] - ac[j]) > maskFactor)
                     {
-                        if(ex[0] - ac[0] > maskFactor)
+                        if(ex[j] - ac[j] > maskFactor)
                         {
-                            error = ex[0] - ac[0] - maskFactor;
+                            error = ex[j] - ac[j] - maskFactor;
                         }
                         else
                         {
-                           error = ex[0] - ac[0] + maskFactor;
+                           error = ex[j] - ac[j] + maskFactor;
                         }
                     }
                     //else, mask. Error = 0

@@ -1,14 +1,9 @@
 \section{Implementation}
-Im PFSS Plugin gibt es zwei Flaschenhälse: Das Herunterladen der Komprimierten Feldlinien und das Dekomprimieren. E Das Herunterladen beansprucht vorallem Zeit, während das Dekomprimieren Speicher und Rechenaufwändig ist. Das entschleunigt die Darstellung. In der Ist-Implementation wurde bereits versucht, mit den Flaschenhälsen umzugehen. Es wird analysiert, was für Massnahmen getroffen wurden und wo es noch Optimierungspotential gibt.\\
-[\baselineskip]
-Um das Herunterladen zu beschleunigen, wird ein Read Ahead durchgeführt. Eine sehr alte Strategie, um Übetragungen zu beschleunigen. Anstatt nur die angeforderten Daten herunterzuladen, werden ebenfalls die nächsten X Pakete ebenfalls geladen. Da die Feldlinien meistens sequenzell angefordert werden, sind die Feldlinien bereits heruntergeladen, wenn sie benötigt werden. Das Herunterladen geschieht in einem Thread pro Feldliniendatei.\\
-Die Dekompression erfolgt synchron und wird dann angestossen, wenn die Feldlinien visualisiert werden sollen. Das führt zu kleinen Verzögerungen bei jedem Bildwechsel.\\
-Daten werden nicht gecached, wenn der Benutzer zu einem alten Zeitpunkt springt, werden die Feldlinien nochmals neu heruntergeladen.\\
-
-Folgende Massnahmen werden umgesetzt um die Darstellung zu beschleunigen:
+Um die Feldlinien darzustellen müssen diese heruntergeladen und dekomprimiert werden. Die zwei Operationen sind die Hauptverantwortlichen für die Wartezeit. Um die Wartezeit zu verkürzen, werden Feldlinien bereits im Voraus asynchron heruntergeladen. Somit sind die Daten bereits im Arbeitsspeicher, bevor die Visualisierung sie benötigt.\\
+Die Wartezeit kann mit zusätzlichen Massnahmen weiter verkürzt werden Folgende Massnahmen wurden implementiert:
 \begin{enumerate}
-	\item Read-Ahead der Dekomprimierten Feldlinien.
 	\item Asynchrone Dekompression.
+	\item Vorladen der Dekomprimierten Feldlinien.
 	\item Mehrstufiges Caching.
 \end{enumerate}
 Die dekomprimierten Feldlinien sollen bereit stehen, bevor sie gebraucht werden.\\
@@ -30,8 +25,8 @@ Die Daten der Feldlinien durchlaufen im JHelioviewer vier Zustände, welche durc
 Um den Flaschenhals herunterladen und Dekomprimieren zu umgehen, wird ein mehrstufiges Read-Ahead und Caching eingeführt. Es soll ein Read Ahead und Caching für die unkomprimierten ''PFSSFrame´´ Feldllinien und eines für die ''PFSSData´´ Objekte implementiert werden. Für das wurde folgende Klassen implementiert:
 (Klassendiagramm)
 Die Klasse ''Framemanager´´ stellt die erste Stufe dar des Read-Aheads dar. Sie ist dafür zuständig, das aktuelle ''PFSSFrame´´ Objekt im speicher zu behalten und falls welche Fehlen, sie vom FrameCache anzufordern. ''PFSSFrame´´ Objekte müssen jeweils Speicher auf der Grafikkarte alloziieren und selbst abräumen. Der Manager gibt den Objekten die Chance sich vor dem Darstellen zu inizialisieren und stellt sicher, dass die Ressourcen der Grafikkarte abgeräumt wurden. Dür das Caching der Frame-Objekte ist die Klasse FrameCache zuständig.\\
-Das Preloading und Caching der PFSSData Objekte wird von der Klasse DataCache übernommen. Das Preloading ist als zweite Cache-Instanz umgesetzt. Hier braucht es keine Kontrolle darüber, wann ein Objekt aus einem Cache entladen wird. Der Garbage-Collector verwaltet alle Ressourcen des Data-Objekts. 
-
+Das Preloading und Caching der PFSSData Objekte wird von der Klasse DataCache übernommen. Das Preloading ist als zweite Cache-Instanz umgesetzt. Hier braucht es keine Kontrolle darüber, wann ein Objekt aus einem Cache entladen wird. Der Garbage-Collector verwaltet alle Ressourcen des Data-Objekts.\\
+[\baselineskip] 
 Der Cache arbeitet mit einer FiFo queue für die entscheidung, wann ein Objekt aus dem cache entladen wird. Der JHelioviewer fragt im allgemeinen Fall sequenzell nach den Datenobjekten. Das älteste Objekt ist meistens das, welches am längsten nicht mehr gebraucht wird.\\
 Der LRU-Cache funktioniert gut, wenn die anzahl Objekte deutlich grösser ist, als der Cache zu halten mag. Der LRU-Cache versagt aber beim Wrap-Around. Wenn es aber $n$ Objekte gibt und der Cache $n-1$ Objekte speichern kann, so löscht er immer das Nächste Objekt, welches gebraucht wird. 
 

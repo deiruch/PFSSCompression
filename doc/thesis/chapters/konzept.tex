@@ -2,6 +2,7 @@
 Ist Kompression bereits vorhanden, zwei Lösungsansätze
 
 \subsection{Ist-Komprimierung} \label{konzept:ist-komprimierung}
+Bild
 Quantisierung und Kodierung. 
 Ist-Kompression. Jeder Kanal wird in 16-Bit Integer quantisiert.
 Abspeicherung: Jeder Kanal am Stück, sodass die Entropie Kodierung greifen kann. Entropiekodierung mittels gzip.
@@ -27,17 +28,19 @@ Format: zuerst Konstanten, alle Radien\\
 \textbf{Quantisierung des JHelioviewers}\\
 Clientseitig wieder ein subsampling und umrechnung ins kartesische System xyz, dann Anglesubsampling
 	
-\subsection{Lösung 0, Angle-Subsampling}
-Subsampling 5Grad auf dem Server
-Kodierung mittels rar
+\subsection{Lösungsansatz Angle-Subsampling}
+Bild
+Subsampling wird nun auf dem Server ausgeführt. in den folgenden Abschnitten sind die Teilschritte erklärt.
+
 \subsubsection{Subsampling}\label{konzept:loesung0:subsampling}
 
 \subsubsection{Ablegung ins Fits Format} \label{konzept:loesung0:fits}
 
 \subsubsection{Entropie Kodierung} \label{konzept:loesung0:kodierung}
-Rar hat sich bewährt bei der purer Feldlinien kompression im Vergleich zu anderen Verfahren wie LZ77/gZip
+Rar hat sich bewährt bei der purer Feldlinien kompression im Vergleich zu anderen Verfahren wie LZ77/gZip. Bringt etwa 4 mal bessere Kompression hin, hat aber mehr mühe mit Floating-Point nummern als mit Integers
 
 \subsection{Lösung 1, Diskrete Kosinus Transformation}
+Bild
 DCT, da alles nahe an harmonischen Halbwellen
 kartesische Koordinaten --> kein wrap around,
 

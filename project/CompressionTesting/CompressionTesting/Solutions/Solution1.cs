@@ -377,11 +377,11 @@ namespace CompressionTesting.Solutions
             Discretizer.Divide(data, 1000, 1);
             Discretizer.DivideLinear(data, 30, 5, 1, 10);
             Discretizer.DivideLinear(data, 100, 0, 11, 8);
-            Discretizer.DivideLinear(data, 25, 0, 19, 7);
-            Discretizer.DivideLinear(data, 50, 0, 26, 15);
-            Discretizer.DivideLinear(data, 1, 0, 41, 40);
+            Discretizer.DivideLinear(data, 110, 5, 19, 7);
+            Discretizer.DivideLinear(data, 155, 0, 26, 15);
+
             //Discretizer.DivideLinear(data, 400, 20, 21, 15);
-            Discretizer.Cut(data, 81);
+            Discretizer.Cut(data, 31);
             Discretizer.ToShorts(data, 1);
 
             InterleavedWriter.WriteDCTByteFits(data, fits);
@@ -390,9 +390,9 @@ namespace CompressionTesting.Solutions
             result.lineCount = data.lines.Count;
 
             Discretizer.MultiplyLinear(data, 30, 5, 1, 10);
-            Discretizer.MultiplyLinear(data, 100, 2, 11, 8);
-            Discretizer.MultiplyLinear(data, 120, 0, 19, 17);
-            //Discretizer.MultiplyLinear(data, 400, 20, 21, 15);
+            Discretizer.MultiplyLinear(data, 100, 0, 11, 8);
+            Discretizer.MultiplyLinear(data, 110, 5, 19, 7);
+            Discretizer.MultiplyLinear(data, 155, 0, 26, 15);
             Discretizer.Multiply(data, 1000, 1);
             //Discretizer.MultiplyPoint(data, 50000, 0);
             foreach (PFSSLine l in data.lines)
