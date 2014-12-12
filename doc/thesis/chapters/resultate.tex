@@ -95,7 +95,7 @@ Wieder nur die Diskrete Kosinus Transformation, aber noch mit künstlich erzeugt
 	\caption{Vergleich der Kompression mit und ohne Byte-Kodierung}
 	\label{resultate:loesung1:dct:randbehandlung}
 \end{figure}
-Noch besser, spart etwa 5 Bytes pro Feldlinie. 
+Noch besser, noch wenige Bytes pro feldlinie
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-7/artefakte.png}
@@ -104,3 +104,10 @@ Noch besser, spart etwa 5 Bytes pro Feldlinie.
 \end{figure} 
 Randbehandlung noch nicht Perfekt.
 Artefakte wird man bei der Visualiserung nicht bemerken, da sowieso nicht alle Punkte dargestellt werden können. Artefakte andere Eigenschaft wie \ref{resultate:loesung1:ableitung_dct_kodierung}, sie können als solches Enttarnt werden.
+
+Realität sieht aber anders aus, überall kleine schwingungen. Visuell nicht schön anzuschauen. Kompression ist nicht brauchbar.
+Bild Umsetzung
+In diesem Fall scheint die Genauigkeitsmetrik versagt zu haben. Man kann es noch retten, aber braucht sehr viel mehr Informationen. Bereits bei 59 Bytes per Pixel.
+Bild verbesserung
+
+Die

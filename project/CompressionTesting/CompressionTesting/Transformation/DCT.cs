@@ -39,15 +39,15 @@ namespace CompressionTesting
             }
         }
 
-        public static float[] fdct(float[] value)
+        public static float[] fdct(float[] value, int max)
         {
             int adaptiveSize = value.Length;
             float halfAdaptive = 2 / (float)adaptiveSize;
-            float[] output = new float[adaptiveSize];
+            float[] output = new float[max];
             double length2 = 2d * adaptiveSize;
 
-            
-            for (int k = 0; k < adaptiveSize; k++)
+
+            for (int k = 0; k < max && k < adaptiveSize; k++)
             {
                 output[k] = halfAdaptive;
                 double inner = 0;
@@ -61,14 +61,20 @@ namespace CompressionTesting
             return output;
         }
 
-        public static float[] idct(float[] value)
+        public static float[] fdct(float[] value)
+        {
+            return fdct(value, value.Length);
+        }
+
+
+        public static float[] idct(float[] value, int max)
         {
             int adaptiveSize = value.Length;
             float halfAdaptive = 2 / (float)adaptiveSize;
             double length2 = 2d * adaptiveSize;
 
             float[] output = new float[adaptiveSize];
-            for (int k = 0; k < adaptiveSize; k++)
+            for (int k = 0; k < max && k < adaptiveSize; k++)
             {
                 for (int i = 1; i < adaptiveSize; i++)
                 {
@@ -80,6 +86,11 @@ namespace CompressionTesting
 
             }
             return output;
+        }
+
+        public static float[] idct(float[] value)
+        {
+            return idct(value, value.Length);
         }
 
         public static float[] slow_fdct(float[] value)

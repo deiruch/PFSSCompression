@@ -339,9 +339,9 @@ namespace CompressionTesting.Solutions
 
             ExtraPointDiscretizer.DividePoint(data, 800, 0);
             ExtraPointDiscretizer.DivideExtra(data, 1000);
-            ExtraPointDiscretizer.DivideLinearExtra(data, 2 * (qualityLevel * 10 + 90), 1, 1);
-            ExtraPointDiscretizer.Cut(data, 20);
-            ExtraPointDiscretizer.ToIntsExtra(data);
+            ExtraPointDiscretizer.DivideLinearExtra(data, 2 * (qualityLevel * 10 + 140), 1, 1);
+            //ExtraPointDiscretizer.Cut(data, 10);
+            ExtraPointDiscretizer.ToShortsExtra(data);
 
             StandardWriter.WriteDCTByteFits(data, fits);
             long size = RarCompression.DoRar(rarFits, fits);
@@ -349,7 +349,7 @@ namespace CompressionTesting.Solutions
             result.lineCount = data.lines.Count;
 
             //140,180
-            ExtraPointDiscretizer.MultiplyLinearExtra(data, 2 * (qualityLevel * 10 + 90), 1, 1);
+            ExtraPointDiscretizer.MultiplyLinearExtra(data, 2 * (qualityLevel * 10 + 140), 1, 1);
             ExtraPointDiscretizer.MultiplyExtra(data, 1000);
             ExtraPointDiscretizer.MultiplyPoint(data, 800, 0);
             DCTransformer.BackwardExtra(data, 0);
@@ -377,10 +377,11 @@ namespace CompressionTesting.Solutions
             Discretizer.Divide(data, 1000, 1);
             Discretizer.DivideLinear(data, 30, 5, 1, 10);
             Discretizer.DivideLinear(data, 100, 0, 11, 8);
-            Discretizer.DivideLinear(data, 110, 5, 19, 7);
-            Discretizer.DivideLinear(data, 155, 0, 26, 10);
+            Discretizer.DivideLinear(data, 25, 0, 19, 7);
+            Discretizer.DivideLinear(data, 50, 0, 26, 15);
+            Discretizer.DivideLinear(data, 1, 0, 41, 40);
             //Discretizer.DivideLinear(data, 400, 20, 21, 15);
-            Discretizer.Cut(data, 31);
+            Discretizer.Cut(data, 81);
             Discretizer.ToShorts(data, 1);
 
             InterleavedWriter.WriteDCTByteFits(data, fits);

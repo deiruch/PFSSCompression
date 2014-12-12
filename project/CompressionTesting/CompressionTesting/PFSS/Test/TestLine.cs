@@ -17,6 +17,23 @@ namespace CompressionTesting.PFSS.Test
             this.Type = t;
         }
 
+        public float[] CopyChannel(int channel, PFSSLine line)
+        {
+            float[] answer = new float[line.points.Count];
+            for (int i = 0; i < answer.Length; i++)
+            {
+                TestPoint p = points[line.points[i].testPointIndex];
+                if (channel == 0)
+                    answer[i] = p.x;
+                if (channel == 1)
+                    answer[i] = p.y;
+                if (channel == 2)
+                    answer[i] = p.z;
+            }
+
+            return answer;
+        }
+
         public PFSSLine GetPFSSLine()
         {
             List<PFSSPoint> newPoints = new List<PFSSPoint>(points.Count);
