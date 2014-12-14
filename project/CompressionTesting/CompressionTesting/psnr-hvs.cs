@@ -13,14 +13,14 @@ namespace CompressionTesting
         private static double[] factors = null;
         private static int max = 80; 
         private static readonly double maxI = 20* Math.Log10(4 * PFSSPoint.SunRadius);
-        private const double eNorm = 80 * 20 * 1000;
+        private const double eNorm = 80 * 2 * 1000;
         private const double maskNorm = 80;
 
         private static void calcFactors()
         {
             int index = 0;
             factors = new double[max];
-            factors[0] = 10 / 100d * 10 / 100d;
+            factors[0] = 10 / 140d * 10 / 140d;
             index++;
             double factor = 20;
             for (int i = 1; i < 10;i++) 
@@ -55,8 +55,12 @@ namespace CompressionTesting
 
         public static double Calculate(TestSuite[] expected, PFSSData[] actual)
         {
-            
-            return 0;
+            double psnr = Double.MaxValue;
+            for (int i = 0; i < expected.Length; i++)
+            {
+                psnr = Math.Min(psnr, Calculate(expected[i], actual[i]));
+            }
+            return psnr;
         }
 
         public static double Calculate(TestSuite expected, PFSSData actual)

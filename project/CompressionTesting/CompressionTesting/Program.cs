@@ -95,7 +95,7 @@ namespace CompressionTesting
 
 
             StreamWriter w = new StreamWriter(new FileStream(Path.Combine(outputFolder, solution.GetName() + ".csv"), FileMode.Create));
-            w.Write("Average Line Size (Bytes);Max Error(Meters);standard deviation (Meters)");
+            w.Write("Average Line Size (Bytes);Max Error(Meters);standard deviation (Meters);PSNR-HVS-M");
 
             //load data
             for (int i = 0; i < testData.Length; i++)
@@ -114,7 +114,7 @@ namespace CompressionTesting
                     data[j] = testData[j].GetData();
                     result[j] = solution.DoTestRun(data[j], i, fitsOutputFolder);
                 }
-                double psnr = psnr_hvs.Calculate(testData[0], data[0]);
+                double psnr = psnr_hvs.Calculate(testData, data);
                 Tuple<double, double> overall = ErrorCalculator.CalculateOverallError(testData, data);
                 long lineCount = 0;
                 long fileSize = 0;
@@ -128,7 +128,7 @@ namespace CompressionTesting
                 double averageLineSize = fileSize / (double)lineCount;
 
                 w.Write("\n");
-                w.Write(averageLineSize + ";" + overall.Item1 + ";" + overall.Item2);
+                w.Write(averageLineSize + ";" + overall.Item1 + ";" + overall.Item2+";"+psnr);
             }
 
             w.Close();

@@ -1,10 +1,11 @@
 \section{Qualitätsmessung der Kompression}
-Um die Datenmenge der Feldlinien zu verringern werden verlustbehaftete Kompressionsverfahren angewendet. Trotz des Dateverlustes sollen die dekomprimierten Linien möglichst ihren Originalen ähneln. Kleine Abweichungen werden in der Sonnenforschung toleriert. Es ist wichtig, dass die Form der Kurve erhalten bleibt. Grosse, seltene Abweichungen sollten vermieden werden, da sie das Aussehen der Feldlinie verändern können.\\
+Um die Datenmenge der Feldlinien zu verringern werden verlustbehaftete Kompressionsverfahren angewendet. Trotz des Dateverlustes sollen die dekomprimierten Linien möglichst ihren Originalen ähneln. Es ist wichtig, dass die Form der Kurve. Grosse, seltene Abweichungen können das Aussehen beeinflussen.\\
 [\baselineskip]
+Im Verlauf der Arbeit wurden zwei unterschiedliche Metriken verwendet: Die Standardabweichung und eine angepasste PSNR-HVS-M. Für die ersten Messungen wurde die Standardabweichung gemessen. Es stellte sich heraus, dass die Metrik für den Anwendungsfall nicht ausreicht: Sichtbare Artefakte, wie hochfrequente Schwingungen um die Originallinie fallen nicht ins Gewicht. Wie die Standardabweichung berechnet wird, ist im Abschnitt \ref{testsetup:ablauf} beschrieben. Für weitere Messungen wurde eine angepasste PSNR-HVS-M Metrik verwendet. Es berücksichtigt nur Artefakte, die vom menschlichen Auge sichtbar sind.
 %neu schreiben.
 Zusammen mit Sonnenforschern wurden zwei Fehlermasse bestimmt: Der absolute maximale Fehler und die Standardabweichung von der komprimierten Linie zum Original. Die Standardabweichung ist für diesen Fall geeignet: Grosse, seltene Abweichungen werden stärker gewichtet, als kleine dafür häufige Abweichungen.\\
 Der absolute maximale Fehler wird noch als Absicherung gemessen. In den meisten Fällen wird die Kompression mit der tieferen Standardabweichung auch den kleineren maximalen Fehler haben. Da aber die Messung über ein paar hunderttausend Punkte durchgeführt wird, ist das Gegenteil denkbar.\\
-Subsample
+Subsample\\
 [\baselineskip]
 %meh
 Eine Grenze für die Genauigkeit ist nicht festzulegen. Auch wenn eine Grenze gefunden wird, kann diese sich in der Zeit verändern. Im Fall der Feldlinien ist die Internetverbindung der Flaschenhals. Es kann sein, dass in Zukunft mehr Präzision bei mehr Platzbedarf verlangt wird. Deshalb werden die Verfahren, wenn möglich, mit unterschiedlichen Qualitätsstufen getestet und verglichen.
@@ -15,7 +16,7 @@ Die feldlinien werden aber nur alle sechs Stunden berechnet und Solar Flares sin
 [\baselineskip]
 Wie im Abschnitt \ref{konzept:ist-komprimierung} beschrieben, führt der IDL-Code schon eine Quantisierung und ein Subsampling durch. Für die Testdaten wurde das Subsampling und die Quantisierung entfernt. Für jede Dimension eines Punktes wird anstatt 16 Bit 32 Bit Genauigkeit verwendet. Die rohe Datenmenge ist dementsprechend Angewachsen auf etwa 10 MiByte pro Aufnahme.
 
-\subsection{Fehlermass Standardabweichung}\label{testsetup:ablauf}
+\subsection{Berechnung der Standardabweichung}\label{testsetup:ablauf}
 Float daten werden geladen. Daten kopiert und Kompression/Dekompression durchgeführt für alle Testdaten. Die kopierten Daten wissen aber noch, welches ihr Originalpunkt ist.
 Zwei Mengen, Originalpunkte $O$, dekomprimierte Punkte $D$. Es gibt immer gleich viele oder mehr Originalpunkte wie dekomprimierte Punkte. Die Fehlerberechnung muss der allgemeine Fall und die Randbehandlung unterschieden werden.
 
@@ -26,7 +27,7 @@ Zwei Mengen, Originalpunkte $O$, dekomprimierte Punkte $D$. Es gibt immer gleich
 	\caption{Darstellung der Fehlerberechnung. Die Punkte sind die Originaldaten, die Quadrate sind die Punkte nach der Kompression.}
 	\label{testsetup:ablauf:fehlerberechnung:diagramm}
 \end{figure} 
-Die Berechnung ist Dargestellt im Diagramm \ref{testsetup:ablauf:fehlerberechnung:diagramm}. Für jeden Punkt $p1'$ aus $D$, nehme $p1'$ und den folgenden Punkt und $p2'$. Ziehe eine Strecke $s$ durch $p1'$ und $p2'$. Suche von $p1'$ den Originalpunkt $p1$ aus $O$ und rechne den Abstand aus zur Strecke $s$. Führe das für alle folgenden Originalpunkte durch, bis $p2$ erreicht wurde. Der Abstand $s$ zu $p2$ wird nicht mehr berechnet.\\
+Die Berechnung ist Dargestellt im Diagramm \ref{testsetup:ablauf:fehlerberechnung:diagramm}. Für jeden Punkt $p1'$ aus $D$, nehme $p1'$ und den folgenden Punkt und $P2'$. Ziehe eine Strecke $s$ durch $p1'$ und $p2'$. Suche von $p1'$ den Originalpunkt $P1$ aus $O$ und rechne den Abstand aus zur Strecke $s$. Führe das für alle folgenden Originalpunkte durch, bis $p2$ erreicht wurde. Der Abstand $s$ zu $p2$ wird nicht mehr berechnet.\\
 [\baselineskip]
 \textbf{Abstandsberechnung eines Punktes zu einer Strecke}\\
 Gegeben: Stecke $s$ mit Eckpunkten $A$ und $B$ und Punkt $P$.\\
@@ -58,7 +59,7 @@ $variance(X) = \sum{(x_i - E(x_i))^2}$
 \end{center}
 Die Standardabweichung $\sigma$ einer Beobachtungsreihe $X$ $(x_1,x_2,x_3,\ldots, x_n-1)$ ergibt sich aus der Wurzel der Varianz von $X$. Die Varianz von $X$ kann errechnet werden, wenn man den Distanz jeder Beobachtung $x_i$ mit dem Erwartungswert $E(x_i)$ berechnet und quadriert. Die Beobachtung ist im diesen Fall ein Punkt der dekomprimierten Linie, während der Erwartungswert der Originalpunkt ist. Die Distanz wird mit dem besprochnen Verfahren \ref{testsetup:ablauf} berechnet. Die Summe der quadratischen Abstände ergibt die Varianz. Die Varianz wird über alle Testdaten berechnet, somit erhält man für einen Test genau eine Standardabweichung.
 
-\subsection{Fehlermass Angepasste PSNR-HVS-M}\label{testsetup:psnr}
+\subsection{Berechnung der angepassten PSNR-HVS-M}\label{testsetup:psnr}
 grund dafür, ref auf resultate
 Warum ist die Standardabweichung ungenügend: Mathematisch sinnvoll, aber die Daten werden schlussendlich von einem Menschen angeschaut. Gewisse Artefakte verschwinden, gewisse sind gut sichtbar. Ein sinnvolles mass für menschlichen Sehapparat zu finden ist ein aktives Vorschungsgebiet der Bildverarbeitung.
 
@@ -67,3 +68,10 @@ PSNR:
 Verbesserung der PSNR-HVS
 
 Awbwandlung
+
+\subsubsection{Umsetzung}
+Faktoren, Empirisch getestet mit algos. eher konservativ
+maxvalue der psnr
+
+\subsubsection{Wertebereich und Grenzen der PSNR}
+Wann ist gut, wann knapp. Jetzt eher knapp

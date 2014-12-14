@@ -22,13 +22,13 @@ namespace CompressionTesting.Solutions
 
         public string GetName()
         {
-            return "Solution1_Eight";
+            return "Solution1_Four";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return Eight(data, qualityLevel, folder);
+            return Four(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -257,7 +257,6 @@ namespace CompressionTesting.Solutions
             TestResult result = new TestResult();
 
             Subsampling.Subsample(data, 4);
-            
             PCATransform.Forward(data, 0);
             Residualizer.DoResiduals(data, 1);
             //YCbCr.ForwardFull(data, 0);
@@ -265,7 +264,7 @@ namespace CompressionTesting.Solutions
 
             Discretizer.DividePoint(data, 70000, 0);
             Discretizer.Divide(data, 1000, 1);
-            Discretizer.DivideLinear(data, 2 * (qualityLevel + 6), 1);
+            Discretizer.DivideLinear(data, 2 * (qualityLevel + 10), 1);
             Discretizer.ToShorts(data, 1);
 
             PCAWriter.WriteFits(data, 1, fits);
@@ -273,7 +272,7 @@ namespace CompressionTesting.Solutions
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 6), 1);
+            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 10), 1);
             Discretizer.Multiply(data, 1000, 1);
             //Residualizer.UndoResiduals(data, 3);
             Discretizer.MultiplyPoint(data, 70000, 0);
@@ -381,7 +380,7 @@ namespace CompressionTesting.Solutions
             Discretizer.DivideLinear(data, 155, 0, 26, 15);
 
             //Discretizer.DivideLinear(data, 400, 20, 21, 15);
-            Discretizer.Cut(data, 31);
+            Discretizer.Cut(data, 36);
             Discretizer.ToShorts(data, 1);
 
             InterleavedWriter.WriteDCTByteFits(data, fits);

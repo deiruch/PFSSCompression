@@ -2,9 +2,9 @@
 Es gibt x Lösungenansätze mit x varianten.  hier sind die Kompressionsraten der jeweils besten Varianten der Ansätze.\\
 Bis auf den Lösungsansatz unter \ref{resultate:loesung0} Unterschiedliche Qualitätsstufen
 
-\subsection{Lösungsansatz: Angle-Subsampling} \label{resultate:loesung0}
+\subsection{Lösungsansatz: Adaptives Subsampling} \label{resultate:loesung0}
 Bild
-Der Ist-Zustand wird das Angle-Subsampling\footnote{siehe Abschnitt \ref{konzept:loesung0:subsampling}} im JHelioviewer durchgeführt. Diese Variante führt das Subsampling vor der Dateiübertragung durch. Die resultierende FITS-Datei wird mittels Rar kodiert\footnote{siehe Abschnitt\ref{konzept:loesung0:kodierung}};
+Der Ist-Zustand wird das Adaptives-Subsampling\footnote{siehe Abschnitt \ref{konzept:loesung0:subsampling}} im JHelioviewer durchgeführt. Diese Variante führt das Subsampling vor der Dateiübertragung durch. Die resultierende FITS-Datei wird mittels Rar kodiert\footnote{siehe Abschnitt\ref{konzept:loesung0:kodierung}};
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung0/loesung0_0.png}
@@ -45,7 +45,7 @@ Die Abbildung \ref{resultate:loesung1:dct:resultate} zeigt den Vergleich der DCT
 	\label{resultate:loesung1:dct:artefakte}
 \end{figure}
 Die Darstellung der Artefakte \ref{resultate:loesung1:dct:artefakte} zeigen das Problem: in den meisten Fällen kann die DCT die Feldlinie gut approximieren. Bei dieser Feldlinie wird der Anfang der Kurve nicht richtig dargestellt. Das ist ein typisches Problem der DCT. In diesem Fall wird für die Transformation angenommen, dass sich das Signal am Anfang und am Ende in umgekehrter Reihenfolge wiederholt \cite{wiki:dct}. Das führt am Anfang der Kurve zu einer grossen Spitze, welche sich nur durch sehr hochfrequente Schwingungen darstellen lässt.  Wenn diese Anteile durch die Quantisierung verschwinden, entstehen solche Artefatkte.\\
-Eine Möglichkeit ist die Feldlinie um Punkte zu erweitern. Wenn die Feldlinie am Anfang und am Ende abflacht, sollte die resultierende Transformation weniger hochfrequente Schwingungen enthalten. Durch eine andere Darstellung könnten diese Probleme ebenfalls gelöst werden.
+Eine Möglichkeit ist die Feldlinie um Punkte zu erweitern. Wenn die Feldlinie am Anfang und am Ende abflacht, sollte die resultierende Transformation weniger hochfrequente Schwingungen enthalten. Diese Variante wird im Abschnitt \ref{resultate:loesung1:dct:randbeh+byte} behandelt und führt zu einer deutlich besseren Approximation. Durch eine andere Darstellung der Daten kann das Problem ebenfalls gelöst werden. Diese Variante wird in den folgenden Abschnitten besprochen.
 
 \subsubsection{Variante: Ableitung+DCT}\label{resultate:dct:ableitung_dct}
 Bild
@@ -93,10 +93,10 @@ Bei der Variante \ref{resultate:dct} war das Problem, dass die Ränder schlecht 
 	\caption{Artefakte der DCT Kompression der Ableitung}
 	\label{resultate:loesung1:dct:byte:artefakte}
 \end{figure} 
-Die Abweichung ist in der selben Grössenordnung wie die der Lösung 0. In der Abbildung\ref{resultate:loesung1:dct:byte:artefakte} ist deutlich zu sehen, dass die Kurve durch die Quantisierung gedämpft wird. Die Maximum der Kurve ist tiefer, sowie das lokale Minima der letzten Halbwelle höher. Der Vorteil dieser Variante ist, dass die resultierende Feldline sehr glatt verläuft. Ohne die Originalkurve währen die Artefakte nicht zu identifizieren.\\
-Wenn man die Artefakte von \ref{resultate:loesung1:dct:byte:artefakte} und \ref{resultate:loesung0:artefakte} vergleicht, fällt auf dass die Variante \ref{resultate:dct} die Feldlinie genauer approximiert. Wenn die Ränder besser dargestellt werden, ist es Denkbar, dass die Variante \ref{resultate:dct} wenigere Kosinus-Funktionen braucht für eine ähnlich genaue Approximation.
+Im Diagramm der Abbildung\ref{resultate:loesung1:dct:byte:artefakte} ist deutlich zu sehen, dass die Kurve durch die Quantisierung gedämpft wird. Die Maximum der Kurve ist tiefer, sowie das lokale Minima der letzten Halbwelle höher. Der Vorteil dieser Variante ist, dass die resultierende Feldline sehr glatt verläuft. Ohne die Originalkurve währen die Artefakte nicht zu identifizieren.\\
+Wenn  die Artefakte \ref{resultate:loesung1:dct:byte:artefakte} und \ref{resultate:loesung0:artefakte} vergleicht, fällt auf, dass die Variante \ref{resultate:dct} die Feldlinie genauer approximiert. Wenn die Ränder besser dargestellt werden, ist es Denkbar, dass die Variante \ref{resultate:dct} wenigere Kosinus-Funktionen braucht für eine ähnlich genaue Approximation.
 
-\subsubsection{Variante: DCT+Byte Kodierung}
+\subsubsection{Variante: Randbehandlung+DCT+Byte Kodierung} \label{resultate:loesung1:dct:randbeh+byte}
 Wieder nur die Diskrete Kosinus Transformation, aber noch mit künstlich erzeugten Punkten\ref{konzept:loesung1:randbehandlung} und der Byte Kodierung\ref{konzept:loesung1:kodierung}.
 \begin{figure}[!htbp]
 	\center
@@ -104,22 +104,26 @@ Wieder nur die Diskrete Kosinus Transformation, aber noch mit künstlich erzeugt
 	\caption{Vergleich der Kompression mit und ohne Byte-Kodierung}
 	\label{resultate:loesung1:dct:randbehandlung}
 \end{figure}
-Noch besser, noch wenige Bytes pro feldlinie
+Das Diagramm der Abbildung \ref{resultate:loesung1:dct:randbehandlung} zeigt den Vergleich der Variante mit Randbehandlung und der Variante der abgeleiteten Feldlinie (beschrieben im Abschnitt \ref{resultate:loesung1:ableitung_dct_kodierung}. Es ist zu erkennen, dass dank der Randbehandlung die Feldlinien mit weniger Bytes ähnlich genau approximiert werden können.\\
+[\baselineskip]
+Trotz einer vergleichbaren Genauigkeit wie die des Lösungsansatzes unter \ref{resultate:loesung0}, sind auf der JHelioviewer visualisierung deutliche Artefakte zu sehen. Die Abbildung \ref{resultate:loesung1:dct:randbehandlung:jvhartefakte} vergleicht die originalen mit dekomprimierten Feldlinien. Die Dekompression Lässt die Feldlinien um das originale Signal schwingen.
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-7/artefakte.png}
-	\caption{Artefakte der DCT Kompression der Ableitung}
-	\label{resultate:loesung1:dct:randbehandlung:artefakte:}
+	\frame{
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-7/line_good.png}}
+		\frame{
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-7/line_bad.png}}
+	\caption{Artefakte der Kompression, links sind die originalen Feldlinien, rechts die Dekomprimierten.}
+	\label{resultate:loesung1:dct:randbehandlung:jvhartefakte}
 \end{figure} 
-Randbehandlung noch nicht Perfekt.
-Artefakte wird man bei der Visualiserung nicht bemerken, da sowieso nicht alle Punkte dargestellt werden können. Artefakte andere Eigenschaft wie \ref{resultate:loesung1:ableitung_dct_kodierung}, sie könnten als solches Enttarnt werden.
-
-Realität sieht aber anders aus, überall kleine schwingungen. Visuell nicht schön anzuschauen. Kompression ist nicht brauchbar.
-Bild Umsetzung
-In diesem Fall scheint die Genauigkeitsmetrik versagt zu haben. Man kann es noch retten, aber braucht sehr viel mehr Informationen. Bereits bei 59 Bytes per Pixel.
-Bild verbesserung
-Entscheidung, auf VAriante 6 umzusteigen. Diese Lösung scheint unter dem selben Problem zu leiden, aber weitaus weniger extrem. DAs Bedeutet, dass das Fehlermass schlecht ist und geändert werden soll. Deshalb wurde eine neue Metrik entwickelt, welche unter\ref{testsetup:psnr}
-
-
-\subsubsection{Variante:Bla}
-Für diesen FAll quantisierung angepasst, aber selbst d
+In diesem Fall scheint die Genauigkeitsmetrik zu versagen: Da die Schwingungen nahe am originalen Signal liegen, bleiben die Abstände klein. Die Approximation ist mathematisch betrachtet genau, aber für das menschliche Auge inakzeptabel.\\
+Interessant ist, dass die die Variante der Ableitung beschrieben(\ref{resultate:loesung1:ableitung_dct_kodierung}) ähnliche Artefakte aufweist. In der Abbildung \ref{resultate:loesung1:dct:randbehandlung:jvhartefakte_loesung6} ist ein Vergleich der Original- mit den dekomprimierten Feldlinien dieser Variante zu sehen. Die Artefakte sind deutlich schwächer ausgeprägt. Metrik ist unbrauchbar, Deshalb wurde eine neue Metrik entwickelt, welche unter\ref{testsetup:psnr} beschrieben ist.
+\begin{figure}[!htbp]
+	\center
+	\frame{
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-7/line_good.png}}
+		\frame{
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/testsetup/newalgo//solution6_bad.png}}
+	\caption{Artefakte der Kompression, links sind die originalen Feldlinien, rechts die Dekomprimierten der Variante \ref{resultate:loesung1:ableitung_dct_kodierung}.}
+	\label{resultate:loesung1:dct:randbehandlung:jvhartefakte_loesung6}
+\end{figure} 

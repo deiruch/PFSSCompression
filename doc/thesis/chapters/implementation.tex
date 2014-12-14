@@ -16,7 +16,7 @@ was nicht gemacht wurde, mehrere Dateien zusammengefasst.
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/implementation/dataflow.png}
-	\caption{Zustandsdiagramm der Feldliniendatn}
+	\caption{Zustandsdiagramm der Feldliniendaten}
 	\label{implementation:architektur:datenfluss}
 \end{figure}
 Die Daten der Feldlinien durchlaufen im JHelioviewer vier Zustände, welche durch vier Klassen abgebildet wurde. Die Klassen sowie die Zustandswechsel sind in Abbildung \ref{implementation:architektur:datenfluss} dargestellt. Die Klasse ''FileDescriptor´´ repräsentiert eine Aufnahme von Feldlinien auf dem Server. In diesem Zustand sind die Daten bereit für das Herunterladen. Die folgende Klasse ''PFSSData´´ symbolisiert Feldlinien, welche in den lokalen Arbeitsspeicher geladen wurden. In diesem Zustand sind die Daten noch komprimiert und nicht bereit für eine Visualisierung. Für das Herunterladen ist ebenfalls die ''PFSSData´´ Klasse zuständig. ''PFSSDekompressor´´ ist ein Zwischenzustand und stellt den Wechsel von komprimierten zu unkomprimierten Daten dar. Da der Zustandswechsel aufwändig ist, wird es durch eine eigene Klasse abgebildet. Die letzte Klasse ''PFSSFrame´´ repräsentiert die dekomprimierten Feldlinien. In diesem Zustand sind die Daten bereit für die Darstellung. Die Darstellung wird ebenfalls von der ''PFSSFrame´´ Klasse übernommen.
