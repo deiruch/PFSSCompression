@@ -17,6 +17,7 @@ Die feldlinien werden aber nur alle sechs Stunden berechnet und Solar Flares sin
 Wie im Abschnitt \ref{konzept:ist-komprimierung} beschrieben, führt der IDL-Code schon eine Quantisierung und ein Subsampling durch. Für die Testdaten wurde das Subsampling und die Quantisierung entfernt. Für jede Dimension eines Punktes wird anstatt 16 Bit 32 Bit Genauigkeit verwendet. Die rohe Datenmenge ist dementsprechend Angewachsen auf etwa 10 MiByte pro Aufnahme.
 
 \subsection{Berechnung der Standardabweichung}\label{testsetup:ablauf}
+%Schlecht, nochmal
 Float daten werden geladen. Daten kopiert und Kompression/Dekompression durchgeführt für alle Testdaten. Die kopierten Daten wissen aber noch, welches ihr Originalpunkt ist.
 Zwei Mengen, Originalpunkte $O$, dekomprimierte Punkte $D$. Es gibt immer gleich viele oder mehr Originalpunkte wie dekomprimierte Punkte. Die Fehlerberechnung muss der allgemeine Fall und die Randbehandlung unterschieden werden.
 

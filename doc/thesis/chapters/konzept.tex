@@ -3,7 +3,12 @@ konzept der unterschiedlichen kompressionsverfahren. zwei lösungsansätze.
 bereits eine simple Kompression implementiert.
 
 \subsection{Ist-Komprimierung} \label{konzept:ist-komprimierung}
-Bild
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/ist/aufbau.png}
+	\caption{Aufbau der Ist-Kompression.}
+	\label{konzept:ist:aufbau:diagramm}
+\end{figure} 
 Quantisierung, Formatierung und Kodierung. 
 Ist-Kompression. Jeder Kanal wird in 16-Bit Integer quantisiert.
 Abspeicherung: Jeder Kanal am Stück, sodass die Entropie Kodierung greifen kann. Entropiekodierung mittels gzip.
@@ -30,7 +35,12 @@ Format: zuerst Konstanten, alle Radien\\
 Clientseitig wieder ein subsampling und umrechnung ins kartesische System xyz, dann Anglesubsampling
 	
 \subsection{Lösungsansatz Adaptives Subsampling}
-Bild
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution0/aufbau.png}
+	\caption{Aufbau des Lösungsansatzes: Adaptives Subsampling.}
+	\label{konzept:loesung0:aufbau:diagramm}
+\end{figure} 
 Subsampling wird nun auf dem Server ausgeführt. in den folgenden Abschnitten sind die Teilschritte erklärt.
 
 \subsubsection{Adaptives Subsampling}\label{konzept:loesung0:subsampling}
