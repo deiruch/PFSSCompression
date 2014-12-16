@@ -113,7 +113,7 @@ public class PCA {
     {
         
         Matrix<float> transformation = getTransformation(type);
-        Matrix<float> inverse = data * transformation.Inverse();
+        Matrix<float> inverse = data * transformation;
         if (centerMatrix)
         {
             inverse = inverseShiftColumns(inverse, means);

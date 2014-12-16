@@ -133,6 +133,7 @@ namespace CompressionTesting
             {
                 for (int i = 1; i < adaptiveSize; i++)
                 {
+                    float debug = (float)(value[i] * (Math.Cos((2 * k + 1) * i * Math.PI / adaptive2)));
                     output[k] += (float)(value[i] * (Math.Cos((2 * k + 1) * i * Math.PI / adaptive2)));
                 }
 

@@ -27,6 +27,7 @@ namespace CompressionTesting.PFSS
 
         internal Matrix<float> pcaTransform;
         internal float[] means;
+        internal int minus = 0;
 
         public PFSSLine(TYPE t, List<PFSSPoint> points)
         {

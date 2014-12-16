@@ -18,7 +18,7 @@ namespace CompressionTesting.Transformation
                 PCA pca = new PCA(m, true);
                 Matrix<float> t = pca.transform(m, PCA.TransformationType.ROTATION);
                 CopyToLine(l, t, pointOffset);
-                l.pcaTransform = pca.v;
+                l.pcaTransform = pca.v.Inverse();
                 l.means = pca.means;
             }
         }

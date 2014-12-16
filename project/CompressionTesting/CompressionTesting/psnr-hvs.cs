@@ -88,7 +88,8 @@ namespace CompressionTesting
             for (int i = 0; i < 3; i++)
             {
                 //copy channel
-                float[] ex = expected.CopyChannel(i,actual);
+                //float[] ex = expected.CopyChannel(i,actual);
+                float[] ex = expected.CopyChannel(i);
                 float[] ac = actual.CopyChannel(i);
                 ex = DCT.fdct(ex, max);
                 ac = DCT.fdct(ac, max);

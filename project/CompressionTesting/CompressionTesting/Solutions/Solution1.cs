@@ -22,13 +22,13 @@ namespace CompressionTesting.Solutions
 
         public string GetName()
         {
-            return "Solution1_Eight";
+            return "Solution1_Nine";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return Eight(data, qualityLevel, folder);
+            return Nine(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -401,6 +401,68 @@ namespace CompressionTesting.Solutions
             }
             DCTransformer.Backward(data, 1);
             Residualizer.UndoResiduals(data, 1);
+
+            return result;
+        }
+
+
+
+        public TestResult Nine(PFSS.PFSSData data, int qualityLevel, string folder)
+        {
+            FileInfo fits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".fits"));
+            FileInfo rarFits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".rar"));
+            TestResult result = new TestResult();
+
+            Subsampling.Subsample(data, 4);
+            Residualizer.DoResiduals(data, 1);
+            PCATransform.Forward(data, 1);
+            //YCbCr.ForwardFull(data, 0);
+            DCTransformer.Forward(data, 1);
+
+            //Residualizer.DoResiduals(data, 3);
+
+            foreach (PFSSLine l in data.lines)
+            {
+                Spherical.ForwardToSpherical(l.points[0]);
+                Spherical.ForwardMoveSpherical(l.points[0]);
+            }
+            Discretizer.Divide(data, 1000, 1);
+            Discretizer.DivideLinear(data, 30, 5, 1, 10);
+            Discretizer.DivideLinear(data, 100, 0, 11, 8);
+            Discretizer.DivideLinear(data, 110, 0, 19, 7);
+            Discretizer.DivideLinear(data, 25, 0, 26, 15);
+
+            Discretizer.Cut(data, 31);
+            PCACoefficient.ForwardQuantization(data);
+            Discretizer.ToShorts(data, 1);
+            /*DebugOutput.MedianWriter.AnalyzePerCurveType(data,TYPE.OUTSIDE_TO_SUN,0,new FileInfo(Path.Combine(folder, this.GetName()+"_ots.csv")));
+            DebugOutput.MedianWriter.AnalyzePerCurveType(data, TYPE.SUN_TO_OUTSIDE, 0, new FileInfo(Path.Combine(folder, this.GetName() + "_sto.csv")));
+            DebugOutput.MedianWriter.AnalyzePerCurveType(data, TYPE.SUN_TO_SUN, 0, new FileInfo(Path.Combine(folder, this.GetName() + "_sts.csv")));
+            DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.OUTSIDE_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_ots_curve.csv")));*/
+            PCAWriter.WritePureByteFits(data, 1, fits);
+            long size = RarCompression.DoRar(rarFits, fits);
+            result.fileSize = size;
+            result.lineCount = data.lines.Count;
+
+            PCACoefficient.BackwardQuantization(data);
+            Discretizer.MultiplyLinear(data, 30, 5, 1, 10);
+            Discretizer.MultiplyLinear(data, 100, 0, 11, 8);
+            Discretizer.MultiplyLinear(data, 110, 0, 19, 7);
+            Discretizer.MultiplyLinear(data, 100, 0, 26, 15);
+            Discretizer.Multiply(data, 1000, 1);
+            //Residualizer.UndoResiduals(data, 3);
+            foreach (PFSSLine l in data.lines)
+            {
+                Spherical.BackwardMoveSpherical(l.points[0]);
+                Spherical.BackwardToSpherical(l.points[0], data);
+            }
+            DCTransformer.Backward(data, 1);
+            //YCbCr.BackwardsFull(data, 0);
+            //PCACoefficient.Backwards(data);
+            PCATransform.Backwards(data, 1);
+            Residualizer.UndoResiduals(data, 1);
+
+            return result;
 
             return result;
         }
