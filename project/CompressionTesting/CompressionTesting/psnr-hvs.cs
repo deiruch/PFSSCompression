@@ -13,7 +13,7 @@ namespace CompressionTesting
         private static double[] factors = null;
         private static int max = 80; 
         private static readonly double maxI = 20* Math.Log10(4 * PFSSPoint.SunRadius);
-        private const double eNorm = 80 * 2 * 1000;
+        private const double eNorm = 80*1000;
         private const double maskNorm = 80;
 
         private static void calcFactors()
@@ -88,9 +88,14 @@ namespace CompressionTesting
             for (int i = 0; i < 3; i++)
             {
                 //copy channel
-                //float[] ex = expected.CopyChannel(i,actual);
-                float[] ex = expected.CopyChannel(i);
+                float[] ex = expected.CopyChannel(i,actual);
                 float[] ac = actual.CopyChannel(i);
+                float[] diff = new float[ex.Length];
+                for (int j = 0; j < diff.Length; j++)
+                {
+                    diff[j] = ex[j] - ac[j]; 
+                }
+                diff = DCT.fdct(diff, max);
                 ex = DCT.fdct(ex, max);
                 ac = DCT.fdct(ac, max);
                 double mask = Math.Max(CalcMask(ex), CalcMask(ac));
@@ -101,15 +106,15 @@ namespace CompressionTesting
                 {
                     double error = 0;
                     double maskFactor =  mask/factors[j];
-                    if (Math.Abs(ex[j] - ac[j]) > maskFactor)
+                    if (Math.Abs(diff[j]) > maskFactor)
                     {
-                        if(ex[j] - ac[j] > maskFactor)
+                        if(diff[j] > maskFactor)
                         {
-                            error = ex[j] - ac[j] - maskFactor;
+                            error = diff[j] - maskFactor;
                         }
                         else
                         {
-                           error = ex[j] - ac[j] + maskFactor;
+                           error = diff[j] + maskFactor;
                         }
                     }
                     //else, mask. Error = 0

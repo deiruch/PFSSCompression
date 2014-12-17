@@ -42,7 +42,6 @@ namespace CompressionTesting
             lines.Add(l);
             PFSSData data = new PFSSData(0, 0, lines);
 
-
             solution.DoTestRun(data, 1, fitsOutputFolder);
             StreamWriter w = new StreamWriter(new FileStream(Path.Combine(fitsOutputFolder, solution.GetName() + "_Line.csv"), FileMode.Create));
             l = data.lines[0];

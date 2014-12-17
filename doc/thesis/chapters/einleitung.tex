@@ -1,6 +1,5 @@
 \section{Verlustbehaftete Kompression von volumetrischen Punkten}
-In verschiedene wissenschaftliche Simulationen produzieren grosse Datenmengen. Man möchte Schwingungen, Flugbahnen, Kraftfelder etc als Linien im dreidimensionalen Raum visualisieren. Jede Linie besteht aus einer grossen Menge an volumetrischen Punkten.
-In dieser Arbeit soll mit einer verlustbehafteten Kompression möglich gemacht werden, die Datenmenge über eine Internetverbindung zu übertragen. Die Artefakte der Kompression sollen sich im Rahmen halten. Aber dennoch schön aussehen.\\
+In verschiedene wissenschaftliche Simulationen produzieren grosse Mengen an Daten. Man möchte Schwingungen, Flugbahnen, Flüsse, Kraftfelder etc als Linien im dreidimensionalen Raum visualisieren. Die Linien können als Folge von volumetrischen Punkten dargestellt werden. Die Datenmenge ist oft zu gross als dass sie in sinnvoller Zeit über eine Internetverbindung übertragen werden können. Deshalb sollim rahmen dieser Arbeit eine verlustbehaftete Kompression entwickelt werden, welche die Datenübertragung ermöglicht.\\
 [\baselineskip]
 teilchenphysik, sonnenForschung, feldlinien Konkreter Anwendungsfall der JHelioviewer. Visualisiert Satellitenmessungen und Simulationen. Mittels PFSS werden die Feldlinien simuliert. Datenmenge soll nun auf den jeweiligen JHelioviewer des Sonnenforschers übertragen werden. (Feldlinienbild). Resultate\\
 [\baselineskip]
@@ -20,11 +19,7 @@ Es wird zwischen drei Feldlinien Unterschieden: Linien, die auf der Sonne starte
 \end{figure}
 In regelmässigen Abständen sucht der Server nach neuen Oberflächen-Magnetogramm-Daten der Satelliten. Die momentane Lösung erhält alle sechs Stunden neue Messdaten der Satelliten. Daraus werden mittels Potential Field Source Surface (PFSS) Simulation die Feldlinien zu diesem Zeitpunkt errechnet. Danach führt der Server eine Kompression durch und stellt die Daten auf einem öffentlichen Share dem JHelioviewer zur Verfügung. Zusammen mit Aufnahmen von anderen Instrumenten animiert der JHelioviewer die Feldlinien über einen gewissen Zeitraum. Die Daten werden zur Laufzeit über eine Internetverbindung nachgeladen.
 
-\subsection{Rohdatenmenge der Feldlinien}
-Die PFSS Extrapolation produziert für eine Aufnahme etwa 15 MiBytes an Daten.
-Verlustfrei/verlustbehaftet.
-Vorfeld schon mit Verlustlosen und Verlustbehafteten Kompressionsverfahren auf etwa 1.5 MiByte verkleinert.
-Ziel ist es, so wenige Daten wie Möglich zu brauchen. Zukunftsvision
+resultate
 
 
 

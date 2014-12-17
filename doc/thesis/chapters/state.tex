@@ -8,9 +8,23 @@ Grob betrachtet können verlustbehaftete Kompressionen in drei Teilschritte aufg
 \end{figure}
 Folgend werden Kompressionsverfahren oder typische Algorithmen für einen Teilschritt beschrieben.
 
-\subsection{JPEG/JFIF Kompression}
-Weit verbreitete Bild
-YCbCr, DCT, Quantisierung, Entropie Kodierung.
+\subsection{JPEG/JFIF Bildkompression}
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/state/jpeg.png}
+	\caption{JPEG Kompressionsarchitektur \cite{wallace1992jpeg}}
+	\label{state:jpeg:abb}
+\end{figure}
+Weit verbreitete Bildformat für natürliche Bilder.
+Aufteilung in blöcke, 
+Forward diskrete Cosine transform
+Quantisierung, es ist möglich, die Quantisierung und somit die Qualität und Kompressionsrate zu beeinflussen.
+Quantisierungstabellen sind noch ein ungelöstes problem.\cite{wu1993rate:jpeg} \cite{wang2001designing:jpeg} 
+
+Entropiekodierung 2steps, zigzagmuster, dann runLength und Huffman Kodierung. Hier bietet JPEG die Möglichkeit, eine eigene Huffman-Tabelle zu spezifizieren.
+
+\subsection{B-Spline Signal Approximation}
+\cite{unser1993b:spline} Schnelle B-Spline Signal interpolation und Approximation möglich. Wird aber in der Signal Processing weniger verwendet. Da kontinuierlich, können Operationen wie Integration und Diffenezierung direkt auf der Spline-Funktion durchgeführt werden. Noise reduktion möglich, aber auch Approximation. Verschiedene Ansätze die Knotenpunkte zu wählen (de boor)
 
 \subsection{3d Mesh Kompression}
 In der Computergrafik müssen alle Gegenstände und Akteure in der virtuellen Welt modelliert werden. So wird ein Mensch eine Menge von Dreiecken, das Mesh, modelliert. Jeder Punkt eines Dreieck kann zusätzliche Informationen gespeichert haben wie Texturkoordinaten, Farbe oder Oberflächen-Normalen. Je nach Anwendungsfall kann ein Modell aus ein paar hundert oder mehreren hunderttausend Dreiecken bestehen. Um diese Datenmenge zu verkleinern versuchen Formate wie OpenCTM \cite{website:openctm} die Datenmenge verlustfrei oder verlustbehaftet zu komprimieren.\\
@@ -35,6 +49,7 @@ Verlustbehaftete Kompression, indem man mit einer begrenzten Anzahl
 fourier, wavelet Compressed sensing, Spline Approximation
 
 \subsection{Entropie Kodierung}
+Fast Loessless floating point compression \cite{ratanaworabhan2006fast}
 Verlustfreie Komprimierung basierend auf Shannons coding theorem
 
  Arithmeic, Huffman
