@@ -23,7 +23,14 @@ Quantisierungstabellen sind noch ein ungelöstes problem.\cite{wu1993rate:jpeg} 
 
 Entropiekodierung 2steps, zigzagmuster, dann runLength und Huffman Kodierung. Hier bietet JPEG die Möglichkeit, eine eigene Huffman-Tabelle zu spezifizieren.
 
-\subsection{B-Spline Signal Approximation}
+\subsection{PointCloud Kompression}
+Industrie Lasersampling
+Bild pointcloud \cite{merry2006compression:pointcloud}
+Grosse Punktmenge, welche im 3d Raum komprimiert werden soll.
+verlustfrei/ Verlustbehaftet
+Je nach Implementation können zu jedem Punkt zusatzinfos gespeichert werden wie Farbe/Normalen etc, darüber könnte die Information, zu welcher Linie ein Punkt gehört, gespeichert werden.
+
+\subsection{Curve Fitting}
 \cite{unser1993b:spline} Schnelle B-Spline Signal interpolation und Approximation möglich. Wird aber in der Signal Processing weniger verwendet. Da kontinuierlich, können Operationen wie Integration und Diffenezierung direkt auf der Spline-Funktion durchgeführt werden. Noise reduktion möglich, aber auch Approximation. Verschiedene Ansätze die Knotenpunkte zu wählen (de boor)
 
 \subsection{3d Mesh Kompression}
@@ -32,12 +39,7 @@ wie funktioniert es\\
 
 wie es verwendet werden könnte
 
-\subsection{PointCloud Kompression}
-Industrie Lasersampling
-Bild pointcloud
-Grosse Punktmenge, welche im 3d Raum komprimiert werden soll.
-verlustfrei/ Verlustbehaftet
-Je nach Implementation können zu jedem Punkt zusatzinfos gespeichert werden wie Farbe/Normalen etc, darüber könnte die Information, zu welcher Linie ein Punkt gehört, gespeichert werden.
+
 
 \subsection{Signal Approximation}
 Messtechnik von Medizin bis Fotografie, überall wo man ein Signal über Zeit hat

@@ -1,6 +1,7 @@
 \section{Qualitätsmessung der dekomprimierten Daten}
 Bei verlustbehafteten Kompressionen muss die Qualität des dekomprimierten Bildes sichergestellt werden. Im optimalen Fall ähneln die dekomprimierten Daten ihren Originalen, sodass für das menschliche Auge keine Artefakte sichtbar sind.\\
 Im Verlauf der Arbeit wurden zwei Metriken verwendet: Die Standardabweichung und eine angepasste PSNR-HVS-M. Für die ersten Tests wurde nur die Standardabweichung gemessen. Es stellte sich heraus, dass die Standardabweichung nicht ausreicht: Sichtbare Artefakte, wie hochfrequente Schwingungen um die Originallinie fallen nicht ins Gewicht. Der absolute Fehler bleibt klein, für das menschliche Auge jedoch sind solche Artefakte störend (Ein Beispiel für die Artefakte ist in Abbildung \ref{resultate:loesung1:dct:randbehandlung:jvhartefakte} im Abschnitt \ref{resultate:loesung1:dct:randbeh+byte} zu finden). Wie die Standardabweichung berechnet wird, ist im Abschnitt \ref{testsetup:ablauf} beschrieben. Für weitere Tests wurde zusätzlich die PSNR-HVS-M Metrik berechnet. Die Metrik stammt aus der Bildverarbeitung. Das Ziel des Fehlermasses ist es, eine hohe Korrelation zwischen der Metrik und dem menschlichen Augenmass zu erreichen. Wie die PSNR-HVS-M Metrik angepasst und umgesetzt wurde, ist im Abschnitt \ref{testsetup:psnr} beschrieben.\\
+Für die Messungen wurden spezielle Aufnahmen der Feldlinien gewählt. Wie die Aufnahmen ausgewählt wurden, ist im Abschnitt \ref{testsetup:auswahl_erhebung} beschrieben.\\
 [\baselineskip]
 Subsample\\
 [\baselineskip]
@@ -9,16 +10,13 @@ Eine Grenze für die Genauigkeit ist nicht festzulegen. Auch wenn eine Grenze ge
 
 \subsection{Auswahl und Erhebung der Testdaten}\label{testsetup:auswahl_erhebung}
 Die Testdaten sollen zu einem alle Randfälle abdecken, als auch durchschnittliche Fälle enthalten. Aus diesem Grund wurden insgesamt zehn Datensätze ausgewählt: Vier Datensätze mit hoher Sonnenaktivität, zwei mit wenig und vier zufällig. Für die vier Datensätzen mit hoher Aktivität wurde in den Jahren 2014 und 2013 nach den grössten Solare Flares gesucht. Für die Datensätze mit wenig Aktivität wurde das Gegenteil gemacht, nach Zeiträumen mit möglichst kleinen Solar Flares gesucht.\\
-Die feldlinien werden aber nur alle sechs Stunden berechnet und Solar Flares sind sehr spontane Ereignisse. Auch eine grosse Flare kann während den sechs Stunden angefangen und wieder aufgehört haben. Für die grossen Solar Flares wurde deshalb beachtet, dass die Datensätze vor dem Ereignis verwendet wurden. Grosse Solar Flares entladen das Feld, vor dem Ereignis ist das Magnetfeld komplexer.\\
+Die Feldlinien werden aber nur alle sechs Stunden berechnet und Solar Flares sind sehr spontane Ereignisse. Auch eine grosse Flare kann während den sechs Stunden angefangen und wieder aufgehört haben. Für die grossen Solar Flares wurde deshalb beachtet, dass die Datensätze vor dem Ereignis verwendet wurden. Grosse Solar Flares entladen das Feld, vor dem Ereignis ist das Magnetfeld komplexer.\\
 [\baselineskip]
 Wie im Abschnitt \ref{konzept:ist-komprimierung} beschrieben, wird bereits eine einfache verlustbehaftete Kompression durchgeführt. Für die Testdaten wurde diese entfernt, was die rohe Datenmenge entsprechend anwachsen liess auf etwa 10 MiBytes pro Aufnahme.
 
 \subsection{Berechnung der Standardabweichung}\label{testsetup:ablauf}
-%neu schreiben.
-Zusammen mit Sonnenforschern wurden zwei Fehlermasse bestimmt: Der absolute maximale Fehler und die Standardabweichung von der komprimierten Linie zum Original. Die Standardabweichung ist für diesen Fall geeignet: Grosse, seltene Abweichungen werden stärker gewichtet, als kleine dafür häufige Abweichungen.\\
-Der absolute maximale Fehler wird noch als Absicherung gemessen. In den meisten Fällen wird die Kompression mit der tieferen Standardabweichung auch den kleineren maximalen Fehler haben. Da aber die Messung über ein paar hunderttausend Punkte durchgeführt wird, ist das Gegenteil denkbar.\\
-
-Zwei Mengen, Originalpunkte $O$, dekomprimierte Punkte $D$. Es gibt immer gleich viele oder mehr Originalpunkte wie dekomprimierte Punkte. Die Fehlerberechnung muss der allgemeine Fall und die Randbehandlung unterschieden werden.
+Die Linien sollten sich ähneln. Das ist der Fall, wenn die dekomprimierte Kurve entlang der Originalen verläuft und keine grosse Ausschläge beinhaltet. Grosse seltene Abweichungen können das Aussehen massgebend verändern. Neue Amplituden einführen etc. Ein Fall für die Standardabweichung. \\
+Schwierigkeit liegt darin, von der Abtastrate die Standardabweichung zu berechnen.
 
 \subsubsection{Allgemeiner Fall}
 \begin{figure}[!htbp]
@@ -27,7 +25,7 @@ Zwei Mengen, Originalpunkte $O$, dekomprimierte Punkte $D$. Es gibt immer gleich
 	\caption{Darstellung der Fehlerberechnung. Die Punkte sind die Originaldaten, die Quadrate sind die Punkte nach der Kompression.}
 	\label{testsetup:ablauf:fehlerberechnung:diagramm}
 \end{figure} 
-Die Berechnung ist Dargestellt im Diagramm \ref{testsetup:ablauf:fehlerberechnung:diagramm}. Für jeden Punkt $p1'$ aus $D$, nehme $p1'$ und den folgenden Punkt und $P2'$. Ziehe eine Strecke $s$ durch $p1'$ und $p2'$. Suche von $p1'$ den Originalpunkt $P1$ aus $O$ und rechne den Abstand aus zur Strecke $s$. Führe das für alle folgenden Originalpunkte durch, bis $p2$ erreicht wurde. Der Abstand $s$ zu $p2$ wird nicht mehr berechnet.\\
+Die Berechnung ist Dargestellt im Diagramm \ref{testsetup:ablauf:fehlerberechnung:diagramm}. Für jeden Punkt $p1'$ aus den dekomprimierten Punkten $D$, nehme $p1'$ und den folgenden Punkt und $P2'$. Ziehe eine Strecke $s$ durch $p1'$ und $p2'$. Suche von $p1'$ den Originalpunkt $P1$ aus allen Originalpunkten $O$ und rechne den Abstand aus zur Strecke $s$. Führe das für alle folgenden Originalpunkte durch, bis $p2$ erreicht wurde. Der Abstand $s$ zu $p2$ wird nicht mehr berechnet.\\
 [\baselineskip]
 \textbf{Abstandsberechnung eines Punktes zu einer Strecke}\\
 Gegeben: Stecke $s$ mit Eckpunkten $A$ und $B$ und Punkt $P$.\\

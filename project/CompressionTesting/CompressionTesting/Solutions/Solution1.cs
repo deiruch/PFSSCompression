@@ -262,20 +262,25 @@ namespace CompressionTesting.Solutions
             //YCbCr.ForwardFull(data, 0);
             DCTransformer.Forward(data, 1);
 
-            Discretizer.DividePoint(data, 70000, 0);
+            Discretizer.DividePoint(data, 60000, 0);
             Discretizer.Divide(data, 1000, 1);
-            Discretizer.DivideLinear(data, 2 * (qualityLevel + 10), 1);
+            PCACoefficient.DivideLinear(data, 0, (qualityLevel + 16), (qualityLevel + 16), 1, 800);
+            PCACoefficient.DivideLinear(data, 1, (qualityLevel + 17), (qualityLevel + 17), 1, 800);
+            PCACoefficient.DivideLinear(data, 2, (qualityLevel + 18), (qualityLevel + 18), 1, 800);
+            //Discretizer.DivideLinear(data, 2 * (qualityLevel + 10), 1);
             Discretizer.ToShorts(data, 1);
 
-            PCAWriter.WriteFits(data, 1, fits);
+            PCAWriter.WritePureShortFits(data, 1, fits);
             long size = RarCompression.DoRar(rarFits, fits);
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 10), 1);
+            PCACoefficient.MultiplyLinear(data, 0, (qualityLevel + 16), (qualityLevel + 16), 1, 800);
+            PCACoefficient.MultiplyLinear(data, 1, (qualityLevel + 17), (qualityLevel + 17), 1, 800);
+            PCACoefficient.MultiplyLinear(data, 2, (qualityLevel + 18), (qualityLevel + 18), 1, 800);
             Discretizer.Multiply(data, 1000, 1);
             //Residualizer.UndoResiduals(data, 3);
-            Discretizer.MultiplyPoint(data, 70000, 0);
+            Discretizer.MultiplyPoint(data, 60000, 0);
             DCTransformer.Backward(data, 1);
             //PCACoefficient.Backwards(data);
             Residualizer.UndoResiduals(data, 1);
@@ -404,8 +409,6 @@ namespace CompressionTesting.Solutions
 
             return result;
         }
-
-
 
         public TestResult Nine(PFSS.PFSSData data, int qualityLevel, string folder)
         {

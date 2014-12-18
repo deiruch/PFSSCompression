@@ -111,5 +111,21 @@ namespace CompressionTesting.Quantization
                 }
             }
         }
+
+        public static void DivideLinear(PFSSData data, int channel, double start, double increase, int offset, int length)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                double div = start;
+                for (int i = offset; i < offset + length && i < l.points.Count; i++)
+                {
+                    PFSSPoint p = l.points[i];
+                    if (channel == 0) p.x = (float)(p.x / div);
+                    if (channel == 1) p.y = (float)(p.y / div);
+                    if (channel == 2) p.z = (float)(p.z / div);
+                    div += increase;
+                }
+            }
+        }
     }
 }
