@@ -20,7 +20,6 @@ namespace CompressionTesting.FileWriter
             short[] ptph;
             short[] ptth;
             short[] ptr_nz_len = new short[input.lines.Count];
-            //float[] startPoints = new float[input.lines.Count * 3 * offset];
             float[] means = new float[input.lines.Count * 3];
             float[] pca = new float[input.lines.Count*6];
 
@@ -198,8 +197,6 @@ namespace CompressionTesting.FileWriter
             f.Close();
 
         }
-
-
 
 
         public static void WritePureShortFits(PFSSData input, int offset, FileInfo output)

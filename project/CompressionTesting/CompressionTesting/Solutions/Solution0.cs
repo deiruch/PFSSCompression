@@ -87,7 +87,7 @@ namespace CompressionTesting.Solutions
 
             //backward
             Discretizer.Multiply(data, 50000, 0);
-            PCATransform.Backwards(data,0);
+            PCATransform.Backward(data,0);
             //Residualizer.UndoResiduals(data, 1);
 
             return result;

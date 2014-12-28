@@ -77,18 +77,18 @@ namespace CompressionTesting.FileWriter
             f.Close();
         }
 
-        public static void WriteShortFits(PFSSData input, FileInfo output)
+        public static void WriteShortFits(PFSSData input, FileInfo output, int offset = 1)
         {
             short[] ptr;
             short[] ptph;
             short[] ptth;
             short[] ptr_nz_len = new short[input.lines.Count];
-            short[] startPoints = new short[input.lines.Count * 3];
+            short[] startPoints = new short[input.lines.Count * 3*offset];
 
             int totalCount = 0;
             for (int i = 0; i < ptr_nz_len.Length; i++)
             {
-                int count = input.lines[i].points.Count - 1;
+                int count = input.lines[i].points.Count - offset;
                 totalCount += count;
                 ptr_nz_len[i] = (short)count;
             }
@@ -101,9 +101,12 @@ namespace CompressionTesting.FileWriter
             int startPointIndex = 0;
             foreach (PFSSLine l in input.lines)
             {
-                startPoints[startPointIndex++] = (short)l.points[0].x;
-                startPoints[startPointIndex++] = (short)l.points[0].y;
-                startPoints[startPointIndex++] = (short)l.points[0].z;
+                for (int i = 0; i < offset; i++)
+                {
+                    startPoints[startPointIndex++] = (short)l.points[i].x;
+                    startPoints[startPointIndex++] = (short)l.points[i].y;
+                    startPoints[startPointIndex++] = (short)l.points[i].z;
+                }
 
                 for (int i = 1; i < l.points.Count; i++)
                 {

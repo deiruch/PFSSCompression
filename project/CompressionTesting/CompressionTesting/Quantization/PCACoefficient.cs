@@ -56,7 +56,7 @@ namespace CompressionTesting.Quantization
             }
         }
 
-        public static void ForwardQuantization(PFSSData data)
+        public static void ForwardQuantization(PFSSData data,float factor = 1000)
         {
             ForwardMinus(data);
             foreach (PFSSLine l in data.lines)
@@ -69,12 +69,12 @@ namespace CompressionTesting.Quantization
 
                 for (int i = 0; i < 3; i++)
                 {
-                    l.means[i] = (short)(l.means[i] / 1000d);
+                    l.means[i] = (short)(l.means[i] / factor);
                 }
             }
         }
 
-        public static void BackwardQuantization(PFSSData data)
+        public static void BackwardQuantization(PFSSData data, float factor = 1000)
         {
             
             foreach (PFSSLine l in data.lines)
@@ -89,7 +89,7 @@ namespace CompressionTesting.Quantization
 
                 for (int i = 0; i < 3; i++)
                 {
-                    l.means[i] *=  1000;
+                    l.means[i] *=  factor;
                 }
             }
 

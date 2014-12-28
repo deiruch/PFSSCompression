@@ -80,18 +80,17 @@ namespace CompressionTesting
             }
             w.Close();
         }
-
+        
         private static void run()
         {
             ISolution solution = new Solution1();
-            bool testOneFile = true;
+            bool testOneFile = false;
             //DCT.DiscreteCosineTransform(400);
 
             string fitsOutputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp";
             string outputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\testresult";
             string[] expectedFiles = Directory.GetFiles(@"C:\dev\git\bachelor\test\testdata\raw");
             TestSuite[] testData = testOneFile ? new TestSuite[1] : new TestSuite[expectedFiles.Length];
-
 
             StreamWriter w = new StreamWriter(new FileStream(Path.Combine(outputFolder, solution.GetName() + ".csv"), FileMode.Create));
             w.Write("Average Line Size (Bytes);Max Error(Meters);standard deviation (Meters);PSNR-HVS-M");

@@ -23,7 +23,7 @@ namespace CompressionTesting.Transformation
             }
         }
 
-        public static void Backwards(PFSSData data, int pointOffset)
+        public static void Backward(PFSSData data, int pointOffset)
         {
             foreach (PFSSLine l in data.lines)
             {

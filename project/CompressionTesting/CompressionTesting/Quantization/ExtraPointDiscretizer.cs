@@ -38,51 +38,70 @@ namespace CompressionTesting.Quantization
             }
         }
 
-        public static void DivideLinearExtra(PFSSData data, double factor, int offset, int start)
+        public static void DivideLinearExtra(PFSSData data, int channel, double factor, int offset, int start)
         {
             foreach (PFSSLine l in data.lines)
             {
                 double div = factor*start;
-                for (int i = offset; i < l.extraX.Length; i++)
+                if (channel == 0)
                 {
-                    l.extraX[i] = (float)(l.extraX[i] / div);
-                    
+                    for (int i = offset; i < l.extraX.Length; i++)
+                    {
+                        l.extraX[i] = (float)(l.extraX[i] / div);
+                        div += factor;
+                    }
                 }
 
-                for (int i = offset; i < l.extraY.Length; i++)
+                if (channel == 1)
                 {
-                    l.extraY[i] = (float)(l.extraY[i] / div);
-
+                    for (int i = offset; i < l.extraY.Length; i++)
+                    {
+                        l.extraY[i] = (float)(l.extraY[i] / div);
+                        div += factor;
+                    }
                 }
-                div = factor * start;
-                for (int i = offset; i < l.extraZ.Length; i++)
+
+                if (channel == 2)
                 {
-                    l.extraZ[i] = (float)(l.extraZ[i] / div);
+                    for (int i = offset; i < l.extraZ.Length; i++)
+                    {
+                        l.extraZ[i] = (float)(l.extraZ[i] / div);
+                        div += factor;
+                    }
                 }
 
             }
         }
 
-        public static void MultiplyLinearExtra(PFSSData data, double factor, int offset, int start)
+        public static void MultiplyLinearExtra(PFSSData data, int channel, double factor, int offset, int start)
         {
             foreach (PFSSLine l in data.lines)
             {
                 double div = factor*start;
-                for (int i = offset; i < l.extraX.Length; i++)
+                if (channel == 0)
                 {
-                    l.extraX[i] = (float)(l.extraX[i] * div);
-
+                    for (int i = offset; i < l.extraX.Length; i++)
+                    {
+                        l.extraX[i] = (float)(l.extraX[i] * div);
+                        div += factor;
+                    }
                 }
-                div = factor * start;
-                for (int i = offset; i < l.extraY.Length; i++)
+                if (channel == 1)
                 {
-                    l.extraY[i] = (float)(l.extraY[i] * div);
-    
+                    for (int i = offset; i < l.extraY.Length; i++)
+                    {
+                        l.extraY[i] = (float)(l.extraY[i] * div);
+                        div += factor;
+                    }
                 }
-                div = factor * start;
-                for (int i = offset; i < l.extraZ.Length; i++)
+                if (channel == 2)
                 {
-                    l.extraZ[i] = (float)(l.extraZ[i] * div);
+                    div = factor * start;
+                    for (int i = offset; i < l.extraZ.Length; i++)
+                    {
+                        l.extraZ[i] = (float)(l.extraZ[i] * div);
+                        div += factor;
+                    }
                 }
 
             }
@@ -161,25 +180,34 @@ namespace CompressionTesting.Quantization
             }
         }
 
-        public static void Cut(PFSSData data, int offset)
+        public static void Cut(PFSSData data, int offset,int channel)
         {
             foreach (PFSSLine l in data.lines)
             {
-                for (int i = offset; i < l.extraX.Length; i++)
+                if (channel == 0)
                 {
+                    for (int i = offset; i < l.extraX.Length; i++)
+                    {
 
-                    l.extraX[i] = 0;
+                        l.extraX[i] = 0;
+                    }
                 }
-                for (int i = offset; i < l.extraY.Length; i++)
+                if (channel == 1)
                 {
+                    for (int i = offset; i < l.extraY.Length; i++)
+                    {
 
-                    l.extraY[i] = 0;
+                        l.extraY[i] = 0;
+                    }
                 }
 
-                for (int i = offset; i < l.extraZ.Length; i++)
+                if (channel == 2)
                 {
+                    for (int i = offset; i < l.extraZ.Length; i++)
+                    {
 
-                    l.extraZ[i] = 0;
+                        l.extraZ[i] = 0;
+                    }
                 }
             }
 

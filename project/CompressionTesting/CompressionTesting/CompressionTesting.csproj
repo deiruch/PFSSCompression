@@ -71,6 +71,7 @@
     <Compile Include="Quantization\Discretizer.cs" />
     <Compile Include="Transformation\DCTErrorRemover.cs" />
     <Compile Include="Transformation\DCTImprover.cs" />
+    <Compile Include="Transformation\LinearPredictor.cs" />
     <Compile Include="Transformation\PCA.cs" />
     <Compile Include="Transformation\PCATransform.cs" />
     <Compile Include="Transformation\Spherical.cs" />

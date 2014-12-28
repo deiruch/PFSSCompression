@@ -11,10 +11,10 @@ namespace CompressionTesting
     class psnr_hvs
     {
         private static double[] factors = null;
-        private static int max = 80; 
+        private static int max = 100; 
         private static readonly double maxI = 20* Math.Log10(4 * PFSSPoint.SunRadius);
-        private const double eNorm = 80*1000;
-        private const double maskNorm = 80;
+        private const double eNorm = 16*1000;
+        private const double maskNorm = 100;
 
         private static void calcFactors()
         {
@@ -32,20 +32,20 @@ namespace CompressionTesting
             }
             
 
-            factor = 10d/40d;
+            factor = 10d/25d;
             factor *= factor;
             for (int i = 0; i < 8;i++) 
             {
                 factors[index++] = factor;
             }
 
-            factor = 10d / 20d;
+            factor = 10d / 15d;
             factor *= factor;
             for(int i = 0; i < 22;i++) {
                 factors[index++] = factor;
             }
 
-            factor = 10d / 11d;
+            factor = 10d / 8d;
             factor *= factor;
             while (index < factors.Length)
             {

@@ -9,7 +9,7 @@ bereits eine simple Kompression implementiert.
 	\caption{Aufbau der Ist-Kompression.}
 	\label{konzept:ist:aufbau:diagramm}
 \end{figure} 
-Die Ist-Kompression führt zuerst ein Subsampling durch. Drei Viertel aller Punkte werden in diesem Schritt verworfen. Im nächsten Schritt werden die übrigen Punkte  auf 16-Bit Integer diskretisiert. Das reduziert die Anzahl Bytes und verbessert die Kompression im Schritt Entropie Kodierung. Die Implementationen der Entropie Kodierer scheinen Integer-Werte einfacher komprimieren zu können. In der Entropie Kodierung werden die Daten geordnet. Alle X-Kanäle werden hintereinander abgelegt, gefolgt von allen Y-Kanälen etc. Diese Anordnung verbessert die Kompressionsrate der Entropie Kodierung. Je näher ähnliche Muster beieinander liegen, desto besser können sie Komprimiert werden. Für die eigentliche Entropie-Kodierung wird Gzip verwendet. Gzip basiert auf dem Deflate Algorithmus, welcher aus einer Kombination von LZ77 und Huffman Kodierung besteht \cite{wiki:gzip}.\\
+Die Ist-Kompression führt zuerst ein Subsampling durch. Drei Viertel aller Punkte werden in diesem Schritt verworfen. Im nächsten Schritt werden die übrigen Punkte  auf 16-Bit Integer diskretisiert. Das reduziert die Anzahl Bytes und verbessert die Kompression im Schritt Entropie Kodierung. Die Implementationen der Entropie Kodierer scheinen Integer-Werte einfacher komprimieren zu können. In der Entropie Kodierung werden die Daten geordnet. Alle X-Kanäle der Feldlinien werden hintereinander abgelegt, gefolgt von allen Y-Kanälen etc. Diese Anordnung verbessert die Kompressionsrate der Entropie Kodierung. Je näher ähnliche Muster beieinander liegen, desto besser können sie Komprimiert werden. Für die eigentliche Entropie-Kodierung wird Gzip verwendet. Gzip basiert auf dem Deflate Algorithmus, welcher aus einer Kombination von LZ77 und Huffman Kodierung besteht \cite{wiki:gzip}.\\
 Da die Punktmenge für Low-End Grafikkarten zu gross ist, führt der JHelioviewer ein weiteres Subsampling durch, welches im Abschnitt \ref{konzept:loesung0:subsampling} beschrieben ist.
 
 \subsection{Lösungsansatz: Adaptives Subsampling} \label{konzept:loesung0}
@@ -19,7 +19,7 @@ Da die Punktmenge für Low-End Grafikkarten zu gross ist, führt der JHelioviewe
 	\caption{Aufbau des Lösungsansatzes: Adaptives Subsampling.}
 	\label{konzept:loesung0:aufbau:diagramm}
 \end{figure} 
-Subsampling wird nun auf dem Server ausgeführt. in den folgenden Abschnitten sind die Teilschritte erklärt.
+Dieser Lösungsansatz verwendet die selbe Pipeline wie die Ist-Kompression \ref{konzept:ist-komprimierung}. Der Unterschied ist, dass ein anderes Subsampling Verfahren gewählt wurde und eine andere Entropie-Kodierung. Die Abbildung \ref{konzept:loesung0:aufbau:diagramm} zeigt den neuen Ablauf. 
 
 \subsubsection{Adaptives Subsampling}\label{konzept:loesung0:subsampling}
 Ziel des adaptiven Subsamplings ist es, die Daten durch eine Folge von Strecken zu approximieren. An stellen, welche die Feldlinie gekrümmt ist, braucht es mehr Strecken. An Stellen, welche die Feldlinie Linear verlauft können so viele Punkte gespart werden. 
@@ -32,41 +32,44 @@ Ziel des adaptiven Subsamplings ist es, die Daten durch eine Folge von Strecken 
 Das Diagramm der Abbildung \ref{konzept:loesung0:angle} stellt das Subsampling im zweidimensionalen Raum dar. Zu sehen sind die Punkte der Feldlinie. Das Adaptive Subsampling wählt nun Punkte $P$ aus der Feldlinie aus, welche Start- und Endpunkte der Strecken darstellen.\\
 $P_1$ wurde bereits ausgewählt. Es wird nun ein Punkt $P_x$ gesucht, der als Endpunkt einer Strecke von $P_1$ zu $P_x$ die Feldlinie approximiert. Dazu wird der Winkel der Strecke $P_1$ zu $P_x$ mit der Strecke $P_x$ zu $P_x+1$ verglichen. Wenn der Winkel kleiner ist, als ein Faktor $F$, wird der nächste Punkt $P_x+1$ überprüft. Wenn der Winkel grösser ist, wird $P_x$ ausgewählt und von $P_x$ aus weiter geprüft.
 
-\subsubsection{Entropie Kodierung} \label{konzept:loesung0:kodierung}
+\subsubsection{Entropie Kodierung mittels RAR} \label{konzept:loesung0:kodierung}
 Abspeicherung, Alle X Kanäle hintereinander, alle Y Kanäle etc. So kann die Entropide-Kodierung besser greifen.
 Rar hat sich bewährt bei der purer Feldlinien kompression im Vergleich zu anderen Verfahren wie LZ77/gZip. Bringt etwa 4 mal bessere Kompression hin, hat aber mehr mühe mit Floating-Point nummern als mit Integers
 
 \subsection{Lösung 1, Diskrete Kosinus Transformation}
 Bild
 DCT, da alles nahe an harmonischen Halbwellen
-kartesische Koordinaten --> kein wrap around,
-
-Es ist auch möglich die Punkte im sphärischen Koordinatensystem in den Frequenzraum zu überführen. Der $\phi$-Kanal ist jedoch schwierig durch tiefe Kosinus Schwingungen darzustellen: Wie im Abschnitt \ref{konzept:ist-komprimierung} besprochen, beinhaltet der Kanal Sprünge bei der Passierung des Nullpunktes. Das führt zu sehr hochfrequenten Schwingungsanteile in der DCT. Nach einer Quantisierung sind dabei Artefakte nicht vermeidbar. Im kartesischen System hingegen sind alle Kanäle stetig und lassen sich einfacher durch Kosinus-Funktionen approximieren.\\
 
 \subsubsection{Subsampling} \label{konzept:loesung1:subsampling}
-Wie im Abschnitt \ref{testsetup:auswahl_erhebung} beschrieben, wurde aus den Testdaten die Quantisierung und das Subsampling entfernt. Die Feldlinien der Testdaten haben das vier Mal mehr Puntke, als beim Ist-Zustand übertragen werden. Die DCT-Implementierung weist eine Komplexität von $O(n^2)$ auf. Vor der Kosinus-Transformation wird deshalb das selbe Subsampling durchgeführt, wie im Ist-Zustand. So kann der Rechenaufwand in Grenzen gehalten werden.\\
-Falls die Laufzeit der Dekompression verbessert werden soll, kann die Fast-Cosine-Transformation umgesetzt werden. Diese hat eine Komplexität von $O(n log(n))$. Der Nachteil ist, dass nur Daten der Länge $2^n$ transformiert werden können, was zusätzliche Programmlogik braucht. Falls die Fast-Cosine-Transformation nicht ausreicht, können die Linien in Blöcken mit einer bestimmten Anzahl von Punkten unterteilt werden. Dadurch wird die Komplexität auf $O(n)$ gesenkt. Jedoch ist es wahrscheinlich, dass durch die Unterteilung die Kompressionsrate leidet. Vermutlich braucht es für die Approximation der Blöcke insgesamt mehr Kosinus-Funktionen, als für die Approximation der gesamten Feldlinie.\\
+Das Subsampling wurde aus der Ist-Kompression \ref{konzept:ist-komprimierung} übernommen und dient, die DCT zu beschleunigen. Da die DCT eine Komplexität von $O(n^2)$ aufweist, wird durch das Subsampling die Transformation wesentlich schneller.\\
+Falls die Laufzeit der Dekompression weiter verbessert werden soll, kann die Fast-Cosine-Transformation umgesetzt werden. Diese hat eine Komplexität von $O(n log(n))$. Der Nachteil ist, dass nur Daten der Länge $2^n$ transformiert werden können, was zusätzliche Programmlogik braucht. Falls die Fast-Cosine-Transformation nicht ausreicht, können die Linien in Blöcken mit einer bestimmten Anzahl von Punkten unterteilt werden. Dadurch wird die Komplexität auf $O(n)$ gesenkt. Jedoch ist es wahrscheinlich, dass durch die Unterteilung die Kompressionsrate leidet. Vermutlich braucht es für die Approximation der Blöcke insgesamt mehr Kosinus-Funktionen, als für die Approximation der gesamten Feldlinie.\\
 
 \subsubsection{Randbehandlung} \label{konzept:loesung1:randbehandlung}
 
+\subsubsection{Principal Component Analysis}
+
 \subsubsection{Cosinus-Transformation} \label{konzept:loesung1:kosinus}
-Transformiert Daten in den Frequenzraum. Eine Menge von Punkten mit der Länge $N$ kann in eine Menge von $N$ Kosinusfunktionen überführt werden.\\
+Die Diskrete Kosinus Transformation stellt eine endliche Menge von $N$ Datenpunkten als $N$ Kosinusfunktionen zu verschiedenen Frequenzen dar. Die Werte DCT-Koeffizienten stellt dar, wie hoch der Anteil einer bestimmten Frequenz ist im Originalsignal. Im optimalen Fall kann ein Signal durch niederfrequente Funktionen approximiert werden. Die hochfrequenten Anteile stellen Details dar, welche nicht relevant sind.\\
 Es gibt verschiedene Möglichkeiten die Punkte zu transformieren. . Es wurde sich am JPEG/JFIF Standard orientiert  , welcher, welche die DCT-II als Forwärts und die DCT-III als Rückwärtstransformation verwendet \cite{wallace1992jpeg}.
-Der Unterschied liegt in der RAndbehandlung
-$X_k = \sum_{n=0}^{N-1}x_n cos[\frac{\pi}{N}(n+\frac{1}{2}k)]
- k= 0,1,\ldots,N-1$
+Der Unterschied liegt in der Randbehandlung
+
+\begin{equation} \label{konzept:loesung1:kosinus:formula:fdct}
+	X_k = \sum_{n=0}^{N-1}x_n cos[\frac{\pi}{N}(n+\frac{1}{2}k)] \quad k = 0, 1, \ldots, N-1
+\end{equation}
 $N$ ist anzahl Punkte. Transformiert in den Frequenzraum. $x_n$ ist ein Punkt des Signales und $X_k$ ist die Resultierende Kosinus Schwingung%? wirklich schwingung oder was anderes?
 
 Inverse Transform
-$X_k = \frac{1}{2}x_0 + \sum_{n=1}^{N-1}x_n cos[\frac{\pi}{N}n(k+\frac{1}{2}]  k= 0,1,\ldots,N-1$
+\begin{equation} \label{konzept:loesung1:kosinus:formula:idct}
+X_k  = \frac{1}{2}x_0 + \sum_{n=1}^{N-1}x_n cos[\frac{\pi}{N}n(k+\frac{1}{2})] \quad k  = 0,1,\ldots,N-1
+\end{equation}
 
 \subsubsection{Quantisierung}
 
-\subsubsection{Ablegung ins Fits Format}
 
 \subsubsection{Entropie Kodierung}\label{konzept:loesung1:kodierung}
 Kodierung
-	Zuerst einfaches Run-length
+	Idee: RUn length, fast alles nullen
+	Adaptive
 
 	Weitere Kodierung mittels Rar.
 		Rar hat sich bewährt bei der purer Feldlinien kompression im Vergleich zu anderen Verfahren wie LZ77/gZip

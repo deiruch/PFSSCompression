@@ -1,25 +1,23 @@
 \section{Verlustbehaftete Kompression von volumetrischen Punkten}
-In verschiedene wissenschaftliche Simulationen produzieren grosse Mengen an Daten. Man möchte Schwingungen, Flugbahnen, Flüsse, Kraftfelder etc als Linien im dreidimensionalen Raum visualisieren. Die Linien können als Folge von volumetrischen Punkten dargestellt werden. Die Datenmenge ist oft zu gross als dass sie in sinnvoller Zeit über eine Internetverbindung übertragen werden können. Deshalb sollim rahmen dieser Arbeit eine verlustbehaftete Kompression entwickelt werden, welche die Datenübertragung ermöglicht.\\
+Wissenschaftliche Simulationen produzieren grosse Mengen an Daten. Es werden Schwingungen, Flugbahnen, Flüsse, Kraftfelder etc. als Linien im dreidimensionalen Raum visualisieren. Die Linien können als Folge von volumetrischen Punkten dargestellt werden. Die Datenmenge ist oft zu gross als dass sie in sinnvoller Zeit über eine Internetverbindung übertragen werden können. Deshalb soll im rahmen dieser Arbeit eine verlustbehaftete Kompression entwickelt werden, welche die Datenübertragung ermöglicht.\\
 [\baselineskip]
-teilchenphysik, sonnenForschung, feldlinien Konkreter Anwendungsfall der JHelioviewer. Visualisiert Satellitenmessungen und Simulationen. Mittels PFSS werden die Feldlinien simuliert. Datenmenge soll nun auf den jeweiligen JHelioviewer des Sonnenforschers übertragen werden. (Feldlinienbild). Resultate\\
-[\baselineskip]
-Der JHelioviewer ist eine Applikation, die zur Analyse von Sonnendaten verwendet wird. Es wird international zur Sonnenforschung eingesetzt und wird von der FHNW zusammen mit der ESA entwickelt. Momentan ist eine neue Version des JHelioviewer in Entwicklung, welche die Sonne im dreidimensionalen Raum darstellt. Ein Feature von JHelioviewer ist die Magnetfeldlinien darzustellen und zu animieren, die Abbildung \ref{einleitung::feldlinien} zeigt die Visualisierung.
+Im Rahmen dieses Projekts müssen Daten von Magnetfeldlinien der Sonne über eine Internetverbindung zum JHelioviewer übertragen werden. Der JHelioviewer ist eine Applikation zur visualisierung von Satellitenmessdaten und Simulationen der Sonne. Die Applikation wird von der ESA und der FHNW entwickelt. Die Abbildung \ref{einleitung::feldlinien} zeigt eine Visualisierung des JHelioviewers.\\
 \begin{figure}[!htbp]
 \center
 	\includegraphics[width=0.8\textwidth,height=8cm,keepaspectratio]{./pictures/einleitung/fieldLines.png}
 	\caption{Visualisierung der Feldlinien im JHelioviewer}
 	\label{einleitung::feldlinien}
 \end{figure}
-Es wird zwischen drei Feldlinien Unterschieden: Linien, die auf der Sonne starten und wieder auf der Sonne landen, auf der Sonne starten und ins Weltall führen oder vom Weltall auf der Sonne landen. Die weissen Feldlinien repräsentieren ''Sonne zu Sonne´´, die Grünen ''Sonne zu Weltall´´ und die Violetten ''Weltall zu Sonne´´. Die Feldlinien sind, allgemein Betrachtet, eine grosse Menge an Punkten, welche ein Server bereitstellt. Die Abbildung \ref{einleitung::aufbau} visualisiert den Datenfluss.
-\begin{figure}[!htbp]
-\center
-	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/einleitung/server.png}
-	\caption{Aufbau und Datenfluss des Servers}
-	\label{einleitung::aufbau}
-\end{figure}
-In regelmässigen Abständen sucht der Server nach neuen Oberflächen-Magnetogramm-Daten der Satelliten. Die momentane Lösung erhält alle sechs Stunden neue Messdaten der Satelliten. Daraus werden mittels Potential Field Source Surface (PFSS) Simulation die Feldlinien zu diesem Zeitpunkt errechnet. Danach führt der Server eine Kompression durch und stellt die Daten auf einem öffentlichen Share dem JHelioviewer zur Verfügung. Zusammen mit Aufnahmen von anderen Instrumenten animiert der JHelioviewer die Feldlinien über einen gewissen Zeitraum. Die Daten werden zur Laufzeit über eine Internetverbindung nachgeladen.
+Es wurde eine Aufnahme der Sonnenoberfläche zusammen mit drei Arten von Feldlinien visualisiert: Linien, die auf der Sonne starten und wieder auf der Sonne landen, auf der Sonne starten und ins Weltall führen oder vom Weltall auf der Sonne landen. Die weissen Feldlinien repräsentieren ''Sonne zu Sonne´´, die Grünen ''Sonne zu Weltall´´ und die Violetten ''Weltall zu Sonne´´.\\
+[\baselineskip]
+Der JHelioviewer visualisiert mehrere Messungen oder Simulationen in Abfolge. Ziel ist es, möglichst schnell die Mess- und Simulationsdaten abzuspielen, sodass der Benutzer eine flüssige Animation erhält. Pro Simulation werden etwa 1.5 MiByte and Feldliniendaten generiert. Bei einer Visualisierung muss der JHelioviewer die Feldlinien- und andere Daten zur Laufzeit herunterladen.
+Internetverbindung wird stark beansprucht und Benutzer muss auf Frames warten.
 
-resultate
+Potential Field Source Surface (PFSS) Simulation, welche aus Messungen der Sonnenoberfläche die Magnetfeldlinien extrapoliert, produziert pro Aufnahme etwa 1.5 Mibyte an Daten. welche zur Laufzeit über eine Internetverbindung heruntergeladen wird. Mit einer verlustbehafteten Kompression soll die zu übertragende Datenmenge deutlich verkleinert werden.
+
+Resultate
+
+Wo was beschrieben wird.
 
 
 
