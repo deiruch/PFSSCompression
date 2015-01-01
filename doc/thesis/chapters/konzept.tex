@@ -22,7 +22,7 @@ Da die Punktmenge für Low-End Grafikkarten zu gross ist, führt der JHelioviewe
 Dieser Lösungsansatz verwendet die selbe Pipeline wie die Ist-Kompression \ref{konzept:ist-komprimierung}. Der Unterschied ist, dass ein anderes Subsampling Verfahren gewählt wurde und eine andere Entropie-Kodierung. Die Abbildung \ref{konzept:loesung0:aufbau:diagramm} zeigt den neuen Ablauf. 
 
 \subsubsection{Adaptives Subsampling}\label{konzept:loesung0:subsampling}
-Ziel des adaptiven Subsamplings ist es, die Daten durch eine Folge von Strecken zu approximieren. An stellen, welche die Feldlinie gekrümmt ist, braucht es mehr Strecken. An Stellen, welche die Feldlinie Linear verlauft können so viele Punkte gespart werden. 
+Ziel des adaptiven Subsamplings ist es, die Daten durch eine Folge von Strecken zu approximieren. An stellen, welche die Feldlinie gekrümmt ist, braucht es mehr Strecken. An Stellen, welche die Feldlinie linear verlauft, können Punkte gespart werden. 
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution0/anglesubsampling.png}
@@ -33,26 +33,23 @@ Das Diagramm der Abbildung \ref{konzept:loesung0:angle} stellt das Subsampling i
 $P_1$ wurde bereits ausgewählt. Es wird nun ein Punkt $P_x$ gesucht, der als Endpunkt einer Strecke von $P_1$ zu $P_x$ die Feldlinie approximiert. Dazu wird der Winkel der Strecke $P_1$ zu $P_x$ mit der Strecke $P_x$ zu $P_x+1$ verglichen. Wenn der Winkel kleiner ist, als ein Faktor $F$, wird der nächste Punkt $P_x+1$ überprüft. Wenn der Winkel grösser ist, wird $P_x$ ausgewählt und von $P_x$ aus weiter geprüft.
 
 \subsubsection{Entropie Kodierung mittels RAR} \label{konzept:loesung0:kodierung}
-Abspeicherung, Alle X Kanäle hintereinander, alle Y Kanäle etc. So kann die Entropide-Kodierung besser greifen.
-Rar hat sich bewährt bei der purer Feldlinien kompression im Vergleich zu anderen Verfahren wie LZ77/gZip. Bringt etwa 4 mal bessere Kompression hin, hat aber mehr mühe mit Floating-Point nummern als mit Integers
+Die Anordnung der Daten wurde aus der Ist-Kompression übernommen, jedoch wird Rar anstatt GZip verwendet. GZip konnte bei den Ist-Komprimierten Daten eine Kompressionsrate von $1.2$ erreichen, während Rar bei selben Daten eine Rate von $3.7$ erreicht.
 
 \subsection{Lösung 1, Diskrete Kosinus Transformation}
 Bild
-DCT, da alles nahe an harmonischen Halbwellen
+DCT, da alles nahe an harmonischen Halbwellen. 
+Ringing Artefakte \ref{resultate:loesung1:ringing}. 
 
 \subsubsection{Subsampling} \label{konzept:loesung1:subsampling}
 Das Subsampling wurde aus der Ist-Kompression \ref{konzept:ist-komprimierung} übernommen und dient, die DCT zu beschleunigen. Da die DCT eine Komplexität von $O(n^2)$ aufweist, wird durch das Subsampling die Transformation wesentlich schneller.\\
-Falls die Laufzeit der Dekompression weiter verbessert werden soll, kann die Fast-Cosine-Transformation umgesetzt werden. Diese hat eine Komplexität von $O(n log(n))$. Der Nachteil ist, dass nur Daten der Länge $2^n$ transformiert werden können, was zusätzliche Programmlogik braucht. Falls die Fast-Cosine-Transformation nicht ausreicht, können die Linien in Blöcken mit einer bestimmten Anzahl von Punkten unterteilt werden. Dadurch wird die Komplexität auf $O(n)$ gesenkt. Jedoch ist es wahrscheinlich, dass durch die Unterteilung die Kompressionsrate leidet. Vermutlich braucht es für die Approximation der Blöcke insgesamt mehr Kosinus-Funktionen, als für die Approximation der gesamten Feldlinie.\\
+Falls die Laufzeit der Dekompression weiter verbessert werden soll, kann die Fast-Cosine-Transformation umgesetzt werden. Diese hat eine Komplexität von $O(n log(n))$. Der Nachteil ist, dass nur Daten der Länge $2^n$ transformiert werden können, was zusätzliche Programmlogik braucht. Falls die Fast-Cosine-Transformation nicht ausreicht, können die Linien in Blöcken mit einer bestimmten Anzahl von Punkten unterteilt werden. Dadurch wird die Komplexität auf $O(n)$ gesenkt. Jedoch ist es wahrscheinlich, dass durch die Unterteilung die Kompressionsrate leidet. Vermutlich braucht es für die Approximation der Blöcke insgesamt mehr Kosinus-Funktionen, als für die Approximation der gesamten Feldlinie.
 
-\subsubsection{Randbehandlung} \label{konzept:loesung1:randbehandlung}
-
-\subsubsection{Principal Component Analysis}
+\subsubsection{Ableitung}
+Die Feldlinie wird abgeleitet und alle folgenden Transformationen werden auf den Steigungen der Feldlinie ausgeführt. Damit die Transformation umkehrbar ist, muss der Startpunkt zusätzlich abgespeichert werden. Die Ableitung hat den Effekt, dass Artefakte der Dekompression sich meist auf verschiebungen und Dämpfungen der Amplitude äussern. Der Nachteil ist, dass sich Ungenauigkeiten durch die Feldlinie summieren und das Ende mit einem grösseren Fehler approximiert wird.
 
 \subsubsection{Cosinus-Transformation} \label{konzept:loesung1:kosinus}
-Die Diskrete Kosinus Transformation stellt eine endliche Menge von $N$ Datenpunkten als $N$ Kosinusfunktionen zu verschiedenen Frequenzen dar. Die Werte DCT-Koeffizienten stellt dar, wie hoch der Anteil einer bestimmten Frequenz ist im Originalsignal. Im optimalen Fall kann ein Signal durch niederfrequente Funktionen approximiert werden. Die hochfrequenten Anteile stellen Details dar, welche nicht relevant sind.\\
-Es gibt verschiedene Möglichkeiten die Punkte zu transformieren. . Es wurde sich am JPEG/JFIF Standard orientiert  , welcher, welche die DCT-II als Forwärts und die DCT-III als Rückwärtstransformation verwendet \cite{wallace1992jpeg}.
-Der Unterschied liegt in der Randbehandlung
-
+Die Diskrete Kosinus Transformation stellt eine endliche Menge von $N$ Datenpunkten als $N$ Kosinusfunktionen zu verschiedenen Frequenzen dar. Die Werte DCT-Koeffizienten stellt dar, wie hoch der Anteil einer bestimmten Frequenz ist im Originalsignal. Im optimalen Fall kann ein Signal durch niederfrequente Funktionen approximiert werden. Die hochfrequenten Anteile stellen Details dar, welche meist nicht relevant sind.\\
+Es gibt verschiedene Möglichkeiten die Punkte zu transformieren. Hier wurde sich am JPEG/JFIF Standard orientiert, welche die DCT-II \eqref{konzept:loesung1:kosinus:formula:fdct} als Forwärts und die DCT-III \eqref{konzept:loesung1:kosinus:formula:idct} als Rückwärtstransformation verwendet \cite{wallace1992jpeg}. Die DCT transformiert ein periodisches, unendliches Signal. Welche Transformationen gewählt werden, wirkt sich aus, in welcher Art das Signal an den Rändern wiederholt wird. Im diesem Fall wird das Signal jeweils gespiegelt wiederholt.
 \begin{equation} \label{konzept:loesung1:kosinus:formula:fdct}
 	X_k = \sum_{n=0}^{N-1}x_n cos[\frac{\pi}{N}(n+\frac{1}{2}k)] \quad k = 0, 1, \ldots, N-1
 \end{equation}

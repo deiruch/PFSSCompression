@@ -17,18 +17,18 @@ namespace CompressionTesting.Solutions
     {
         public int GetQualityLevels()
         {
-            return 11;
+            return 1;
         }
 
         public string GetName()
         {
-            return "Solution1_Seven";
+            return "Solution1_Twelve";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return Seven(data, qualityLevel, folder);
+            return Twelve(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -339,9 +339,9 @@ namespace CompressionTesting.Solutions
             DCTransformer.ForwardExtra(data, 0);
 
             ExtraPointDiscretizer.DivideExtra(data,1000);
-            ExtraPointDiscretizer.DivideLinearExtra(data, 0, 2 * (qualityLevel * 2 + 18), 0, 1);
-            ExtraPointDiscretizer.DivideLinearExtra(data, 1, 2 * (qualityLevel * 2 + 18), 0, 1);
-            ExtraPointDiscretizer.DivideLinearExtra(data, 2, 2 * (qualityLevel * 2 + 18), 0, 1);
+            ExtraPointDiscretizer.DivideLinearExtra(data, 0, 2 * (qualityLevel * 8 + 10), 0, 1);
+            ExtraPointDiscretizer.DivideLinearExtra(data, 1, 2 * (qualityLevel * 8 + 10), 0, 1);
+            ExtraPointDiscretizer.DivideLinearExtra(data, 2, 2 * (qualityLevel * 8 + 10), 0, 1);
             ExtraPointDiscretizer.ToIntsExtra(data);
             //ExtraPointDiscretizer.ToShortsExtra(data);
 
@@ -351,9 +351,9 @@ namespace CompressionTesting.Solutions
             result.lineCount = data.lines.Count;
 
             //140,180
-            ExtraPointDiscretizer.MultiplyLinearExtra(data, 0, 2 * (qualityLevel * 2 + 18), 0, 1);
-            ExtraPointDiscretizer.MultiplyLinearExtra(data, 1, 2 * (qualityLevel * 2 + 18), 0, 1);
-            ExtraPointDiscretizer.MultiplyLinearExtra(data, 2, 2 * (qualityLevel * 2 + 18), 0, 1);
+            ExtraPointDiscretizer.MultiplyLinearExtra(data, 0, 2 * (qualityLevel * 8 + 10), 0, 1);
+            ExtraPointDiscretizer.MultiplyLinearExtra(data, 1, 2 * (qualityLevel * 8 + 10), 0, 1);
+            ExtraPointDiscretizer.MultiplyLinearExtra(data, 2, 2 * (qualityLevel * 8 + 10), 0, 1);
             ExtraPointDiscretizer.MultiplyExtra(data, 1000);
 
             DCTransformer.BackwardExtra(data, 0);
@@ -430,12 +430,15 @@ namespace CompressionTesting.Solutions
                 Spherical.ForwardMoveSpherical(l.points[0]);
             }
             Discretizer.Divide(data, 1000, 1);
+            /*Discretizer.DivideLinear(data, 2 * (qualityLevel + 1), 1, 0);
+            Discretizer.DivideLinear(data, 2 * (qualityLevel + 3), 1, 1);
+            Discretizer.DivideLinear(data, 2 * (qualityLevel + 3), 1, 2);*/
             Discretizer.DivideLinear(data, 20, 5, 1, 10);
             Discretizer.DivideLinear(data, 60, 0, 11, 8);
             Discretizer.DivideLinear(data, 50, 0, 19, 7);
             Discretizer.DivideLinear(data, 10, 0, 26, 45);
 
-            Discretizer.Cut(data, 71);
+            Discretizer.Cut(data, 36);
             PCACoefficient.ForwardQuantization(data);
             Discretizer.ToShorts(data, 1);
 
@@ -445,6 +448,9 @@ namespace CompressionTesting.Solutions
             result.lineCount = data.lines.Count;
 
             PCACoefficient.BackwardQuantization(data);
+            /*Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 1), 1, 0);
+            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 3), 1, 1);
+            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 3), 1, 2);*/
             Discretizer.MultiplyLinear(data, 20, 5, 1, 10);
             Discretizer.MultiplyLinear(data, 60, 0, 11, 8);
             Discretizer.MultiplyLinear(data, 50, 0, 19, 7);
@@ -500,9 +506,9 @@ namespace CompressionTesting.Solutions
 
             //ExtraPointDiscretizer.DividePoint(data, 10, 0);
             ExtraPointDiscretizer.DivideExtra(data, 1000);
-            ExtraPointDiscretizer.DivideLinearExtra(data, 0, 2 * (qualityLevel * 2 + 20), 0, 1);
-            ExtraPointDiscretizer.DivideLinearExtra(data, 1, 2 * (qualityLevel * 2 + 35), 0, 1);
-            ExtraPointDiscretizer.DivideLinearExtra(data, 2, 2 * (qualityLevel * 2 + 40), 0, 2);
+            ExtraPointDiscretizer.DivideLinearExtra(data, 0, 2 * (qualityLevel * 4 + 10), 0, 1);
+            ExtraPointDiscretizer.DivideLinearExtra(data, 1, 2 * (qualityLevel * 4 + 20), 0, 1);
+            ExtraPointDiscretizer.DivideLinearExtra(data, 2, 2 * (qualityLevel * 4 + 25), 0, 2);
             ExtraPointDiscretizer.ToShortsExtra(data);
             PCACoefficient.ForwardQuantization(data, 50000);
             //ExtraPointDiscretizer.ToShortsExtra(data);
@@ -514,14 +520,80 @@ namespace CompressionTesting.Solutions
 
             //140,180
             PCACoefficient.BackwardQuantization(data, 50000);
-            ExtraPointDiscretizer.MultiplyLinearExtra(data, 0, 2 * (qualityLevel * 2 + 20), 0, 1);
-            ExtraPointDiscretizer.MultiplyLinearExtra(data, 1, 2 * (qualityLevel * 2 + 35), 0, 1);
-            ExtraPointDiscretizer.MultiplyLinearExtra(data, 2, 2 * (qualityLevel * 2 + 40), 0, 2);
+            ExtraPointDiscretizer.MultiplyLinearExtra(data, 0, 2 * (qualityLevel * 4 + 10), 0, 1);
+            ExtraPointDiscretizer.MultiplyLinearExtra(data, 1, 2 * (qualityLevel * 4 + 20), 0, 1);
+            ExtraPointDiscretizer.MultiplyLinearExtra(data, 2, 2 * (qualityLevel * 4 + 25), 0, 2);
             ExtraPointDiscretizer.MultiplyExtra(data, 1000);
             //ExtraPointDiscretizer.MultiplyPoint(data, 10, 0);
 
             DCTransformer.BackwardExtra(data, 0);
             PCATransform.Backward(data, 0);
+
+            return result;
+        }
+
+        public TestResult Twelve(PFSS.PFSSData data, int qualityLevel, string folder)
+        {
+            FileInfo fits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".fits"));
+            FileInfo rarFits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".rar"));
+            TestResult result = new TestResult();
+
+            Subsampling.Subsample(data, 4);
+            Residualizer.DoResiduals(data, 1);
+            DCTransformer.Forward(data, 1);
+
+            foreach (PFSSLine l in data.lines)
+            {
+                Spherical.ForwardToSpherical(l.points[0]);
+                Spherical.ForwardMoveSpherical(l.points[0]);
+            }
+            Discretizer.HandleR(data, 0, 8192 * 0.03);
+            Discretizer.Divide(data, 1000, 1);
+            //Quantize Sun to Sun Lines
+            Discretizer.DivideLinear(data, 20, 5, 1, 10, TYPE.SUN_TO_SUN);
+            Discretizer.DivideLinear(data, 70, 2, 11, 8, TYPE.SUN_TO_SUN);
+            Discretizer.DivideLinear(data, 90, 5, 19, 7, TYPE.SUN_TO_SUN);
+            Discretizer.DivideLinear(data, 150, 20, 26, 15, TYPE.SUN_TO_SUN);
+            Discretizer.Cut(data, 31, TYPE.SUN_TO_SUN);
+
+            //Quantize Sun to Sun Lines
+            Discretizer.DivideLinear(data, 10, 4, 1, 10, TYPE.OUTSIDE_TO_SUN);
+            Discretizer.DivideLinear(data, 60, 0, 11, 8, TYPE.OUTSIDE_TO_SUN);
+            Discretizer.DivideLinear(data, 60, 5, 19, 52, TYPE.OUTSIDE_TO_SUN);
+            Discretizer.Cut(data, 51, TYPE.OUTSIDE_TO_SUN);
+            Discretizer.DivideLinear(data, 10, 4, 1, 10, TYPE.SUN_TO_OUTSIDE);
+            Discretizer.DivideLinear(data, 60, 0, 11, 8, TYPE.SUN_TO_OUTSIDE);
+            Discretizer.DivideLinear(data, 60, 6, 19, 52, TYPE.SUN_TO_OUTSIDE);
+            Discretizer.Cut(data, 51, TYPE.SUN_TO_OUTSIDE);
+            Discretizer.ToShorts(data, 1);
+
+            InterleavedWriter.WriteDCTByteFits(data, fits);
+            long size = RarCompression.DoRar(rarFits, fits);
+            result.fileSize = size;
+            result.lineCount = data.lines.Count;
+
+            //dequantize Sun to sun
+            Discretizer.MultiplyLinear(data, 20, 5, 1, 10, TYPE.SUN_TO_SUN);
+            Discretizer.MultiplyLinear(data, 70, 2, 11, 8, TYPE.SUN_TO_SUN);
+            Discretizer.MultiplyLinear(data, 90, 5, 19, 7, TYPE.SUN_TO_SUN);
+            Discretizer.MultiplyLinear(data, 150, 20, 26, 15, TYPE.SUN_TO_SUN);
+
+            Discretizer.MultiplyLinear(data, 10, 4, 1, 10, TYPE.OUTSIDE_TO_SUN);
+            Discretizer.MultiplyLinear(data, 60, 0, 11, 8, TYPE.OUTSIDE_TO_SUN);
+            Discretizer.MultiplyLinear(data, 65, 6, 19, 52, TYPE.OUTSIDE_TO_SUN);
+            Discretizer.MultiplyLinear(data, 10, 4, 1, 10, TYPE.SUN_TO_OUTSIDE);
+            Discretizer.MultiplyLinear(data, 60, 0, 11, 8, TYPE.SUN_TO_OUTSIDE);
+            Discretizer.MultiplyLinear(data, 65, 6, 19, 52, TYPE.SUN_TO_OUTSIDE);
+
+            Discretizer.Multiply(data, 1000, 1);
+            //Discretizer.MultiplyPoint(data, 50000, 0);
+            foreach (PFSSLine l in data.lines)
+            {
+                Spherical.BackwardMoveSpherical(l.points[0]);
+                Spherical.BackwardToSpherical(l.points[0], data);
+            }
+            DCTransformer.Backward(data, 1);
+            Residualizer.UndoResiduals(data, 1);
 
             return result;
         }

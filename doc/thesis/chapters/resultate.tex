@@ -20,7 +20,6 @@ Im Ist-Zustand führt der JHelioviewer nach der Dekompression ein adaptives Subs
 	\caption{Vergleich des Lösungsansatzes: Adaptives Subsampling zur Ist-Kompression.}
 	\label{resultate:loesung0:loesung0_0}
 \end{figure}
-%Grösse der DAtei
 Wie im Diagramm \ref{resultate:loesung0:loesung0_0} erkennbar ist, braucht dieser Lösungsansatz deutlich weniger Speicher als die Ist-Kompression. Das Adaptive Subsampling reduziert deutlich die Anzahl Punkte, während die Rar eine bessere Kompression erbringt. Dieser Ansatz kann die Daten um Faktor $11.6$ besser komprimieren.\\
 Die Komplexität dieses Ansatzes bleibt ist $O(n)$ ($n$ ist die Anzahl Punkte) und bleibt somit in der selben Komplexitätsklasse wie die Ist-Kompression. Dieser Lösungsansatz ist aber bei der Dekompression schneller, da $n$ etwa vier mal Kleiner ist. und ist som  Da bei der Dekompression $n$ etwa vier Mal weniger Punkte bearbeiten muss, ist die Dekompression sogar schneller als die Ist-Lösung.\\
 \begin{figure}[!htbp]
@@ -132,12 +131,30 @@ Interessant ist, dass die die Variante der Ableitung (Abschnitt \ref{resultate:l
 \end{figure} 
 Es wird vermutet, dass es sich um Ringing Artifacts \cite{wiki:ringing:artefacts} handelt. 
 Sie geschehen, wenn oft bei harten Übergängen in eines Inputsignal und führen zu einem oszillierenden Outputsignal. Ringing Artifacts sind typische Kompressionsartefakte von DCT-basierten Verfahren wie JPEG/JFIF oder MP3.\\
-Die Feldlinien, welche am Stärksten von den Artefakten betroffen sind sind die, welche vom Weltall zur Sonne oder von der Sonne ins Weltall führen. Diese verhalten sich oft monoton, mit teils harten Richtungswechsel in der Nähe der Sonnenoberfläche. Die Abbildung \ref{resultate:loesung1:dct:randbehandlung:harte_richtungswechsel} zeigt eine Visualisierung von Feldlinien mit abrupten Richtungswechsel. den abrupten Wechsel gefolgt von einer monotonen Steigung kann nur durch hochfrequente Anteile dargestellt werden. Wenn diese durch die Quantisierung an Genauigkeit verlieren, entstehen die oszillierenden Ringing Artefakte. 
+Die Feldlinien, welche am Stärksten von den Artefakten betroffen sind sind die, welche vom Weltall zur Sonne oder von der Sonne ins Weltall führen. Diese verhalten sich oft monoton, mit teils harten Richtungswechsel in der Nähe der Sonnenoberfläche. Die Abbildung \ref{resultate:loesung1:dct:randbehandlung:harte_richtungswechsel} zeigt eine Visualisierung von Feldlinien mit abrupten Richtungswechsel. den abrupten Wechsel gefolgt von einer monotonen Steigung kann nur durch hochfrequente Anteile dargestellt werden. Wenn diese durch die Quantisierung an Genauigkeit verlieren, entstehen die oszillierenden Artefakte. 
 \begin{figure}
 	\caption{Harte Richtunswechsel bei Feldlinien, welche von der Sonne zum Weltall führen.}
 	\label{resultate:loesung1:dct:randbehandlung:harte_richtungswechsel}
 \end{figure}
 
 \subsubsection{Behandlung der Ringing Artefakte}
-PCA könnte hilfreich sein, da sich die Artefakte auf einen Kanal beschränken würden. Die einfachste Lösung währe, die Quantisierung herunterzuschrauben.
-Resultate der heruntergeschraubten Varianten.
+Um eine optimale Kompression der Feldlinien zu erreichen, müssen die Ringing Artefakte behandelt werden. Im Abschnitt \ref{resultate:loesung1:ringing} wurde erwähnt, dass nicht alle Varianten gleich von den Artefakten betroffen sind. Es wurde ebenfalls besprochen, dass die Feldlinien, welche von der Sonnenoberfläche zur Oberfläche führen, kaum von den Artefakten betroffen sind. In diesem Abschnitt wird deshalb erforscht, welche Variante die ''Sonne zu Sonne'' und welche die ''Weltall zur Sonne'' oder ''Sonne ins Weltall'' Feldlinien optimal approximieren kann.\\
+Testvarianten Ableitung \ref{resultate:loesung1:ableitung_dct_kodierung} und \ref{resultate:loesung1:dct:randbeh+byte}.
+Varianten mit einer PCA Transformation werden hier wieder berücksichtigt. Falls es zu Ringing Artefakte kommt, könnte durch die PCA die Artefakte auf einen Kanal beschränkt werden.\\
+Testvarianten.
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/ringing/sts.png}
+	\caption{Approximation der Feldlinien ''Sonnenoberfläche zu Sonnenoberfläche''. Je höher die PSNR-HVS-M, desto besser ist die Approximation. }
+	\label{resultate:loesung1:dct:behandlung_ringing:sts}
+\end{figure} 
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/ringing/nosts.png}
+	\caption{Approximation der der Feldlinien ''Sonnenoberfläche ins Weltall'' oder ''Weltall zur Sonnenoberfläche''. Je höher die PSNR-HVS-M, desto besser ist die Approximation.}
+	\label{resultate:loesung1:dct:behandlung_ringing:nosts}
+\end{figure}
+Das Diagramm der Abbildung \ref{resultate:loesung1:dct:behandlung_ringing:sts} zeigt, wie gut die Varianten die Feldlinien approximieren können, welche von der Sonnenoberfläche zur Sonnenoberfläche führen. Es ist anzumerken, dass ein PSNR-HVS-M Wert von $95$ etwa die Grenze ist, wo keine Artefakte auftreten.
+Die Diagramme in den Abbildungen \ref{ \ref{resultate:loesung1:dct:behandlung_ringing:nosts} zeigen, dass es für unterschiedliche Qualitätsstufen andere optimale Lösungen gibt. Die Ableitung hat zur Folge, dass die Feldlinien bei starker Quantisierung stabiler verhalten. Interessant ist, dass die PCA bei den Feldlinine von Sonne zur Sonne weniger Speicherplatz verbrauchen um eine beinahe artefaktlose Approximation zu erreichen.
+
+Lösung ableitung + dct mit 

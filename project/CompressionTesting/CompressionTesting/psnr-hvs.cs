@@ -56,10 +56,15 @@ namespace CompressionTesting
         public static double Calculate(TestSuite[] expected, PFSSData[] actual)
         {
             double psnr = Double.MaxValue;
+            int index = 0;
             for (int i = 0; i < expected.Length; i++)
             {
+                double oldPSNR = psnr;
                 psnr = Math.Min(psnr, Calculate(expected[i], actual[i]));
+                if (psnr < oldPSNR)
+                    index = i;
             }
+            System.Console.WriteLine(index);
             return psnr;
         }
 
@@ -85,45 +90,46 @@ namespace CompressionTesting
         {
             points = 0;
             double squaredError =0;
-            for (int i = 0; i < 3; i++)
-            {
-                //copy channel
-                float[] ex = expected.CopyChannel(i,actual);
-                float[] ac = actual.CopyChannel(i);
-                float[] diff = new float[ex.Length];
-                for (int j = 0; j < diff.Length; j++)
-                {
-                    diff[j] = ex[j] - ac[j]; 
-                }
-                diff = DCT.fdct(diff, max);
-                ex = DCT.fdct(ex, max);
-                ac = DCT.fdct(ac, max);
-                double mask = Math.Max(CalcMask(ex), CalcMask(ac));
-                mask = Math.Sqrt(mask / maskNorm);
 
-                points += ex.Length;
-                for (int j = 0; j < ex.Length; j++)
+                for (int i = 0; i < 3; i++)
                 {
-                    double error = 0;
-                    double maskFactor =  mask/factors[j];
-                    if (Math.Abs(diff[j]) > maskFactor)
+                    //copy channel
+                    float[] ex = expected.CopyChannel(i, actual);
+                    float[] ac = actual.CopyChannel(i);
+                    float[] diff = new float[ex.Length];
+                    for (int j = 0; j < diff.Length; j++)
                     {
-                        if(diff[j] > maskFactor)
-                        {
-                            error = diff[j] - maskFactor;
-                        }
-                        else
-                        {
-                           error = diff[j] + maskFactor;
-                        }
+                        diff[j] = ex[j] - ac[j];
                     }
-                    //else, mask. Error = 0
+                    diff = DCT.fdct(diff, max);
+                    ex = DCT.fdct(ex, max);
+                    ac = DCT.fdct(ac, max);
+                    double mask = Math.Max(CalcMask(ex), CalcMask(ac));
+                    mask = Math.Sqrt(mask / maskNorm);
 
-                    squaredError += error * error;
-                }
+                    points += ex.Length;
+                    for (int j = 0; j < ex.Length; j++)
+                    {
+                        double error = 0;
+                        double maskFactor = mask / factors[j];
+                        if (Math.Abs(diff[j]) > maskFactor)
+                        {
+                            if (diff[j] > maskFactor)
+                            {
+                                error = diff[j] - maskFactor;
+                            }
+                            else
+                            {
+                                error = diff[j] + maskFactor;
+                            }
+                        }
+                        //else, mask. Error = 0
 
-            }
+                        squaredError += error * error;
+                    }
+
                 
+            }
             return squaredError;
         }
 

@@ -77,8 +77,7 @@ Um das Contrast Masking zu berechnen, führt Ponomarenko et al. die gewichtete E
 \begin{equation} \label{testsetup:psnr:formula:masking_effect}
 	E_m(X)  = \frac{1}{f_m}E_w(X)
 \end{equation}
-
-Wobei $X$ die Kosinus-Koeffizienten eines Blockes sind und $C$ die jeweiligen Gewichtungen zur Frequenz. Der Normalisierungsfaktor $f_m$ wurde experimentell ermittelt und auf $16$ festgelegt. Ponomarenko et al. argumentiert, dass der Unterschied zwischen einem Block $X_e$ und einem verrauschten Block $X_d$ unsichtbar sind, wenn die Formel \eqref{testsetup:psnr:formula:masking} erfüllt ist.
+Wobei $X$ die Kosinus-Koeffizienten eines Bildblocks sind und $C$ die jeweiligen Gewichtungen zur Frequenz. Der Normalisierungsfaktor $f_m$ wurde experimentell ermittelt und auf $16$ festgelegt. Ponomarenko et al. argumentiert, dass der Unterschied zwischen einem Block $X_e$ und einem verrauschten Block $X_d$ unsichtbar sind, wenn die Formel \eqref{testsetup:psnr:formula:masking} erfüllt ist.
 \begin{equation} \label{testsetup:psnr:formula:masking}
 	E_w(X_e-X_d) < max[E_m(X_e),E_m(X_d)]
 \end{equation}
@@ -90,20 +89,22 @@ Wobei $E_{norm} = \sqrt{max[E_m(X_e),E_m(X_d)] / 64}$. Aus den Distanzen $X_{\De
 [\baselineskip]
 Wie gut die PSNR-HVS-M Metrik mit dem menschlichen Auge übereinstimmt, hängt vom Normalisierungsfaktor $f_m$ und von der Wahl der Gewichtungen $C$ ab. Ponomarenko et al. verwendeten die normalisierten und quadrierten Werte der Standard JPEG Quantisierungsmatrix \cite{wallace1992jpeg}. Es ist zu beachten, dass der DC-Koeffizient nicht im Contrast Masking berücksichtigt wird, für den Wert wird die normale PSNR berechnet. Der DC-Koeffizient stellt die durchschnittliche Helligkeit in einem Block dar. Das menschliche Auge kann auch kleine Unterschiede in dieser Frequenz erkennen.
 
-\subsubsection{Umsetzung und Anpassung für diese Arbeit}
-Der grösste Unterschied zur Arbeit von Ponomarenko et. al. ist der Einbezug des DC-Koeffizienten ins Contrast-Masking. Das menschliche Auge kann leichte Verschiebungen der Feldlinien kaum unterscheiden. Des weiteren musste für die Feldlinie eine eigene Quantisierungsmatrik  gefunden werden. Empirisch getestet, bis keine Artefakte mehr zu erkennen waren. Sehr konservativ gewählt.
-Maxvalue der PSNR wurde auf den 4Fachen Sonnenradius. Der maximale Wert der PFSS Simulation.\\
-psnr-hvs-m ist nicht samplingunabhängig. + min zwischen psnr-hvs-m \\
-[\baselineskip]
-Letztes Problem, festlegung des Normalisierungsfaktors $f_m$. Ponomarenko et. al. hat wirklich nicht mehr dazu geschrieben, als dass der Wert empirisch festgelegt wurde. Dieser Wert stellt ein, wie stark das Contrast-Masking einfliessen soll. Je höher der Wert ist, desto ähnlicher ist die PSNR-HVS-M Metrik der normalen PSNR.\\
+\subsubsection{Umsetzung und Anpassung der PSNR-HVS-M für diese Arbeit}
+Der grösste Unterschied zur Arbeit von Ponomarenko et. al. ist der Einbezug des DC-Koeffizienten ins Contrast-Masking. Das menschliche Auge kann leichte Verschiebungen der Feldlinien kaum unterscheiden. Des weiteren musste für die Feldlinie eine eigene Quantisierungsmatrix gefunden werden, ausdenen die Gewichtungen berechnet werden. Die Quantisierungsmatrix wurde empirisch ermittelt, sodass die dekomprimierten Feldlinien keine sichtbaren Artefakte aufweisen.\\
+Für die PSNR wird der maximale Wert $MAX_I$ benötigt. Hier wurde der maximal mögliche Wert der PFSS Simulation verwendet, den vierfachen Sonnenradius.\\
+Der letzte Wert, den es zu setzen gibt, ist der Normalisierungsfaktor $f_m$. Ponomarenko et. al. schrieb keine zusätzliche Information oder Begründung zu diesem Wert, obwohl es ein zentraler Faktor inder der PSNR-HVS-M Berechnung ist. Dieser Wert stellt ein, wie stark das Contrast-Masking einfliessen soll. Je höher der Wert ist, desto ähnlicher ist die PSNR-HVS-M Metrik der normalen PSNR.\\
+Die Tabelle \ref{testsetup:psnr:umsetzung:tabelle:f_m} erforscht den Einfluss des $f_m$ Faktors. Dazu wurde die PSNR-HVS-M zu drei dekomprimierten Simulationen berechnet, welche eine unterschiedliche Qualität aufweisen.
 \begin{table}
 \center
-\begin{tabular}{c|c|c|c}
-	&$f_m$ 16 &$f_m$ 40 &$f_m$ 80 \\\hline
-	Qualität: gut & \textbf{125.1}& 123.1 & 117.8 \\
-	Qualität: ok & \textbf{94.4}& 92.8& 91.7\\
-	Qualität: schlecht & \textbf{90.7} & 88.3 & 86.9
+\begin{tabular}{r|c|c|c}
+	Qualität &$f_m$ 8 &$f_m$ 16 &$f_m$ 40 \\\hline
+	Keine sichtbare Artefakte & x & \textbf{125.1} & 117.8 \\
+	Kaum sichtbare Artefakte & x & \textbf{94.4} & 91.7\\
+	Leicht sichtbare Artefakte & 94.9 & \textbf{93.41} & 92.0
 \end{tabular}
 \caption{Tabelle mit unterschiedlichen Werten für $f_m$.}
 \label{testsetup:psnr:umsetzung:tabelle:f_m}
 \end{table}
+Man möchte möglichst grosse Abstände zwischen den verschiedenen Qualitätsstufen.\\
+[\baselineskip]
+Die PSNR-HVS-M ist nicht Unabhängig von der Abtastrate. Es erwartet, dass die zu vergleichenden Datenmengen gleich viele Punkte enthalten. Für diese Arbeit werden die Originaldaten auf die selbe Punktmenge reduziert. Wenn pro Feldlinie exakt ein Punkt abgespeichert wird, würde die PSNR-HVS-M trotzdem eine hohe Ähnlichkeit zwischen Original und dekomprimierten Feldlinien ergeben. Dies ist Vertretbar, da die Standardabweichung eine hohe Distanz ergeben würde. Die PSNR-HVS-M soll hauptsächlich Artefakte aufdecken, welche in der Standardabweichung nicht ins Gewicht fallen wie die Ringing Artefakte vom Abschnitt \ref{resultate:loesung1:ringing}.

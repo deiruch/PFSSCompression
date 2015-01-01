@@ -151,6 +151,7 @@ namespace CompressionTesting.FileWriter
             int[] ptr = new int[input.lines.Count];
             int[] ptph = new int[input.lines.Count];
             int[] ptth = new int[input.lines.Count];
+            byte[] type = new byte[input.lines.Count];
 
             List<PFSSLine> lines = new List<PFSSLine>(input.lines);
             lines.Sort();
@@ -187,7 +188,9 @@ namespace CompressionTesting.FileWriter
             int startPointIndex = 0;
             for (int i = 0; i < lines.Count; i++)
             {
+               
                 PFSSLine l = lines[i];
+                type[i] = l.Type == TYPE.SUN_TO_SUN ? (byte)0 : (byte)1;
                 ptr[startPointIndex] = (short)l.points[0].x;
                 ptph[startPointIndex] = (short)l.points[0].y;
                 ptth[startPointIndex] = (short)l.points[0].z;
@@ -213,7 +216,7 @@ namespace CompressionTesting.FileWriter
             Double[] b0a = new Double[] { input.b0 };
             Double[] l0a = new Double[] { input.l0 };
             Object[][] data = new Object[1][];
-            Object[] dataRow = new Object[] {b0a,l0a,DCTCoder.EncodeStartPointChannel(ptr),DCTCoder.EncodeStartPointChannel(ptph), DCTCoder.EncodeStartPointChannel(ptth), ptr_nz_len_byte, channels[0], channels[1], channels[2] };
+            Object[] dataRow = new Object[] { b0a, l0a, type, ptr_nz_len_byte, DCTCoder.EncodeStartPointChannel(ptr), DCTCoder.EncodeStartPointChannel(ptph), DCTCoder.EncodeStartPointChannel(ptth), channels[0], channels[1], channels[2] };
             data[0] = dataRow;
 
             BinaryTable table = new BinaryTable(data);
@@ -223,13 +226,14 @@ namespace CompressionTesting.FileWriter
             BinaryTableHDU bhdu = (BinaryTableHDU)fits.GetHDU(1);
             bhdu.SetColumnName(0, "B0", null);
             bhdu.SetColumnName(1, "L0", null);
-            bhdu.SetColumnName(2, "StartPointR", null);
-            bhdu.SetColumnName(3, "StartPointPhi", null);
-            bhdu.SetColumnName(4, "StartPointTheta", null);
-            bhdu.SetColumnName(5, "LINE_LENGTH", null);
-            bhdu.SetColumnName(6, "X", null);
-            bhdu.SetColumnName(7, "Y", null);
-            bhdu.SetColumnName(8, "Z", null);
+            bhdu.SetColumnName(2, "Type", null);
+            bhdu.SetColumnName(3, "LINE_LENGTH", null);
+            bhdu.SetColumnName(4, "StartPointR", null);
+            bhdu.SetColumnName(5, "StartPointPhi", null);
+            bhdu.SetColumnName(6, "StartPointTheta", null);
+            bhdu.SetColumnName(7, "X", null);
+            bhdu.SetColumnName(8, "Y", null);
+            bhdu.SetColumnName(9, "Z", null);
 
             BufferedDataStream f = new BufferedDataStream(new FileStream(output.FullName, FileMode.Create));
             fits.Write(f);
