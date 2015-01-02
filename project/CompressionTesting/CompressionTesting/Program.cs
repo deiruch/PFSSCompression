@@ -84,7 +84,7 @@ namespace CompressionTesting
         private static void run()
         {
             ISolution solution = new Solution1();
-            bool testOneFile = false;
+            bool testOneFile = true;
             //DCT.DiscreteCosineTransform(400);
 
             string fitsOutputFolder = @"C:\Users\Jonas Schwammberger\Documents\GitHub\PFSSCompression\test\temp";

@@ -35,43 +35,56 @@ $P_1$ wurde bereits ausgewählt. Es wird nun ein Punkt $P_x$ gesucht, der als En
 \subsubsection{Entropie Kodierung mittels RAR} \label{konzept:loesung0:kodierung}
 Die Anordnung der Daten wurde aus der Ist-Kompression übernommen, jedoch wird Rar anstatt GZip verwendet. GZip konnte bei den Ist-Komprimierten Daten eine Kompressionsrate von $1.2$ erreichen, während Rar bei selben Daten eine Rate von $3.7$ erreicht.
 
-\subsection{Lösung 1, Diskrete Kosinus Transformation}
-Bild
-DCT, da alles nahe an harmonischen Halbwellen. 
-Ringing Artefakte \ref{resultate:loesung1:ringing}. 
+\subsection{Lösungsantz, Diskrete Kosinus Transformation}\label{konzept:loesung1}
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution0/aufbau.png}
+	\caption{Aufbau des Lösungsansatzes: Adaptives Subsampling.}
+	\label{konzept:loesung1:aufbau}
+\end{figure} 
+Die Kompression dieses Lösungsansatzes ist Dargestellt im Diagramm der Abbildung \ref{konzept:loesung1:aufbau}. Konzeptionell ähnelt dieser Ansatz der JPEG/JFIF Kompression (dargestellt in der Abbildung \ref{state:jpeg:abb}), die einzelnen Teilschritte können aber andere Algorithmen verwenden. Im Vergleich zum JPEG/JFIF Standard ist der grösste Unterschied, dass die Ableitung Kosinus Transformiert wird.
+
+Die Feldlinien ähneln oft harmonischen Halbwellen, welche sich durch wenige Kosinusfunktionen approximieren lassen können. Um eine optimale Kompression mit dieser Variante zu erreichen, müssen Ringing Artefakte \cite{wiki:ringing:artefacts} behandelt werden. Sie äussern sich als Oszillieren im dekomprimierten Signal, was das menschliche Auge als störend empfindet. Beispiele für die Ringing Artefakten von Feldlinien sind im Abschnitt \ref{resultate:loesung1:ringing} erleutert.\\
+Es gibt Möglichkeiten, die Ringing Artefakte zu Dämpfen oder gar zu beheben: Die simpelste Variante ist es, das Signal zum Beispiel mit einem Gauss Filter \cite{wiki:gauss:filter} zu glätten. Die Glättung kann das Signal verfälschen und ist deshalb nicht die optimale Lösung. In der Bild- und Audioverarbeitung wird aktiv nach Filter geforscht, welche die Ringing Artefakte in der Dekompression vermindern \cite{kaup1998reduction} \cite{park1999postprocessing}.\\
+In dieser Arbeit wurde für die drei Typen von Feldlinien unterschiedliche Quantisierungsfaktoren umgesetzt.
 
 \subsubsection{Subsampling} \label{konzept:loesung1:subsampling}
 Das Subsampling wurde aus der Ist-Kompression \ref{konzept:ist-komprimierung} übernommen und dient, die DCT zu beschleunigen. Da die DCT eine Komplexität von $O(n^2)$ aufweist, wird durch das Subsampling die Transformation wesentlich schneller.\\
-Falls die Laufzeit der Dekompression weiter verbessert werden soll, kann die Fast-Cosine-Transformation umgesetzt werden. Diese hat eine Komplexität von $O(n log(n))$. Der Nachteil ist, dass nur Daten der Länge $2^n$ transformiert werden können, was zusätzliche Programmlogik braucht. Falls die Fast-Cosine-Transformation nicht ausreicht, können die Linien in Blöcken mit einer bestimmten Anzahl von Punkten unterteilt werden. Dadurch wird die Komplexität auf $O(n)$ gesenkt. Jedoch ist es wahrscheinlich, dass durch die Unterteilung die Kompressionsrate leidet. Vermutlich braucht es für die Approximation der Blöcke insgesamt mehr Kosinus-Funktionen, als für die Approximation der gesamten Feldlinie.
+Falls die Laufzeit der Dekompression weiter verbessert werden soll, kann die Fast-Cosine-Transformation umgesetzt werden. Diese hat eine Komplexität von $O(n log(n))$. Falls das nicht ausreicht, können die Linien in Blöcke unterteilt werden und die DCT pro Block ausführen. Dadurch wird die Komplexität auf $O(n)$ gesenkt. Jedoch ist es wahrscheinlich, dass durch die Unterteilung die Kompressionsrate leidet. Vermutlich braucht es für die Approximation der Blöcke insgesamt mehr Kosinus-Funktionen, als für die Approximation der gesamten Feldlinie.
 
 \subsubsection{Ableitung}
-Die Feldlinie wird abgeleitet und alle folgenden Transformationen werden auf den Steigungen der Feldlinie ausgeführt. Damit die Transformation umkehrbar ist, muss der Startpunkt zusätzlich abgespeichert werden. Die Ableitung hat den Effekt, dass Artefakte der Dekompression sich meist auf verschiebungen und Dämpfungen der Amplitude äussern. Der Nachteil ist, dass sich Ungenauigkeiten durch die Feldlinie summieren und das Ende mit einem grösseren Fehler approximiert wird.
+Die Feldlinie wird abgeleitet und alle folgenden Transformationen werden auf den Steigungen der Feldlinie ausgeführt. Damit die Transformation umkehrbar ist, muss der Startpunkt zusätzlich abgespeichert werden.\\
+Für das menschliche Auge sind die Artefakte, die in der abgeleiteten Feldlinie entstehen, weniger störend. Die Feldlinie bleibt tendenziell glatt. Artefakte äussern sich meist in veränderten Amplituden, welche erst erkennbar sind, wenn die Originalfeldlinie zum Vergleich bereit steht.
 
 \subsubsection{Cosinus-Transformation} \label{konzept:loesung1:kosinus}
 Die Diskrete Kosinus Transformation stellt eine endliche Menge von $N$ Datenpunkten als $N$ Kosinusfunktionen zu verschiedenen Frequenzen dar. Die Werte DCT-Koeffizienten stellt dar, wie hoch der Anteil einer bestimmten Frequenz ist im Originalsignal. Im optimalen Fall kann ein Signal durch niederfrequente Funktionen approximiert werden. Die hochfrequenten Anteile stellen Details dar, welche meist nicht relevant sind.\\
-Es gibt verschiedene Möglichkeiten die Punkte zu transformieren. Hier wurde sich am JPEG/JFIF Standard orientiert, welche die DCT-II \eqref{konzept:loesung1:kosinus:formula:fdct} als Forwärts und die DCT-III \eqref{konzept:loesung1:kosinus:formula:idct} als Rückwärtstransformation verwendet \cite{wallace1992jpeg}. Die DCT transformiert ein periodisches, unendliches Signal. Welche Transformationen gewählt werden, wirkt sich aus, in welcher Art das Signal an den Rändern wiederholt wird. Im diesem Fall wird das Signal jeweils gespiegelt wiederholt.
+Es gibt verschiedene Möglichkeiten die Punkte zu transformieren. Hier wurde sich am JPEG/JFIF Standard orientiert, welche die DCT-II \eqref{konzept:loesung1:kosinus:formula:fdct} als Forwärts und die DCT-III \eqref{konzept:loesung1:kosinus:formula:idct} als Rückwärtstransformation verwendet \cite{wallace1992jpeg}. 
 \begin{equation} \label{konzept:loesung1:kosinus:formula:fdct}
-	X_k = \sum_{n=0}^{N-1}x_n cos[\frac{\pi}{N}(n+\frac{1}{2}k)] \quad k = 0, 1, \ldots, N-1
+	X_k = \sum_{n=0}^{N-1}x_n*cos[\frac{\pi}{N}(n+\frac{1}{2}k)] \quad k = 0, 1, \ldots, N-1
 \end{equation}
-$N$ ist anzahl Punkte. Transformiert in den Frequenzraum. $x_n$ ist ein Punkt des Signales und $X_k$ ist die Resultierende Kosinus Schwingung%? wirklich schwingung oder was anderes?
-
-Inverse Transform
 \begin{equation} \label{konzept:loesung1:kosinus:formula:idct}
-X_k  = \frac{1}{2}x_0 + \sum_{n=1}^{N-1}x_n cos[\frac{\pi}{N}n(k+\frac{1}{2})] \quad k  = 0,1,\ldots,N-1
+x_n  = \frac{1}{2}X_0 + \sum_{k=1}^{N-1}X_k*cos[\frac{\pi}{N}k(n+\frac{1}{2})] \quad n = 0,1,\ldots,N-1
 \end{equation}
+Wobei $N$ die Länge des diskreten Signals ist. $x_n$ bezeichnet einen Wert im diskreten Signal und $X_k$ ist der Anteil der Frequens $k$. Ein Inputsignal der Länge $N$ resultiert in $N$ Kosinus-Funktionen.
+
+Die DCT transformiert ein periodisches, unendliches Signal. Um ein endliches Signal zu transformieren, wird das Signal konzeptionell wiederholt. Welche Transformationen gewählt werden, wirkt sich aus, in welcher Art das Signal wiederholt wird. In diesem Fall wird das Signal jeweils in umgekehrter Reihenfolge wiederholt.\\
+Wie die ränder aussehen, wirkt sich auf die Dekompression aus und kann je nach dem ungewünschte Artefakte mit sich bringen. Im Diagramm der Abbildung\ref{resultate:loesung1:dct:artefakte} im Abschnitt \ref{resultate:dct} ist ein Beispiel zu sehen für mögliche Artefakte bei ungeeigneten Rändern. 
+
 
 \subsubsection{Quantisierung}
-
+Feldlinien unterscheiden sich stark vom Typ. Für unterschiedliche Typen wurden unterschieldiche Qauntisierungsfaktoren entwickelt.
+Für unterschiedliche Daten wurden unterschiedliche Quantisierungen 
 
 \subsubsection{Entropie Kodierung}\label{konzept:loesung1:kodierung}
-Kodierung
-	Idee: RUn length, fast alles nullen
-	Adaptive
+Daten werden geordent, genaue Spezifikation ist im Anhang zu finden.
+Es wurden zwei zusätzliche Kodierungen hinzugefügt um die Kompressionsrate weiter zu verbessern\\
 
-	Weitere Kodierung mittels Rar.
-		Rar hat sich bewährt bei der purer Feldlinien kompression im Vergleich zu anderen Verfahren wie LZ77/gZip
+\textbf{Längenkodierung}\\
+Die quantisierten Koeffizienten einer Feldlinie sind ab einem gewissen Punkt immer  Null. Die Längenkodierung schneidet den Null Block ab. Da die Anzahl Punkte jeder Feldlinie abgespeichert ist, ist diese Operation umkehrbar. Alle X Kanäle hintereinander abgelegt. Die erste Zahl bezeichnet die Anzahl an Nicht-null Komponenten.
 
+Die Anzahl an Punkten in der Feldlinie ist ebenfalls gespeichert. Idee: Nur noch den Block abspeichern, welche Nicht-Null koeffizienten enthält. Die eigentliche Länge ist ge
 
-
-
-
+\textbf{Adaptive Genauigkeits-Kodierung}\\
+Die quantisierten Koeffizienten sind meistens klein und liegen zwischen $-50$ und $+50$. Acht Bit Genauigkeit würde meistens ausreichen, nur wenige Koeffizienten brauchen mehr Genauigkeit. Mit der adaptiven Genauigkeits-Kodierung sollen so wenige Bytes pro Koeffizient abgespeichert werden, wie benötigt werden. 
+Continue flag
+Vorteil: kleine Zahlen brauchen nur sehr wenige Bytes für die Speicherung. Nachteil: Nur 7 Nutzbits pro Byte, grosse Zahlen verbrauchen mehr speicher. Sinnvoll bei wenigen grossen Zahlen.

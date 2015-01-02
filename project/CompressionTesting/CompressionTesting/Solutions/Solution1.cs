@@ -17,18 +17,18 @@ namespace CompressionTesting.Solutions
     {
         public int GetQualityLevels()
         {
-            return 1;
+            return  3;
         }
 
         public string GetName()
         {
-            return "Solution1_Twelve";
+            return "Solution1_Nine";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return Twelve(data, qualityLevel, folder);
+            return Nine(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -438,7 +438,12 @@ namespace CompressionTesting.Solutions
             Discretizer.DivideLinear(data, 50, 0, 19, 7);
             Discretizer.DivideLinear(data, 10, 0, 26, 45);
 
-            Discretizer.Cut(data, 36);
+            if(qualityLevel == 0)
+             Discretizer.Cut(data, 16);
+            if (qualityLevel == 1)
+                Discretizer.Cut(data, 36);
+            if (qualityLevel == 2)
+                Discretizer.Cut(data, 71);
             PCACoefficient.ForwardQuantization(data);
             Discretizer.ToShorts(data, 1);
 

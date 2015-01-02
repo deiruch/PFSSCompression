@@ -14,9 +14,11 @@ Grob betrachtet beinhalten verlustbehaftete Kompressionen drei Teilschritte: Tra
 	\caption{Aufbau der JPEG Kompression \cite{wallace1992jpeg}}
 	\label{state:jpeg:abb}
 \end{figure}
-Das JPEG/JFIF Bildformat ist eines der meist-verwendeten Bildkompressionsverfahren für natürliche Bilder. Das Diagramm der Abbildung \ref{state:jpeg:abb} zeigt den Aufbau der Kompressionspipeline. JPEG/JFIF unterteilt das Eingabebild in $8x8$ Blöcke und führt auf ihnen eine Diskrete Kosinus Transformation (DCT) durch. Der Bildblock ist nun als Folge von Kosinus-Funktionen dargestellt.\\
+Das JPEG/JFIF Bildformat ist eines der meist-verwendeten Bildkompressionsverfahren für natürliche Bilder. Das Diagramm der Abbildung \ref{state:jpeg:abb} zeigt den Aufbau der Kompressionspipeline. JPEG/JFIF unterteilt das Eingabebild in $8*8$ Blöcke und führt auf ihnen eine Diskrete Kosinus Transformation (DCT) durch. Der Bildblock ist nun als Folge von Kosinus-Funktionen dargestellt.\\
 Die Quantisierung versucht nun Frequenzen, welche das menschliche Auge schlecht erkennen kann mit weniger Präzise darzustellen. Wenn die Quantisierung gut gewählt wurde, kann der Mensch das dekomprimierte Bild nicht vom Original unterscheiden, verbraucht aber weniger Speicherplatz. JPEG/JFIF bietet vorgefertigte Quantisierungstabellen an. Der Benutzer kann aber eigene Tabellen für spezifizieren. Wie die Quantisierungstabelle optimal gewählt wird, ist ein aktives Forschungsfeld \cite{wu1993rate:jpeg} \cite{wang2001designing:jpeg} und kann von Anwendungsfall zu Anwendungsfall unterschiedlich sein.\\
-Nach der Quantisierung werden die quantisierten Blöcke im Zick-Zack-Muster angeordnet, sodass die Entropie Kodierung eine bessere Kompression durchführen kann. JPEG/JFIF führt zuerst eine Run-Length Kodierung durch und auf dem Rest dann eine Huffman-Kodierung. Auch hier bietet JPEG die Möglichkeit eine eigene Huffman-Tabelle abzuspeichern Hier bietet JPEG die Möglichkeit, eine eigene Huffman-Tabelle zu spezifizieren.
+Nach der Quantisierung werden die quantisierten Blöcke im Zick-Zack-Muster angeordnet, sodass die Entropie Kodierung eine bessere Kompression durchführen kann. JPEG/JFIF führt eine Run-Length und eine Huffman-Kodierung durch. JPEG bietet auch hier an, eine benutzerspezifizierte Huffman-Tabelle zu verwenden.
+
+wie das benutzt werden kann
 
 \subsection{PointCloud Kompression}
 Industrie Lasersampling
@@ -38,7 +40,8 @@ Verlustbehaftete Kompression, indem man mit einer begrenzten Anzahl
 fourier, wavelet Compressed sensing
 
 \subsection{Entropie Kodierung}
-Allgemeine Verfahren, Huffman, Arithmetic, LZM, RLE.
-Fix fertige Pakete wie Gzip, Rar etc.
+Die Entropie Kodierung findet in allen Bereichen der Informatik Anwendungen. Allgemeien Verfahren RLE, Huffman, Arithmetic
 
-Spezialisierte Entropie Kodierun:Fast Loessless floating point compression \cite{ratanaworabhan2006fast}
+Fix fertige Pakete wie Gzip, Rar welche meist mehrere Verfahren kombinieren.
+
+Spezialisierte Entropie Kodierun:Fast Lossless floating point compression \cite{ratanaworabhan2006fast}

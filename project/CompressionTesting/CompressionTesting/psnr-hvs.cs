@@ -13,7 +13,7 @@ namespace CompressionTesting
         private static double[] factors = null;
         private static int max = 100; 
         private static readonly double maxI = 20* Math.Log10(4 * PFSSPoint.SunRadius);
-        private const double eNorm = 16*1000;
+        private const double eNorm = 32*1000;
         private const double maskNorm = 100;
 
         private static void calcFactors()

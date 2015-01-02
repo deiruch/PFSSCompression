@@ -226,7 +226,7 @@ namespace CompressionTesting.FileWriter
             BinaryTableHDU bhdu = (BinaryTableHDU)fits.GetHDU(1);
             bhdu.SetColumnName(0, "B0", null);
             bhdu.SetColumnName(1, "L0", null);
-            bhdu.SetColumnName(2, "Type", null);
+            bhdu.SetColumnName(2, "TYPE", null);
             bhdu.SetColumnName(3, "LINE_LENGTH", null);
             bhdu.SetColumnName(4, "StartPointR", null);
             bhdu.SetColumnName(5, "StartPointPhi", null);
