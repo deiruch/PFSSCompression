@@ -38,7 +38,7 @@ Die Anordnung der Daten wurde aus der Ist-Kompression übernommen, jedoch wird R
 \subsection{Lösungsantz, Diskrete Kosinus Transformation}\label{konzept:loesung1}
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution0/aufbau.png}
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution1/aufbau.png}
 	\caption{Aufbau des Lösungsansatzes: Adaptives Subsampling.}
 	\label{konzept:loesung1:aufbau}
 \end{figure} 
@@ -70,21 +70,41 @@ Wobei $N$ die Länge des diskreten Signals ist. $x_n$ bezeichnet einen Wert im d
 Die DCT transformiert ein periodisches, unendliches Signal. Um ein endliches Signal zu transformieren, wird das Signal konzeptionell wiederholt. Welche Transformationen gewählt werden, wirkt sich aus, in welcher Art das Signal wiederholt wird. In diesem Fall wird das Signal jeweils in umgekehrter Reihenfolge wiederholt.\\
 Wie die ränder aussehen, wirkt sich auf die Dekompression aus und kann je nach dem ungewünschte Artefakte mit sich bringen. Im Diagramm der Abbildung\ref{resultate:loesung1:dct:artefakte} im Abschnitt \ref{resultate:dct} ist ein Beispiel zu sehen für mögliche Artefakte bei ungeeigneten Rändern. 
 
-
 \subsubsection{Quantisierung}
 Feldlinien unterscheiden sich stark vom Typ. Für unterschiedliche Typen wurden unterschieldiche Qauntisierungsfaktoren entwickelt.
 Für unterschiedliche Daten wurden unterschiedliche Quantisierungen 
 
 \subsubsection{Entropie Kodierung}\label{konzept:loesung1:kodierung}
 Daten werden geordent, genaue Spezifikation ist im Anhang zu finden.
-Es wurden zwei zusätzliche Kodierungen hinzugefügt um die Kompressionsrate weiter zu verbessern\\
+Um die Entropie Kodierung zu verbessern wurden zwei Byte-Kodierungen hinzugefügt. Die Kanäle werden zuerst mit der Längenkodierung und darauf folgend mit der adaptive Genauigkeit kodiert.\\
 
 \textbf{Längenkodierung}\\
-Die quantisierten Koeffizienten einer Feldlinie sind ab einem gewissen Punkt immer  Null. Die Längenkodierung schneidet den Null Block ab. Da die Anzahl Punkte jeder Feldlinie abgespeichert ist, ist diese Operation umkehrbar. Alle X Kanäle hintereinander abgelegt. Die erste Zahl bezeichnet die Anzahl an Nicht-null Komponenten.
+Die quantisierten Koeffizienten einer Feldlinien-Kanals können in zwei Blöcke unterteilt werden: Der erste Block enthält alle nicht-Null Koeffizienten, sie approximieren den Kanal. Der zweite Block besteht aus hochfrequenten Schwingungen, welche auf Null quantisiert wurden. Die Längenkodierung schneidet den Null block ab und fügt die Länge des Nicht-Null Blockes hinzu. Alle Längen und alle Blöcke werden zusammen abgespeichert, die Tabelle \ref{konzept:loesung1:entropie:laengenkodierung} verdeutlicht das Konzept. $n_i$ ist die Länge der Feldlinie $i$ und $x_{i,j}$ ist der $j$ DCT-Koeffizient der Feldlinie $i$.\\
+\begin{table}[!htbp]
+	\center
+	\begin{tabular}{||c|c|c|c|c||c|c|c}
+		\hline
+		\multicolumn{8}{|c|}{X Kanäle}\\\hline\hline
+		 \multicolumn{5}{||c||}{Block Feldlinie 0} & \multicolumn{3}{c}{\ldots} \\\hline
+		$n_0$ &$x_{0,0}$ &$x_{0,1}$ & \ldots & $x_{0,n-1}$ & $n_1$ & $x_{1,0}$ & \ldots\\\hline
+	\end{tabular}
+	\caption{Beispiel eines abgespeicherten Kanals mit der Längenkodierung.}
+	\label{konzept:loesung1:entropie:laengenkodierung}
+\end{table}
+Um einen Kanal zu Dekodieren, muss die Anzahl an DCT-Koeffizienten $n_i$ gelesen werden und danach Nullen Anfügen, bis die ursprüngliche Länge des Kanals erreicht wurde. Die Anzahl Punkte jeder Feldlinie ist ebenfalls gespeichert.\\
 
-Die Anzahl an Punkten in der Feldlinie ist ebenfalls gespeichert. Idee: Nur noch den Block abspeichern, welche Nicht-Null koeffizienten enthält. Die eigentliche Länge ist ge
-
+Die Längenkodierung ist effizient, wenn die hochfrequenten DCT-Koeffizienten einen grossen, zusammenhängenden Null-Block bilden. Im schlechtesten Fall währe der letzte DCT-Koeffizient nicht Null. In diesem Fall würde die Längenkodierung nichts abschneiden. Durch die Quantisierung kann dieser Fall nur bei Kanälen mit weniger als $50$ Punkten auftreten.\\
+[\baselineskip]
 \textbf{Adaptive Genauigkeits-Kodierung}\\
-Die quantisierten Koeffizienten sind meistens klein und liegen zwischen $-50$ und $+50$. Acht Bit Genauigkeit würde meistens ausreichen, nur wenige Koeffizienten brauchen mehr Genauigkeit. Mit der adaptiven Genauigkeits-Kodierung sollen so wenige Bytes pro Koeffizient abgespeichert werden, wie benötigt werden. 
-Continue flag
-Vorteil: kleine Zahlen brauchen nur sehr wenige Bytes für die Speicherung. Nachteil: Nur 7 Nutzbits pro Byte, grosse Zahlen verbrauchen mehr speicher. Sinnvoll bei wenigen grossen Zahlen.
+Die quantisierten Koeffizienten sind meistens klein und liegen zwischen $-50$ und $+50$. Acht Bit Genauigkeit würden meistens ausreichen, nur wenige Koeffizienten brauchen mehr Genauigkeit. Mit der adaptiven Genauigkeits-Kodierung sollen so wenige Bytes pro Koeffizient abgespeichert werden, wie benötigt werden. Dazu wird wie in Tabelle \ref{konzept:loesung1:entropie:adaptive} eine neue Byte-Kodierung eingeführt. Das MSB wird als ''Continue Flag'' verwendet. Wenn es gesetzt ist, gehört das folgende Byte ebenfalls zur Zahl.\\
+\begin{table}[!htbp]
+	\center
+	\begin{tabular}{|c|c|c|c||c|c|c|c|}
+	\hline
+	\multicolumn{8}{|c|}{Byte}\\\hline
+	Continue Flag & X & X & X & X & X & X & X \\\hline
+	\end{tabular}
+	\caption{Aufteilung eines Bytes der adaptiven Genauigkeitskodierung. X sind Nutz-Bits.}
+	\label{konzept:loesung1:entropie:adaptive}
+\end{table}
+Wenn ein Kanal hauptsächlich aus tiefen Zahlen besteht, können so Bytes gespart werden, ohne Genauigkeit zu verlieren. Wenn aber der Kanal aus hauptsächlich grossen Zahlen besteht, welche zwei oder mehr Bytes an Genauigkeit brauchen, wird weniger Speicherplatz gespart.

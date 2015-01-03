@@ -2,15 +2,6 @@
 Es gibt x Lösungenansätze mit x varianten.  hier sind die Kompressionsraten der jeweils besten Varianten der Ansätze.\\
 Bis auf den Lösungsansatz unter \ref{resultate:loesung0} Unterschiedliche Qualitätsstufen
 Im Verlauf wurde eine neue Metrik entwickelt, deshalb gibt es manchmal zwei Plots. Einmal mit der Standardabweichung, und einmal mit PSNR-HVS-M. Standardabweichung ist der beste Ort unten Links, bei PSNR-HVS-M Plots Oben Links. Bis aus den Lösungsansatz \ref{resultate:loesung0} sind alle Ansätze mit unterschiedlichen Qualitätsstufen getestet.
-\begin{table}
-	\center
-	\begin{tabular}{l|l}
-		Lösungsansatz & Kompressionsraten \\\hline
-		Adaptives Subsampling & 11.6 \\
-			
-	\end{tabular}
-	\caption{Tabelle der }
-\end{table}
 
 \subsection{Lösungsansatz: Adaptives Subsampling} \label{resultate:loesung0}
 Im Ist-Zustand führt der JHelioviewer nach der Dekompression ein adaptives Subsampling durch. Dieser Lösungsansatz führt das adaptive Subsampling vor der Datenübertragung durch und Kodiert die Daten mit Rar anstatt mit Gzip. Eine genauere Beschreibung des Ansatzes ist im Abschnitt \ref{konzept:loesung0} zu finden.
@@ -61,9 +52,9 @@ Vor der DCT werden die Feldlinien abgeleitet. Mit der Ableitung soll das Randpro
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-1/loesung1_1.png}
 	\caption{Vergleich der DCT Kompression der Ableitung mit der DCT Kompression}
-	\label{resultate:loesung1:dct:artefakte}
+	\label{resultate:loesung1:dct_ableitung:resultate}
 \end{figure}
-Die abgeleiteten Feldlinien können besser approximiert werden und erreichen dadurch eine Kompressionsrate von $14.3$ mit einer vergleichbaren Genauigkeit. Das Randproblem wurde ebenfalls verbessert. Eine Darstellung der Artefakte ist im Diagramm der Abbildung\ref{resultate:loesung1:dct:byte:artefakte} zu finden.\\
+Das Diagramm der Abbildung \ref{resultate:loesung1:dct_ableitung:resultate} zeigt, dass die abgeleiteten Feldlinien besser approximiert werden können und erreichen dadurch eine Kompressionsrate von $14.3$ mit einer vergleichbaren Genauigkeit. Das Randproblem wurde ebenfalls verbessert. Eine Darstellung der Artefakte ist im Diagramm der Abbildung\ref{resultate:loesung1:dct:byte:artefakte} zu finden.\\
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-6/artefakte.png}
