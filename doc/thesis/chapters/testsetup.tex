@@ -92,9 +92,10 @@ Wie gut die PSNR-HVS-M Metrik mit dem menschlichen Auge übereinstimmt, hängt v
 \subsubsection{Umsetzung und Anpassung der PSNR-HVS-M für diese Arbeit}
 Der grösste Unterschied zur Arbeit von Ponomarenko et. al. ist der Einbezug des DC-Koeffizienten ins Contrast-Masking. Das menschliche Auge kann leichte Verschiebungen der Feldlinien kaum unterscheiden. Des weiteren musste für die Feldlinie eine eigene Quantisierungsmatrix gefunden werden, ausdenen die Gewichtungen berechnet werden. Die Quantisierungsmatrix wurde empirisch ermittelt, sodass die dekomprimierten Feldlinien keine sichtbaren Artefakte aufweisen.\\
 Für die PSNR wird der maximale Wert $MAX_I$ benötigt. Hier wurde der maximal mögliche Wert der PFSS Simulation verwendet, den vierfachen Sonnenradius.\\
+
 Der letzte Wert, den es zu setzen gibt, ist der Normalisierungsfaktor $f_m$. Ponomarenko et. al. schrieb keine zusätzliche Information oder Begründung zu diesem Wert. Dieser Wert stellt ein, wie stark das Contrast-Masking einfliessen soll. Je höher der Wert ist, desto ähnlicher ist die PSNR-HVS-M Metrik der normalen PSNR.\\
 Die Tabelle \ref{testsetup:psnr:umsetzung:tabelle:f_m} erforscht den Einfluss des $f_m$ Faktors. Dazu wurde die PSNR-HVS-M zu drei dekomprimierten Simulationen berechnet, welche eine unterschiedliche Qualität aufweisen. 
-\begin{table}
+\begin{table}[!htbp]
 \center
 \begin{tabular}{r|c|c|c}
 	Qualität &$f_m$ 8 &$f_m$ 16 &$f_m$ 32 \\\hline
@@ -105,6 +106,6 @@ Die Tabelle \ref{testsetup:psnr:umsetzung:tabelle:f_m} erforscht den Einfluss de
 \caption{Einfluss des $f_m$ Faktors auf die PSNR-HVS-M.}
 \label{testsetup:psnr:umsetzung:tabelle:f_m}
 \end{table}
-Für diesen Anwendungsfall scheint der Faktor $f_m$ sich stabil zu verhalten: der Faktor kann verdoppelt oder halbiert werden und die resultierenden Distanzen bleiben in der selben Grössenordnung. Es wurde der Standardwert von $16$ übernommen. Eine Anpassung von $f_m$ scheint nicht die Metrik massgebend zu verändern und hat vermutlich weniger Einfluss als die Gewichtung der DCT Koeffizienten. \\
-[\baselineskip]
+Für diesen Anwendungsfall scheint der Faktor $f_m$ sich stabil zu verhalten: der Faktor kann verdoppelt oder halbiert werden und die resultierenden Distanzen bleiben in der selben Grössenordnung. Es wurde der Standardwert von $16$ übernommen. Eine Anpassung von $f_m$ scheint nicht die Metrik massgebend zu verändern und hat vermutlich weniger Einfluss als die Gewichtung der DCT Koeffizienten.\\
+
 Die PSNR-HVS-M ist nicht unabhängig von der Abtastrate. Es erwartet, dass die zu vergleichenden Datenmengen gleich viele Punkte enthalten. Für diese Arbeit werden die Originaldaten auf die selbe Punktmenge reduziert. Wenn pro Feldlinie exakt ein Punkt abgespeichert wird, würde die PSNR-HVS-M trotzdem eine hohe Ähnlichkeit zwischen Original und dekomprimierten Feldlinien ergeben. Dies ist Vertretbar, da die Standardabweichung eine hohe Distanz ergeben würde. Die PSNR-HVS-M soll hauptsächlich Artefakte aufdecken, welche in der Standardabweichung nicht ins Gewicht fallen wie die Ringing Artefakte vom Abschnitt \ref{resultate:loesung1:ringing}.

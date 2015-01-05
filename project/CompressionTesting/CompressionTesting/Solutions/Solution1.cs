@@ -17,18 +17,18 @@ namespace CompressionTesting.Solutions
     {
         public int GetQualityLevels()
         {
-            return  3;
+            return  1;
         }
 
         public string GetName()
         {
-            return "Solution1_Nine";
+            return "Solution1_Twelve";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return Nine(data, qualityLevel, folder);
+            return Twelve(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -552,14 +552,14 @@ namespace CompressionTesting.Solutions
                 Spherical.ForwardToSpherical(l.points[0]);
                 Spherical.ForwardMoveSpherical(l.points[0]);
             }
-            Discretizer.HandleR(data, 0, 8192 * 0.03);
+            Discretizer.HandleR(data, 0, 8192 * 0.025);
             Discretizer.Divide(data, 1000, 1);
             //Quantize Sun to Sun Lines
             Discretizer.DivideLinear(data, 20, 5, 1, 10, TYPE.SUN_TO_SUN);
             Discretizer.DivideLinear(data, 70, 2, 11, 8, TYPE.SUN_TO_SUN);
-            Discretizer.DivideLinear(data, 90, 5, 19, 7, TYPE.SUN_TO_SUN);
+            Discretizer.DivideLinear(data, 80, 5, 19, 7, TYPE.SUN_TO_SUN);
             Discretizer.DivideLinear(data, 150, 20, 26, 15, TYPE.SUN_TO_SUN);
-            Discretizer.Cut(data, 31, TYPE.SUN_TO_SUN);
+            Discretizer.Cut(data, 36, TYPE.SUN_TO_SUN);
 
             //Quantize Sun to Sun Lines
             Discretizer.DivideLinear(data, 10, 4, 1, 10, TYPE.OUTSIDE_TO_SUN);

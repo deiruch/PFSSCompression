@@ -90,20 +90,19 @@ namespace CompressionTesting
         {
             points = 0;
             double squaredError =0;
-
+          
                 for (int i = 0; i < 3; i++)
                 {
                     //copy channel
                     float[] ex = expected.CopyChannel(i, actual);
                     float[] ac = actual.CopyChannel(i);
+                    ex = DCT.fdct(ex, max);
+                    ac = DCT.fdct(ac, max);
                     float[] diff = new float[ex.Length];
                     for (int j = 0; j < diff.Length; j++)
                     {
                         diff[j] = ex[j] - ac[j];
                     }
-                    diff = DCT.fdct(diff, max);
-                    ex = DCT.fdct(ex, max);
-                    ac = DCT.fdct(ac, max);
                     double mask = Math.Max(CalcMask(ex), CalcMask(ac));
                     mask = Math.Sqrt(mask / maskNorm);
 

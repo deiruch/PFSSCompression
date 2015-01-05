@@ -18,19 +18,25 @@ Das JPEG/JFIF Bildformat ist eines der meist-verwendeten Bildkompressionsverfahr
 Die Quantisierung versucht nun Frequenzen, welche das menschliche Auge schlecht erkennen kann mit weniger Präzise darzustellen. Wenn die Quantisierung gut gewählt wurde, kann der Mensch das dekomprimierte Bild nicht vom Original unterscheiden, verbraucht aber weniger Speicherplatz. JPEG/JFIF bietet vorgefertigte Quantisierungstabellen an. Der Benutzer kann aber eigene Tabellen für spezifizieren. Wie die Quantisierungstabelle optimal gewählt wird, ist ein aktives Forschungsfeld \cite{wu1993rate:jpeg} \cite{wang2001designing:jpeg} und kann von Anwendungsfall zu Anwendungsfall unterschiedlich sein.\\
 Nach der Quantisierung werden die quantisierten Blöcke im Zick-Zack-Muster angeordnet, sodass die Entropie Kodierung eine bessere Kompression durchführen kann. JPEG/JFIF führt eine Run-Length und eine Huffman-Kodierung durch. JPEG bietet auch hier an, eine benutzerspezifizierte Huffman-Tabelle zu verwenden.
 
-wie das benutzt werden kann
+Auf wissenschaftliche Floating-Point Daten
 
-\subsection{PointCloud Kompression}
-Industrie Lasersampling
-Bild pointcloud \cite{merry2006compression:pointcloud}
-Grosse Punktmenge, welche im 3d Raum komprimiert werden soll.
-verlustfrei/ Verlustbehaftet
+\subsection{Point Cloud Kompression}
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/state/pointcloud.png}
+	\caption{Aufbau einer Octree basierten Point Cloud Kompression.}
+	\label{state:pointcloud:abb}
+\end{figure}
+3d Laser Sampling Geräte produzieren grosse Mengen an volumetrischen Punkten von alltäglichen Objekten. Die Kompression von solchen Punktwolken ist ein aktives Forschungsfeld. Eine vorgeschlagene Kompression  von Schnabel und Klein \cite{schnabel2006octree} verwendet Octrees \cite{wiki:octree}. Das Diagramm der Abbildung \ref{state:pointcloud:abb} verdeutlicht den Ablauf.\\
+Die dreidimensionalen Punkten werden in einem Octree mit einer begrenzten Anzahl an Levels abgelegt. Im Quantisierungsschritt werden die Punkte durch die Zellenmittelpunkte des Octrees ersetzt. Die Anzahl an Levels ist gleichzusetzen mit der Genauigkeit in Bits welche für jede Koordinatenachse zur Verfügung stehen. Wenn die Levels auf $8$ begrenzt sind, steht für jede Achse $8$ Bit Genauigkeit zur Verfügung.\\
+In der Entropie Kodierung wird der Octree zuerst mit einem Prediktiven und danach mit einer Arithmetischen Kodierung versehen. In der Prediktiven Kodierung liegt die Komplexität und die Güte der Kompression.\\
+
 Je nach Implementation können zu jedem Punkt zusatzinfos gespeichert werden wie Farbe/Normalen etc, darüber könnte die Information, zu welcher Linie ein Punkt gehört, gespeichert werden.
 
 \subsection{Curve Fitting}
-In der Signal Prozessierung Interpolation oder Rauschunterdrückung werden Signale mit Basisfunktionen. \cite{unser1993b:spline} Schnelle B-Spline Signal interpolation und Approximation möglich. Wird aber in der Signal Processing weniger verwendet. Da kontinuierlich, können Operationen wie Integration und Diffenezierung direkt auf der Spline-Funktion durchgeführt werden. Noise reduktion möglich, aber auch Approximation. Verschiedene Ansätze die Knotenpunkte zu wählen (de boor)
+Curve Fitting ist ein Teilgebiet der Signalverarbeitung. Ein Signal wird aus einer oder mehreren Basisfunktionen ausgedrückt und findet typischerweise Anwendungen in den Bereichen Signalinterpolation, Differenzierung und Rauschunterdrückung. Aber auch eine verlustbehaftete Kompression ist Möglich.
 
-
+ Die B-Spline Transformation \cite{unser1993b:spline} ist in linearer Zeit. Möglichkeit, ein Signal mit B-Splines zu approximieren. Die Problematik liegt in den Details wie Anzahl Funktionen, Verteilung der Spline Knotenpunkten etc.
 
 \subsection{Entropie Kodierung}
 Die Entropie Kodierung findet in allen Bereichen der Informatik Anwendungen. Allgemeien Verfahren RLE, Huffman, Arithmetic
