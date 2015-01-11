@@ -13,6 +13,7 @@ namespace CompressionTesting.Solutions
 {
     class Solution0 : ISolution
     {
+        int counter = 0;
         public int GetQualityLevels()
         {
             return 1;
@@ -35,7 +36,7 @@ namespace CompressionTesting.Solutions
 
         public TestResult Zero(PFSS.PFSSData data, int qualityLevel, string folder)
         {
-            FileInfo fits = new FileInfo(Path.Combine(folder, "standardShort.fits"));
+            FileInfo fits = new FileInfo(Path.Combine(folder, "standardShort"+ counter++ +".fits"));
             FileInfo rarFits = new FileInfo(Path.Combine(folder, "standardShort.rar"));
             TestResult result = new TestResult();
 

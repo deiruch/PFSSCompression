@@ -121,7 +121,7 @@ Interessant ist, dass die die Variante der Ableitung (Abschnitt \ref{resultate:l
 Es wird vermutet, dass es sich um Ringing Artifacts \cite{wiki:ringing:artefacts} handelt. 
 Es sind typische Artefakte einer DCT Kompression. Es können abrupte Steigungen im Inputsignal nicht gut approximiert werden. Die approximation dieser abrupten Steigungen führt zu Oszillationen im Outputsignal. Dieser Effekt wird als Ringing Artefakte bezeichnet und sind typische typische Kompressionsartefakte von DCT-basierten Verfahren wie JPEG/JFIF oder MP3.\\
 Die Feldlinien, welche am stärksten von den Artefakten betroffen sind, sind die ''Weltall zur Sonne'' oder ''Sonne ins Weltall'' Feldlinien. Diese verhalten sich oft monoton, mit teils abrupten Richtungswechsel in der Nähe der Sonnenoberfläche. Die Abbildung \ref{resultate:loesung1:dct:randbehandlung:harte_richtungswechsel} zeigt ein Beispiel solcher Feldlinien. Den abrupten Anstieg gefolgt von einer monotonen Steigung kann die DCT nur durch viele hochfrequente Anteile darstellen. Wenn diese durch die Quantisierung an Genauigkeit verlieren, können oszillierende Artefakte entstehen. 
-\begin{figure}
+\begin{figure}[!htbp]
 \center
 \includegraphics[width=0.4\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/ringing/haar-like.png}
 	\caption{Abrupte Steigungen bei Feldlinien, welche von der Sonne ins Weltall führen.}
@@ -129,9 +129,8 @@ Die Feldlinien, welche am stärksten von den Artefakten betroffen sind, sind die
 \end{figure}
 
 \subsubsection{Behandlung der Ringing Artefakte} \label{resultate:loesung1:behandlung_ringing}
-Um eine optimale Kompression der Feldlinien zu erreichen, müssen die Ringing Artefakte behandelt werden. Im Abschnitt \ref{konzept:loesung1} wurde erwähnt, dass reduktion von Ringing Artefakte ein aktives Forschungsfeld ist. Es existiert keine allgemeingültige Lösung um Ringing Artefakt zu dämpfen oder gar zu vermeiden. Abschnitt \ref{resultate:loesung1:ringing} wurde erwähnt, dass nicht alle Varianten gleich von den Artefakten betroffen sind Es wurde ebenfalls besprochen, dass die Feldlinien, welche von der Sonnenoberfläche zur Oberfläche führen, kaum von den Artefakten betroffen sind. In diesem Abschnitt wird deshalb erforscht, welche Variante die ''Sonne zu Sonne'' und welche die ''Weltall zur Sonne'' oder ''Sonne ins Weltall'' Feldlinien optimal approximieren kann.\\
+Um eine optimale Kompression der Feldlinien zu erreichen, müssen die Ringing Artefakte behandelt werden. Im Abschnitt \ref{konzept:loesung1} wurde erwähnt, dass reduktion von Ringing Artefakte ein aktives Forschungsfeld ist. Es existiert keine allgemeingültige Lösung um Ringing Artefakt zu dämpfen oder gar zu vermeiden. Abschnitt \ref{resultate:loesung1:ringing} wurde erwähnt, dass nicht alle Varianten gleich starke Artefakte verursachen. Es wurde ebenfalls besprochen, dass die Feldlinien, welche von der Sonnenoberfläche zur Oberfläche führen, kaum von den Artefakten betroffen sind. In diesem Abschnitt wird deshalb erforscht, welche Variante die ''Sonne zu Sonne'' und welche die ''Weltall zur Sonne'' oder ''Sonne ins Weltall'' Feldlinien optimal approximieren kann. Für die Messung der Artefakte wird die PSNR-HVS-M Metrik aus Abschnitt \ref{testsetup:psnr} verwendet.\\
 Für den Test werden insgesamt vier Varianten verglichen. Die Varianten \ref{resultate:loesung1:ableitung_dct_kodierung} und und \ref{resultate:loesung1:dct:randbeh+byte} jeweils mit und ohne PCA Transformation. Die Transformation wird hier nochmals geprüft. Die Transformation könnte die Rining Artefakte jeweils auf einen Kanal beschränken.\\
-
 \begin{figure}[!htbp]
 	\center	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/ringing/sts.png}
 	\caption{Approximation der Feldlinien ''Sonnenoberfläche zu Sonnenoberfläche''. Je höher die PSNR-HVS-M, desto besser ist die Approximation. }	\label{resultate:loesung1:dct:behandlung_ringing:sts}
@@ -141,10 +140,28 @@ Für den Test werden insgesamt vier Varianten verglichen. Die Varianten \ref{res
 \includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/ringing/nosts.png}
 	\caption{Approximation der der Feldlinien ''Sonnenoberfläche ins Weltall'' oder ''Weltall zur Sonnenoberfläche''. Je höher die PSNR-HVS-M, desto besser ist die Approximation.}	\label{resultate:loesung1:dct:behandlung_ringing:nosts}
 \end{figure}
-Das Diagramm der Abbildung \ref{resultate:loesung1:dct:behandlung_ringing:sts} zeigt, wie gut die Varianten die Feldlinien approximieren können, welche von der Sonnenoberfläche zur Sonnenoberfläche führen. Es ist anzumerken, dass ein PSNR-HVS-M Wert von $95 dB$ bedeutet, dass die Feldlinien kaum sichtbare Artefakte enthalten. Je höher der PSNR-HVS-M Wert, desto genauer ist die Approximation. Interessant ist, dass drei Varianten ähnlich viel Speicherplatz benötigen, für eine beinahe artefaktfreie Approximation. Bei stärkerer Quantisierung treten beiden abgeleiteten Feldlinien deutlich weniger Artefakte auf. Dies deckt sich mit den Beobachtung aus dem Abschnitt \ref{resultate:loesung1:ringing}.\\
+Das Diagramm der Abbildung \ref{resultate:loesung1:dct:behandlung_ringing:sts} zeigt, wie gut die Varianten die Feldlinien approximieren können, welche von der Sonnenoberfläche zur Sonnenoberfläche führen. Es ist anzumerken, dass ein PSNR-HVS-M Wert von etwa $95 dB$ bedeutet, dass die Feldlinien kaum sichtbare Artefakte enthalten. Je höher der PSNR-HVS-M Wert, desto genauer ist die Approximation. Interessant ist, dass drei Varianten ähnlich viel Speicherplatz benötigen, für eine beinahe artefaktfreie Approximation. Bei stärkerer Quantisierung treten beiden abgeleiteten Feldlinien deutlich weniger Artefakte auf. Dies deckt sich mit den Beobachtung aus dem Abschnitt \ref{resultate:loesung1:ringing}.\\
 Ebenfalls interessant ist die Variante der PCA Transformation zusammen mit der Ableitung: Diese benötigt für eine beinahe artefaktfreie Approximation am wenigsten Speicherplatz, führt aber bei stärkerer Quantisierung viele Artefakte ein.
 
 Das Diagramm der Abbildung  \ref{resultate:loesung1:dct:behandlung_ringing:nosts} zeigt, wie gut die Varianten die die andern Typen von Feldlinien approximieren können. Hier ist zu sehen, dass die abgeleiteten Feldlinien weniger Artefakte hinzufügen, jedoch weniger deutlich als in der Abbildung \ref{resultate:loesung1:dct:behandlung_ringing:sts}. Interessant ist, dass die PCA keinen messbaren Vorteil erbrachte. Die zusätzlichen Parameter, die für die Umkehrung der PCA abgespeichert werden, verbrauchen mehr Speicherplatz als man durch die Transformation gewinnt.\\
-Die DCT Variante aus Abschnitt \ref{resultate:loesung1:dct:randbeh+byte} fällt ab einer PSNR-HVS-M von $90 dB$ weniger schnell ab, als die abgeleiteten Feldlinien. Bei diesem PSNR-HVS-M Wert sind aber die Artefakte bereits zu deutlich und nicht mehr akzeptabel.\\
+Die DCT Variante aus Abschnitt \ref{resultate:loesung1:dct:randbeh+byte} fällt ab einer PSNR-HVS-M von $90 dB$ weniger schnell ab, als die abgeleiteten Feldlinien. Bei diesem PSNR-HVS-M Wert sind aber die Artefakte bereits zu deutlich und nicht mehr akzeptabel. Aufgrund dieser Daten wurde die Variante unter Abschnitt \ref{resultate:loesung1:ableitung_dct_kodierung} ausgewählt. 
 
-Aufgrund dieser Daten wurde die Variante \ref{resultate:loesung1:ableitung_dct_kodierung} ausgewählt. 
+\subsubsection{Abschliessende Variante}
+Für den abschliessenden Test wurde die Variante unter Abschnitt \ref{resultate:loesung1:ableitung_dct_kodierung} ausgewählt. Diese verursacht weniger starke Ringing Artefakte als die anderen Varianten.
+spezielle Quantisierung.
+\begin{figure}[!htbp]
+	\center	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-12/resultate.png}
+	\caption{Standardabweichung der abschliessenden DCT Variante.}	\label{resultate:loesung1:dct:abschliessend:standardabweichung}
+\end{figure} 
+Das Diagramm der Abbildung \ref{resultate:loesung1:dct:abschliessend:standardabweichung} zeigt die Standardabweichung der abschliessenden DCT Variante. Zu einer besseren Kompression kann sie deutlich genauer Punkte ablegen und erreicht eine Kompressionsrate von $13.9$. Die Artefakte sind mit einer PSNR-HVS-M von $94.1$ ebenfalls in Grenzen gehalten. Jedoch sind wegen dem Zoom-Feature des JHelioviewers immer noch Oszillationen zu erkennen. Das Linke Bild der Abbildung \ref{resultate:loesung1:dct:final:artefakte} zeigt die Artefakte der Dekompression. Die Artefakte sind aus der Simulation, welche diese Variante am schlechtesten approximieren konnte. Es ist ebenfalls anzumerken, dass die Artefakte bei weniger hohen Zoomstufen nicht mehr zu erkennen sind.\\
+\begin{figure}[!htbp]
+	\center
+	\frame{
+	\includegraphics[width=0.8\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-12/without_average_line.png}}
+		\frame{
+	\includegraphics[width=0.8\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-12/with_average_line.png}}
+	\caption{Artefakte der abschliessenden Variante. Links ohne Glättung, rechts mit Glättung}
+	\label{resultate:loesung1:dct:final:artefakte}
+\end{figure}
+Die Verbesserung in der Genauigkeit wurde erreicht, indem die Feldlinientypen unterschiedlich quantisiert wurden. Die ''Sonne zu Sonne'' können mit wenigeren Koeffizienten approximiert werden als die anderen Typen. Würde die Simulation nur aus diesen Feldlinien bestehen, könnte eine Kompressionsrate von $18-20$ erreicht werden zu einer ähnlichen Genauigkeit. Die Schwierigkeit liegt darin die anderen Feldlinien mit möglichst wenigen Artefakten zu approximieren. Eine Kompression mit der Diskreten Kosinus Transformation wird ab einer gewissen Zoom-Stufe immer Artefakte mit sich bringen, welche das menschliche Auge erkennen kann.\\
+Der JHelioviewer kann die Artefakte verschleiern mit einer Kurvenglättung: Die komprimierten Daten enthalten mehr Punkte, als der JHelioviewer darstellen könnte. Die zusätzlichen Punkte können für die Glättung der Feldlinie verwendet werden. Den Effekt der Glättung ist in der Abbildung \ref{resultate:loesung1:dct:final:artefakte} verdeutlicht. Dadurch können die Artefakte auch bei höheren Zoomstufen verschleiert werden. Jedoch bedeutet das auch, dass die Feldlinie weiter verfälscht wird. 

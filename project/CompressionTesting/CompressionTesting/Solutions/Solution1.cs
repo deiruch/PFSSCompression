@@ -15,6 +15,7 @@ namespace CompressionTesting.Solutions
 {
     class Solution1 : ISolution
     {
+        int counter = 0;
         public int GetQualityLevels()
         {
             return  1;
@@ -556,19 +557,19 @@ namespace CompressionTesting.Solutions
             Discretizer.Divide(data, 1000, 1);
             //Quantize Sun to Sun Lines
             Discretizer.DivideLinear(data, 20, 5, 1, 10, TYPE.SUN_TO_SUN);
-            Discretizer.DivideLinear(data, 70, 2, 11, 8, TYPE.SUN_TO_SUN);
-            Discretizer.DivideLinear(data, 80, 5, 19, 7, TYPE.SUN_TO_SUN);
+            Discretizer.DivideLinear(data, 75, 2, 11, 8, TYPE.SUN_TO_SUN);
+            Discretizer.DivideLinear(data, 85, 5, 19, 7, TYPE.SUN_TO_SUN);
             Discretizer.DivideLinear(data, 150, 20, 26, 15, TYPE.SUN_TO_SUN);
             Discretizer.Cut(data, 36, TYPE.SUN_TO_SUN);
 
             //Quantize Sun to Sun Lines
             Discretizer.DivideLinear(data, 10, 4, 1, 10, TYPE.OUTSIDE_TO_SUN);
             Discretizer.DivideLinear(data, 60, 0, 11, 8, TYPE.OUTSIDE_TO_SUN);
-            Discretizer.DivideLinear(data, 60, 5, 19, 52, TYPE.OUTSIDE_TO_SUN);
+            Discretizer.DivideLinear(data, 65, 4, 19, 52, TYPE.OUTSIDE_TO_SUN);
             Discretizer.Cut(data, 51, TYPE.OUTSIDE_TO_SUN);
             Discretizer.DivideLinear(data, 10, 4, 1, 10, TYPE.SUN_TO_OUTSIDE);
             Discretizer.DivideLinear(data, 60, 0, 11, 8, TYPE.SUN_TO_OUTSIDE);
-            Discretizer.DivideLinear(data, 60, 6, 19, 52, TYPE.SUN_TO_OUTSIDE);
+            Discretizer.DivideLinear(data, 65, 4, 19, 52, TYPE.SUN_TO_OUTSIDE);
             Discretizer.Cut(data, 51, TYPE.SUN_TO_OUTSIDE);
             Discretizer.ToShorts(data, 1);
 
@@ -579,16 +580,16 @@ namespace CompressionTesting.Solutions
 
             //dequantize Sun to sun
             Discretizer.MultiplyLinear(data, 20, 5, 1, 10, TYPE.SUN_TO_SUN);
-            Discretizer.MultiplyLinear(data, 70, 2, 11, 8, TYPE.SUN_TO_SUN);
-            Discretizer.MultiplyLinear(data, 90, 5, 19, 7, TYPE.SUN_TO_SUN);
+            Discretizer.MultiplyLinear(data, 75, 2, 11, 8, TYPE.SUN_TO_SUN);
+            Discretizer.MultiplyLinear(data, 85, 5, 19, 7, TYPE.SUN_TO_SUN);
             Discretizer.MultiplyLinear(data, 150, 20, 26, 15, TYPE.SUN_TO_SUN);
 
             Discretizer.MultiplyLinear(data, 10, 4, 1, 10, TYPE.OUTSIDE_TO_SUN);
             Discretizer.MultiplyLinear(data, 60, 0, 11, 8, TYPE.OUTSIDE_TO_SUN);
-            Discretizer.MultiplyLinear(data, 65, 6, 19, 52, TYPE.OUTSIDE_TO_SUN);
+            Discretizer.MultiplyLinear(data, 65, 4, 19, 52, TYPE.OUTSIDE_TO_SUN);
             Discretizer.MultiplyLinear(data, 10, 4, 1, 10, TYPE.SUN_TO_OUTSIDE);
             Discretizer.MultiplyLinear(data, 60, 0, 11, 8, TYPE.SUN_TO_OUTSIDE);
-            Discretizer.MultiplyLinear(data, 65, 6, 19, 52, TYPE.SUN_TO_OUTSIDE);
+            Discretizer.MultiplyLinear(data, 65, 4, 19, 52, TYPE.SUN_TO_OUTSIDE);
 
             Discretizer.Multiply(data, 1000, 1);
             //Discretizer.MultiplyPoint(data, 50000, 0);

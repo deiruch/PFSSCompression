@@ -9,7 +9,17 @@ bereits eine simple Kompression implementiert.
 	\caption{Aufbau der Ist-Kompression.}
 	\label{konzept:ist:aufbau:diagramm}
 \end{figure} 
-Die Ist-Kompression führt zuerst ein Subsampling durch. Drei Viertel aller Punkte werden in diesem Schritt verworfen. Im nächsten Schritt werden die übrigen Punkte  auf 16-Bit Integer diskretisiert. Das reduziert die Anzahl Bytes und verbessert die Kompression im Schritt Entropie Kodierung. Die Implementationen der Entropie Kodierer scheinen Integer-Werte einfacher komprimieren zu können. In der Entropie Kodierung werden die Daten geordnet. Alle X-Kanäle der Feldlinien werden hintereinander abgelegt, gefolgt von allen Y-Kanälen etc. Diese Anordnung verbessert die Kompressionsrate der Entropie Kodierung. Je näher ähnliche Muster beieinander liegen, desto besser können sie Komprimiert werden. Für die eigentliche Entropie-Kodierung wird Gzip verwendet. Gzip basiert auf dem Deflate Algorithmus, welcher aus einer Kombination von LZ77 und Huffman Kodierung besteht \cite{wiki:gzip}.\\
+Die Ist-Kompression führt zuerst ein Subsampling durch. Drei Viertel aller Punkte werden in diesem Schritt verworfen. Im nächsten Schritt werden die übrigen Punkte  auf 16-Bit Integer diskretisiert. Das reduziert die Anzahl Bytes und verbessert die Kompression im Schritt Entropie Kodierung. Die Implementationen der Entropie Kodierer scheinen Integer-Werte einfacher komprimieren zu können. In der Entropie Kodierung werden die Daten geordnet wie in Tabelle \ref{konzept:ist:entropie} dargestellt.
+\begin{table}[!htbp]
+	\center
+	\begin{tabular}{|c|c|c|c|}
+	\hline
+	Anzahl Punkte der Feldlinien & X Kanal aller Punkte & Y Kanal aller Punkte & Z Kanal aller Punkte \\\hline
+	\end{tabular}
+	\caption{Anordnung der Simulationsdaten der Ist-Kompression}
+	\label{konzept:ist:entropie}
+\end{table}
+Alle X-Kanäle der Feldlinien werden hintereinander abgelegt, gefolgt von allen Y-Kanälen etc. Zuvor werden aber noch alle Längen der Feldlinien abgespeichert, sodass jeder Punkt einer Linie zugeordnet werden kann. Diese Anordnung verbessert die Kompressionsrate der Entropie Kodierung. Je näher ähnliche Muster beieinander liegen, desto besser können sie Komprimiert werden. Für die eigentliche Entropie-Kodierung wird Gzip verwendet. Gzip basiert auf dem Deflate Algorithmus, welcher aus einer Kombination von LZ77 und Huffman Kodierung besteht \cite{wiki:gzip}.\\
 Da die Punktmenge für Low-End Grafikkarten zu gross ist, führt der JHelioviewer ein weiteres Subsampling durch, welches im Abschnitt \ref{konzept:loesung0:subsampling} beschrieben ist.
 
 \subsection{Lösungsansatz: Adaptives Subsampling} \label{konzept:loesung0}
@@ -26,16 +36,17 @@ Ziel des adaptiven Subsamplings ist es, die Daten durch eine Folge von Strecken 
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution0/anglesubsampling.png}
-	\caption{Darstellung des Adaptiven Subsapmlings im 2D Raum.}
+	\caption{Darstellung des Adaptiven Subsapmlings im 2D Raum. Rot sind die Punkte, welche geprüft und gelöscht wurden. Grün ist der Punkt dargestellt, welcher geprüft wird.}
 	\label{konzept:loesung0:angle}
 \end{figure}
 Das Diagramm der Abbildung \ref{konzept:loesung0:angle} stellt das Subsampling im zweidimensionalen Raum dar. Zu sehen sind die Punkte der Feldlinie. Das Adaptive Subsampling wählt nun Punkte $P$ aus der Feldlinie aus, welche Start- und Endpunkte der Strecken darstellen.\\
-$P_1$ wurde bereits ausgewählt. Es wird nun ein Punkt $P_x$ gesucht, der als Endpunkt einer Strecke von $P_1$ zu $P_x$ die Feldlinie approximiert. Dazu wird der Winkel der Strecke $P_1$ zu $P_x$ mit der Strecke $P_x$ zu $P_x+1$ verglichen. Wenn der Winkel kleiner ist, als ein Faktor $F$, wird der nächste Punkt $P_x+1$ überprüft. Wenn der Winkel grösser ist, wird $P_x$ ausgewählt und von $P_x$ aus weiter geprüft.
+$P_1$ wurde bereits ausgewählt. Es wird nun ein Punkt $P_x$ gesucht, der als Endpunkt einer Strecke von $P_1$ zu $P_x$ die Feldlinie approximiert. Dazu wird der Winkel der Strecke $P_1$ zu $P_x$ mit der Strecke $P_x$ zu $P_x+1$ verglichen. Wenn der Winkel kleiner ist, als ein Winkel $\alpha$, wird der nächste Punkt $P_x+1$ überprüft. Wenn der Winkel grösser ist, wird $P_x$ ausgewählt. Danach wird der wird eine nächste Strecke startend von $P_x$ gesucht.
 
 \subsubsection{Entropie Kodierung mittels RAR} \label{konzept:loesung0:kodierung}
 Die Anordnung der Daten wurde aus der Ist-Kompression übernommen, jedoch wird Rar anstatt GZip verwendet. GZip konnte bei den Ist-Komprimierten Daten eine Kompressionsrate von $1.2$ erreichen, während Rar bei selben Daten eine Rate von $3.7$ erreicht.
+\pagebreak
 
-\subsection{Lösungsantz, Diskrete Kosinus Transformation}\label{konzept:loesung1}
+\subsection{Lösungsantz: Diskrete Kosinus Transformation}\label{konzept:loesung1}
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution1/aufbau.png}
@@ -60,7 +71,7 @@ Für das menschliche Auge sind die Artefakte, die in der abgeleiteten Feldlinie 
 Die Diskrete Kosinus Transformation stellt eine endliche Menge von $N$ Datenpunkten als $N$ Kosinusfunktionen zu verschiedenen Frequenzen dar. Die Werte DCT-Koeffizienten stellt dar, wie hoch der Anteil einer bestimmten Frequenz ist im Originalsignal. Im optimalen Fall kann ein Signal durch niederfrequente Funktionen approximiert werden. Die hochfrequenten Anteile stellen Details dar, welche meist nicht relevant sind.\\
 Es gibt verschiedene Möglichkeiten die Punkte zu transformieren. Hier wurde sich am JPEG/JFIF Standard orientiert, welche die DCT-II \eqref{konzept:loesung1:kosinus:formula:fdct} als Forwärts und die DCT-III \eqref{konzept:loesung1:kosinus:formula:idct} als Rückwärtstransformation verwendet \cite{wallace1992jpeg}. 
 \begin{equation} \label{konzept:loesung1:kosinus:formula:fdct}
-	X_k = \sum_{n=0}^{N-1}x_n*cos[\frac{\pi}{N}(n+\frac{1}{2}k)] \quad k = 0, 1, \ldots, N-1
+	X_k = \sum_{n=0}^{N-1}x_n*cos[\frac{\pi}{N}k(n+\frac{1}{2})] \quad k = 0, 1, \ldots, N-1
 \end{equation}
 \begin{equation} \label{konzept:loesung1:kosinus:formula:idct}
 x_n  = \frac{1}{2}X_0 + \sum_{k=1}^{N-1}X_k*cos[\frac{\pi}{N}k(n+\frac{1}{2})] \quad n = 0,1,\ldots,N-1
@@ -71,8 +82,7 @@ Die DCT transformiert ein periodisches, unendliches Signal. Um ein endliches Sig
 Wie die ränder aussehen, wirkt sich auf die Dekompression aus und kann je nach dem ungewünschte Artefakte mit sich bringen. Im Diagramm der Abbildung\ref{resultate:loesung1:dct:artefakte} im Abschnitt \ref{resultate:dct} ist ein Beispiel zu sehen für mögliche Artefakte bei ungeeigneten Rändern. 
 
 \subsubsection{Quantisierung}
-Feldlinien unterscheiden sich stark vom Typ. Für unterschiedliche Typen wurden unterschieldiche Qauntisierungsfaktoren entwickelt.
-Für unterschiedliche Daten wurden unterschiedliche Quantisierungen 
+In der Visualisierung werden die Feldlinien in drei Typen unterschieden: ''Sonne zu Sonne'', ''Sonne ins Weltall'' und ''Weltall zur Sonne''.  Die ''Sonne zu Sonne'' Feldlinien können besser durch Kosinusfunktionen approximiert werden und sind weniger Anfällig auf die Ringing Artefakte. Es wird deshalb für diesen Typ von Feldlinien eine andere Quantisierung durchgeführt.
 
 \subsubsection{Entropie Kodierung}\label{konzept:loesung1:kodierung}
 Daten werden geordent, genaue Spezifikation ist im Anhang zu finden.

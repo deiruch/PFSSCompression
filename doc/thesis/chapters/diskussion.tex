@@ -1,1 +1,25 @@
 \section{Diskussion}
+
+\subsection{Diskussion Lösungsansatz Adaptives Subsampling}
+Der Lösungsansatz des adaptiven Subsamplings ist ein simples aber effektives Verfahren. Besonders die Dekompression hält sich simpel, was sich auch auf die Laufzeit auswirkt. Bei einem I7 Prozessor braucht die Dekompression durchschnittlich $19$ Millisekunden. Ein Thread kann dadurch etwa 50 Simulationen pro Sekunde dekomprimieren.\\
+Der Nachteil dieses Ansatzes liegt daran, dass nur wenige Punkte übertragen werden. Wenn der Benutzer hohe Zoomstufen einstellt, muss der Client selbst eine Interpolation durchführen.
+welche bitrate braucht es für ein movie. Den Nachteil kann man mit zb. durch clientseitige Interpolation lösen, was aber die Komplexität wieder erhöht. Bei einer durchschnittlichen Grösse von $90$ Kibytes braucht es eine Leitung von etwa 14 Megabit für 20 Simulatioen pro Sekunden.
+
+Beste Lösung wenn der Client wenige Arbeitsspeicher und Rechenresourcen aufweist.
+
+\subsection{Diskussion Lösungsansatz DCT}
+Die DCT Kompression kann im Vergleich mit dem adaptiven Subsampling eine höhere Kompressionsrate erreichen, obwohl eine höhere Anzahl an Punkte übertragen werden. Die Laufzeit der Dekompression hängt im Wesentlichen von der Implementation der inversen DCT ab. Eine naive Implementation braucht für eine Dekompression etwa drei Sekunden. Die grösste Zeit wird in der Berechnung der Kosinusfunktion verbraucht. Bei der Implementation in dieser Arbeit werden die Funktionen über SoftReferences gecached. Der Cache passt sich somit an den Arbeitsspeicher an. Wie schnell die Dekompression ist, hängt im Wesentlichen vom freien Arbeitsspeicher ab. Im besten Fall ergibt das eine Laufzeit von $65$ Millisekunden und im schlechtesten Fall $350$. Das führt zu einem Durchsatz zwischen 3 und 15 Simulationen, pro Sekunde pro Thread.\\
+Momentaner zustand $12$ MegaBit
+
+Die DCT Kompression kann Ringing Artefakte (siehe Abschnitt  \ref{resultate:loesung1:ringing}) einführen, welche vom menschlichen Auge als störend empfunden werden. Je stärker die Feldlinien komprimiert werden, desto deutlicher werden die Artefakte. 
+
+JHelioviewer bietet an, in die Feldlinien hineinzu zoomen. Der Benutzer kann auch kleine Artefakte zu Gesicht bekommen, während gewisse Artefakte bei kleinen zoomeinstellungen verschwinden würden. Die Frage ist also, zu welcher Zoomstufe man eine artefaktfreie Ansicht erhalten möchte. Die jetztige Implementation ist noch konservativ und enthält nur kleine Artefakte, welche erst bei grösseren Zoomstufen sichtbar werden.\\
+Da mehr Punkte übertragen werden als der JHelioviewer überhaupt darstellen kann, wird für die Visualisierung eine Glättung vorgenommen. Die momentane Implementation enthält nur kleine Artefakte, welche erst bei höherem Zoom sichtbar werden. Zusammen mit der Glättung werden die Ringing Artefakte fast komplett verschleiert. Wäre man aber bereit mehr zu opfern, so könnte eine deutlich bessere Kompression erreicht werden.
+
+Verbessertes Postprocessing, welches die Ringing Artefakte vermindert.
+
+Welche Bitrate braucht es für movie. Prozessorleistung/Memoryverbrauch. Zoomstufen
+3 sekunden
+$65-350$ ms
+
+Allgemein Zielerreichung

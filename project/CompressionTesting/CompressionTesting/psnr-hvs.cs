@@ -64,7 +64,7 @@ namespace CompressionTesting
                 if (psnr < oldPSNR)
                     index = i;
             }
-            System.Console.WriteLine(index);
+
             return psnr;
         }
 
