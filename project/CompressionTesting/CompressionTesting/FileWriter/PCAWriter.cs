@@ -65,7 +65,7 @@ namespace CompressionTesting.FileWriter
                 }
 
 
-                for (int i = 1; i < l.points.Count; i++)
+                for (int i = offset; i < l.points.Count; i++)
                 {
                     PFSSPoint p = l.points[i];
                     ptr[index] = (short)p.x;
@@ -252,7 +252,7 @@ namespace CompressionTesting.FileWriter
                 }
 
 
-                for (int i = 1; i < l.points.Count; i++)
+                for (int i = offset; i < l.points.Count; i++)
                 {
                     PFSSPoint p = l.points[i];
                     ptr[index] = (short)p.x;

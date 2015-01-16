@@ -13,13 +13,13 @@ namespace CompressionTesting.FileWriter
 {
     class InterleavedWriter
     {
-        public static void WriteFits(PFSSData input, FileInfo output)
+        public static void WriteFits(PFSSData input, FileInfo output,int offset = 1)
         {
             short[] ptr;
             short[] ptph;
             short[] ptth;
             short[] ptr_nz_len = new short[input.lines.Count];
-            float[] startPoints = new float[input.lines.Count * 3];
+            float[] startPoints = new float[input.lines.Count * offset*3];
 
             int totalCount = 0;
             for (int i = 0; i < ptr_nz_len.Length; i++)
@@ -37,11 +37,14 @@ namespace CompressionTesting.FileWriter
             int startPointIndex = 0;
             foreach (PFSSLine l in input.lines)
             {
-                startPoints[startPointIndex++] = l.points[0].x;
-                startPoints[startPointIndex++] = l.points[0].y;
-                startPoints[startPointIndex++] = l.points[0].z;
-
-                for (int i = 1; i < l.points.Count;i++ )
+                for (int i = 0; i < offset; i++)
+                {
+                    startPoints[startPointIndex++] = l.points[i].x;
+                    startPoints[startPointIndex++] = l.points[i].y;
+                    startPoints[startPointIndex++] = l.points[i].z;
+                }
+                    
+                for (int i = offset; i < l.points.Count;i++ )
                 {
                     PFSSPoint p = l.points[i];
                     ptr[index] = (short)p.x;

@@ -53,11 +53,22 @@ namespace CompressionTesting
 
                 Point startPoint = new Point(start);
                 Point endPoint = new Point(end);
+                Point nextPoint = startPoint;
+                Point lastPoint = endPoint;
+                if (i > 0)
+                    lastPoint = new Point(actual.points[i - 1]);
+                if (i < actual.points.Count - 2)
+                    nextPoint = new Point(actual.points[i + 2]);
+             
                 for (int j = start.testPointIndex; j < end.testPointIndex; j++)
                 {
                     double oldquad = quadSum;
                     Point expectedPoint = new Point(expected.points[j]);
                     double err = calcError(startPoint, endPoint, expectedPoint);
+                    double err2 = calcError(endPoint, nextPoint, expectedPoint);
+                    double err3 = calcError(lastPoint, startPoint, expectedPoint);
+                    err = Math.Min(err, err3);
+                    err = Math.Min(err, err2);
                     max = Math.Max(err, max);
                     quadSum += err * err;
                 }

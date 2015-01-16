@@ -112,7 +112,7 @@ namespace CompressionTesting
                     data[j] = testData[j].GetData();
                     result[j] = solution.DoTestRun(data[j], i, fitsOutputFolder);
                 }
-                double psnr = psnr_hvs.Calculate(testData, data);
+                double psnr = 0;// psnr_hvs.Calculate(testData, data);
                 Tuple<double, double> overall = ErrorCalculator.CalculateOverallError(testData, data);
                 long lineCount = 0;
                 long fileSize = 0;

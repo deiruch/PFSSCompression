@@ -18,18 +18,18 @@ namespace CompressionTesting.Solutions
         int counter = 0;
         public int GetQualityLevels()
         {
-            return  1;
+            return  9;
         }
 
         public string GetName()
         {
-            return "Solution1_Twelve";
+            return "Solution1_One";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return Twelve(data, qualityLevel, folder);
+            return One(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -83,10 +83,8 @@ namespace CompressionTesting.Solutions
         #region intermediate solutions
         public TestResult Zero(PFSS.PFSSData data, int qualityLevel, string folder)
         {
-            Random r = new Random();
-            int rand = r.Next();
-            FileInfo fits = new FileInfo(Path.Combine(folder, this.GetName() + rand + ".fits"));
-            FileInfo rarFits = new FileInfo(Path.Combine(folder, this.GetName() + rand + ".rar"));
+            FileInfo fits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".fits"));
+            FileInfo rarFits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".rar"));
             TestResult result = new TestResult();
 
             Subsampling.Subsample(data, 4);
@@ -96,7 +94,7 @@ namespace CompressionTesting.Solutions
             //int zeroCount = GetZeroCount(data, qualityLevel + 16);
             //DCTQuantization.SetToZero(data, zeroCount);
             Discretizer.Divide(data, 1000, 0);
-            Discretizer.DivideLinear(data, 2 * (qualityLevel +90), 0);
+            Discretizer.DivideLinear(data, 2 * (qualityLevel*10 +40), 0);
             Discretizer.ToInt(data, 0);
 
             StandardWriter.WriteIntFits(data, fits);
@@ -104,7 +102,7 @@ namespace CompressionTesting.Solutions
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 90),0);
+            Discretizer.MultiplyLinear(data, 2 * (qualityLevel * 10 + 40), 0);
             Discretizer.Multiply(data, 1000, 0);
             DCTransformer.Backward(data, 0);
             //Residualizer.UndoResiduals(data, 1);
@@ -127,7 +125,7 @@ namespace CompressionTesting.Solutions
             DebugOutput.MedianWriter.AnalyzeDCT(data, 0, new FileInfo(Path.Combine(folder, this.GetName() + ".csv")));
             Discretizer.DividePoint(data, 50000, 0);
             Discretizer.Divide(data, 1000, 1);
-            Discretizer.DivideLinear(data, 2*(qualityLevel+11), 1);
+            Discretizer.DivideLinear(data, 2*(qualityLevel+5), 1);
             Discretizer.ToShorts(data, 1);
 
 
@@ -136,7 +134,7 @@ namespace CompressionTesting.Solutions
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 11), 1);
+            Discretizer.MultiplyLinear(data, 2 * (qualityLevel + 5), 1);
             Discretizer.Multiply(data, 1000, 1);
             Discretizer.MultiplyPoint(data, 50000, 0);
             DCTransformer.Backward(data, 1);
@@ -487,10 +485,11 @@ namespace CompressionTesting.Solutions
             PCATransform.Forward(data, 0);
             LinearPredictor.Forward(data);
             //DCTransformer.Forward(data, 2);
-            DebugOutput.MedianWriter.AnalyzePerCurveType(data,TYPE.OUTSIDE_TO_SUN,0,new FileInfo(Path.Combine(folder, this.GetName()+"_ots.csv")));
+            /*DebugOutput.MedianWriter.AnalyzePerCurveType(data,TYPE.OUTSIDE_TO_SUN,0,new FileInfo(Path.Combine(folder, this.GetName()+"_ots.csv")));
             DebugOutput.MedianWriter.AnalyzePerCurveType(data, TYPE.SUN_TO_OUTSIDE, 0, new FileInfo(Path.Combine(folder, this.GetName() + "_sto.csv")));
             DebugOutput.MedianWriter.AnalyzePerCurveType(data, TYPE.SUN_TO_SUN, 0, new FileInfo(Path.Combine(folder, this.GetName() + "_sts.csv")));
-            DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.OUTSIDE_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_ots_curve.csv")));
+            DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.OUTSIDE_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_ots_curve.csv")));*/
+            
 
             //DCTransformer.Backward(data, 2);
             LinearPredictor.Backward(data);

@@ -90,15 +90,12 @@ namespace CompressionTesting.DebugOutput
                     for (int i = offset; i < l.points.Count; i++)
                     {
                         int j = i - offset;
-                        rMean[j] += Math.Abs(l.points[i].x);
-                        pMean[j] += Math.Abs(l.points[i].y);
-                        tMean[j] += Math.Abs(l.points[i].z);
+                        rMean[j] += l.points[i].x;
+                        pMean[j] += l.points[i].y;
+                        tMean[j] += l.points[i].z;
                         rCount[j]++;
                         pCount[j]++;
                         tCount[j]++;
-                        rMinus[j] += Math.Sign(l.points[i].x);
-                        pMinus[j] += Math.Sign(l.points[i].y);
-                        tMinus[j] += Math.Sign(l.points[i].z);
                     }
                     break;
                 }

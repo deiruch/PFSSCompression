@@ -1,5 +1,5 @@
 \section{Verlustbehaftete Kompression von volumetrischen Punkten}\label{einleitung}
-Moderne Simulationen sind in der Lage grosse Mengen an Daten zu produzieren. Die rohe Datenmenge ist oft zu gross um sie zu archivieren oder in vernünftiger Zeit über eine Internetverbindung zu übertragen. In wissenschaftlichen Anwendungen können natürliche Phänomene wie Schwingungen, Flugbahnen, Kraftfelder etc. als Linien im dreidimensionalen Raum abgebildet werden. Eine wissenschaftliche Simulation erstellt eine Menge an volumetrischen Punkten, welche die Linien im Raum darstellen. Ziel dieser Arbeit ist es eine verlustbehaftete Kompression von wissenschaftlichen Daten zu entwickeln, welche die Übertragung über eine Internetverbindung ermöglicht.\\
+Moderne Simulationen sind in der Lage grosse Mengen an Daten zu produzieren. Die rohe Datenmenge ist oft zu gross um sie zu archivieren oder in vernünftiger Zeit über eine Internetverbindung zu übertragen. In wissenschaftlichen Simulationen werden natürliche Phänomene wie Schwingungen, Flugbahnen, Kraftfelder etc. als Menge von Kurven im dreidimensionalen Raum abgebildet. Die Kurven sind dargestellt als Folge von Punkten. Ziel dieser Arbeit ist es eine verlustbehaftete Kompression für die Punktfolgen zu entwickeln, welche die Übertragung über eine Internetverbindung ermöglicht.\\
 [\baselineskip]
 Im Rahmen dieses Projekts sollen Daten von Magnetfeldlinien der Sonne komprimiert werden, welche über eine Internetverbindung zum JHelioviewer übertragen werden. Der JHelioviewer ist eine Applikation zur visualisierung von Satellitenmessdaten und Simulationen der Sonne. Die Applikation wird von der ESA und der FHNW entwickelt. Die Abbildung \ref{einleitung::feldlinien} zeigt eine Visualisierung des JHelioviewers von der Sonnenoberfläche und Feldlinien.\\
 \begin{figure}[!htbp]
@@ -18,8 +18,9 @@ Im laufe des Projekts wurden zwei Kompressionen entwickel. Die Kompressionsraten
 	\center
 	\begin{tabular}{r|l}
 		Lösungsansatz & Kompressionsraten \\\hline
+		Ist-Zustand & 1\\
 		Adaptives Subsampling & 11.6 \\
-		Diskrete Kosinus Transformation & x \\
+		Diskrete Kosinus Transformation & 14.1 \\
 	\end{tabular}
 	\caption{Tabelle der Lösungsansätzen und dessen Kompressionsraten.}
 	\label{einleitung:tabelle}

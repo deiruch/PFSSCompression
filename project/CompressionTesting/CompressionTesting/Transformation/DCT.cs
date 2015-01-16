@@ -14,7 +14,7 @@ namespace CompressionTesting
         private static readonly float[] coefficients = {1,1,2,2,8,16,24,32,20,30,40,50,60,80,100,120};
         private static float[,] dctFactors = null;
         private static int length = 0;
-        
+
         public static void DiscreteCosineTransform(int len) 
         {
     	    dctFactors = new float[len,len];
@@ -78,7 +78,6 @@ namespace CompressionTesting
             {
                 for (int i = 1; i < adaptiveSize; i++)
                 {
-                    float bla = (float)(value[i] * Math.Cos(getDctFactor(i, k) / length2));
                     output[k] += (float)(value[i] * Math.Cos(getDctFactor(i, k) / length2));
                 }
 

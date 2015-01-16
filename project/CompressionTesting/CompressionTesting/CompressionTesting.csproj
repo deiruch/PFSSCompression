@@ -69,6 +69,7 @@
     <Compile Include="Quantization\PCACoefficient.cs" />
     <Compile Include="Quantization\Subsampling.cs" />
     <Compile Include="Quantization\Discretizer.cs" />
+    <Compile Include="Solutions\Solution2.cs" />
     <Compile Include="Transformation\DCTErrorRemover.cs" />
     <Compile Include="Transformation\DCTImprover.cs" />
     <Compile Include="Transformation\LinearPredictor.cs" />

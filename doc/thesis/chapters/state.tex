@@ -1,9 +1,9 @@
 \section{State of the Art}
-Grob betrachtet beinhalten verlustbehaftete Kompressionen drei Teilschritte: Transformation, Quantisierung und Entropie Kodierung. Die Abbildung \ref{state:aufbau} zeigt eine vereinfachte Abfolge. Die Inputdaten werden zuerst duch ein oder mehrere Verfahren transformiert. So transformieren, dass in der Quantisierung unwichtige Informationen entfernt werden können. Oft gehen nur im Quantisierungsschritt Daten verlohren, während alle anderen Schritte verlustfrei umkehrbar sind. Danach werden die Daten Entropie Kodiert. Für jeden Teilschritt gibt es unterschiedliche Verfahren. So können auch mehrere Transformationen hintereinander durchgeführt werden, oder eine ganze Folge von Transformations- und Quantisierungsverfahren.\\
+Grob betrachtet können die Teilschritte einer verlustbehaftete Kompressionen in drei Verarbeitungsarten eingeteilt werden: Transformationen, Quantisierungen und Entropie Kodierungen. Die Abbildung \ref{state:aufbau} zeigt eine vereinfachte Abfolge. Die Inputdaten werden durch ein oder mehrere Verfahren transformiert. Die Transformationen haben das Ziel, dass die folgende Quantisierung unwichtige Informationen löschen kann. Die Transformationen sind meistens verlustfrei umkehrbar, sodass nur in den Quantisierungsschritten Informationen gelöscht werden. Die reduzierte Information wird Entropie Kodiert. Die Entropie Kodierung ist typischerweise für die Datenreduktion verantwortlich.\\
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/state/aufbau.png}
-	\caption{Typische Teilschritte einer Kompression}
+	\caption{Vereinfachter Ablauf einer verlustbehafteten Kompression}
 	\label{state:aufbau}
 \end{figure}
 
@@ -14,9 +14,9 @@ Grob betrachtet beinhalten verlustbehaftete Kompressionen drei Teilschritte: Tra
 	\caption{Aufbau der JPEG Kompression \cite{wallace1992jpeg}}
 	\label{state:jpeg:abb}
 \end{figure}
-Das JPEG/JFIF Bildformat ist eines der meist-verwendeten Bildkompressionsverfahren für natürliche Bilder. Das Diagramm der Abbildung \ref{state:jpeg:abb} zeigt den Aufbau der Kompressionspipeline. JPEG/JFIF unterteilt das Eingabebild in $8*8$ Blöcke und führt auf ihnen eine Diskrete Kosinus Transformation (DCT) durch. Der Bildblock ist nun als Folge von Kosinus-Funktionen dargestellt.\\
-Die Quantisierung versucht nun Frequenzen, welche das menschliche Auge schlecht erkennen kann mit weniger Präzise darzustellen. Wenn die Quantisierung gut gewählt wurde, kann der Mensch das dekomprimierte Bild nicht vom Original unterscheiden, verbraucht aber weniger Speicherplatz. JPEG/JFIF bietet vorgefertigte Quantisierungstabellen an. Der Benutzer kann aber eigene Tabellen für spezifizieren. Wie die Quantisierungstabelle optimal gewählt wird, ist ein aktives Forschungsfeld \cite{wu1993rate:jpeg} \cite{wang2001designing:jpeg} und kann von Anwendungsfall zu Anwendungsfall unterschiedlich sein.\\
-Nach der Quantisierung werden die quantisierten Blöcke im Zick-Zack-Muster angeordnet, sodass die Entropie Kodierung eine bessere Kompression durchführen kann. JPEG/JFIF führt eine Run-Length und eine Huffman-Kodierung durch. JPEG bietet auch hier an, eine benutzerspezifizierte Huffman-Tabelle zu verwenden.\\
+Das JPEG/JFIF Format ist eines der meist-verwendeten Bildkompressionsverfahren für natürliche Bilder. Das Diagramm der Abbildung \ref{state:jpeg:abb} zeigt den Aufbau der Kompressionspipeline. JPEG/JFIF unterteilt das Eingabebild in $8*8$ Blöcke und führt auf ihnen eine Diskrete Kosinus Transformation (DCT) durch. Der Bildblock ist nun als Folge von Kosinus-Funktionen dargestellt.\\
+Die Quantisierung versucht nun Frequenzen, welche das menschliche Auge schlecht erkennen kann weniger Präzise darzustellen. Wenn die Quantisierung gut gewählt wurde, kann der Mensch das dekomprimierte Bild nicht vom Original unterscheiden, verbraucht aber weniger Speicherplatz. JPEG/JFIF bietet vorgefertigte Quantisierungstabellen an. Der Benutzer kann aber eigene Tabellen für spezifizieren. Wie die Quantisierungstabelle optimal gewählt wird, ist ein aktives Forschungsfeld \cite{wu1993rate:jpeg} \cite{wang2001designing:jpeg} und kann von Anwendungsfall zu Anwendungsfall unterschiedlich sein.\\
+Nach der Quantisierung werden die quantisierten Blöcke im Zick-Zack-Muster angeordnet, sodass die Entropie Kodierung eine bessere Kompression durchführen kann. JPEG/JFIF führt eine Run-Length und eine Huffman-Kodierung durch. JPEG bietet auch hier an, eine benutzerspezifizierte Huffman-Tabelle zu verwenden. Wenn keine Tabelle spezifiziert ist, wird 
 
 Wenn für die Kompression von wissenschaftlichen Daten eine Diskrete Kosinus Transformation eingesetzt werden soll, kann ein ähnlicher Aufbau verwendet werden wie die JPEG/JFIF Kompression. Für eine optimale Kompression wird die Umsetzung der einzelnen Schritte vermutlich von JPEG/JFIF abweichen.
 
@@ -29,11 +29,15 @@ Wenn für die Kompression von wissenschaftlichen Daten eine Diskrete Kosinus Tra
 \end{figure}
 3d Laser Sampling Geräte produzieren grosse Mengen an volumetrischen Punkten von alltäglichen Objekten. Die Kompression von solchen Punktwolken ist ein aktives Forschungsfeld. Eine vorgeschlagene Kompression  von Schnabel und Klein \cite{schnabel2006octree} verwendet Octrees \cite{wiki:octree}. Das Diagramm der Abbildung \ref{state:pointcloud:abb} verdeutlicht den Ablauf.\\
 Die dreidimensionalen Punkten werden in einem Octree mit einer begrenzten Anzahl an Levels abgelegt. Im Quantisierungsschritt werden die Punkte durch die Zellenmittelpunkte des Octrees ersetzt. Die Anzahl an Levels ist gleichzusetzen mit der Genauigkeit in Bits welche für jede Koordinatenachse zur Verfügung stehen. Wenn die Levels auf $8$ begrenzt sind, steht für jede Achse $8$ Bit Genauigkeit zur Verfügung.\\
-In der Entropie Kodierung wird der Octree zuerst Binär abgebildet ($0$ für leere Knoten, $1$ für befüllte Knoten) in Breadth-First Ordnung. Jedes Level im Octree stellt eine Approximation der Punkte dar. Durch die Breadth-First Ordnung werden die ungenaueren Approximationen zuerst abgelegt. Diese Eigenschaft wird mit einer Prediktiven Kodierung ausgenutzt: Aus den vorhergehenden Levels wird eine Vorhersage erstellt, wie das nächste Level aussieht. Die Prediktive Kodierung mus also nur die Daten abspeichern, welche nicht mit der Vorhersage übereinstimmen.\\
+In der Entropie Kodierung wird der Octree zuerst Binär abgebildet ($0$ für leere Knoten, $1$ für befüllte Knoten) in Breadth-First Ordnung. Jedes Level im Octree stellt eine Approximation der Punktwolke dar. Durch die Breadth-First Ordnung werden die ungenaueren Approximationen zuerst abgelegt. Diese Eigenschaft wird mit einer Prediktiven Kodierung ausgenutzt: Aus den vorhergehenden Levels wird eine Vorhersage erstellt, wie die Punkte im nächsten Level zu liegen kommen. Die Kodierung kann die Information reduzieren, indem nur noch der Fehler der Kodierung abgespeichert wird. Je besser die Kodierung das Verhalten vorhersagen kann, desto besser ist die Kompression.
 
-Für diesen Ansatz muss zu einem die Information, welcher Punkt zu welcher Linie gehört, gespeichert werden. Jedem Punkt kann eine Farbe zugewiesen werden. Die Farbe könnte man brauchen um die Punkte den Feldlinien zuzuordnen. Weiter müsste vermutlich die Prediktive Kodierung angepasst werden: Schnabel und Klein benutzten eine Oberflächen-Approximation. Die Feldlinien jedoch bilden im Allgemeinen keine Oberfläche.
+Für diesen Ansatz muss zu einem die Information, welcher Punkt zu welcher Linie gehört, gespeichert werden. Jedem Punkt kann eine Farbe zugewiesen werden. Die Farbe könnte man brauchen um die Punkte den Feldlinien zuzuordnen. Weiter müsste vermutlich die Prediktive Kodierung angepasst werden: Schnabel und Klein nehmen an, dass die Punktwolke eine Oberfläche darstellen. Die Feldlinien jedoch bilden im Allgemeinen keine Oberfläche und benötigen deshalb eine andere Prediktive Kodierung.
 
-\subsection{Curve Fitting}
+\subsection{Curve Fitting Transformation}
+Im Curve Fitting wird ein Signal durch eine oder mehreren Funktionen dargestellt. Es ist dabei zwischen einem exakten Curve Fitting und einer Approximation zu unterscheiden. Die exakte Repräsentation wird typischerweise für die Signalinterpolation verwendet, wäherend eine Approximation in der Rauschunterdrückung zum Einsatz kommt. 
+
+Kompression, aber nicht tief erforscht. Fast B-Spline Approximation und gibt ein Beispiel einer Kompression an.
+Minimale Approximation.
 Curve Fitting ist ein Teilgebiet der Signalverarbeitung. Ein Signal wird aus einer oder mehreren Basisfunktionen ausgedrückt und findet typischerweise Anwendungen in den Bereichen Signalinterpolation, Differenzierung und Rauschunterdrückung. Aber auch eine verlustbehaftete Kompression ist Möglich.
 
 Die B-Spline Transformation \cite{unser1993b:spline} ist in linearer Zeit. Möglichkeit, ein Signal mit B-Splines zu approximieren. Die Problematik liegt in den Details wie Anzahl Funktionen, Verteilung der Spline Knotenpunkten etc.
@@ -42,8 +46,16 @@ Die B-Spline Transformation \cite{unser1993b:spline} ist in linearer Zeit. Mögl
 
 
 \subsection{Entropie Kodierung}
-Die Entropie Kodierung findet in allen Bereichen der Informatik Anwendungen. Es ist ein verlustfreies Verfahren Information mit möglichst wenigen Bytes abzubilden. In verlustbehafteten Kompressionsverfahren ist die Entropie Kodierung meist der letzte Schritt. Deshalb ist ein wichtiger Teilschritt der Entropie Kodierung die Anordnung und Darstellung der Daten.\\
-Typische Verfahren sind Run Length, Huffman oder Aritmetische Kodierung. Je nach dem wie die Daten aussehen, ist ein Verfahren besser als das Andere.  Die Kodierungen werden oft kombiniert für eine bessere Kompression. Die kombinationen sind in Paketen mitgeliefert und können auf beliebige Inputdaten angewendet werden.\\
+Die Entropie Kodierung findet in allen Bereichen der Informatik Anwendungen. Ziel ist es die gleiche Information mit einem Minimum an Daten darzustellen. Verlustbehaftete Kompressionsverfahren reduzieren die Information und verwenden im letzten Schritt eine Entropie Kodierung.
+
+Typische Verfahren sind Run Length, Huffman oder Aritmetische Kodierung. Die Information mit einem Minimum an Daten darzustellen hängt von der Information ab. Die typischen Verfahren sind weit verbreitet, da sie zwar nicht immer das Optimum finden, aber unabhängig von der Art der Information funktionieren. Es ist für Huffman nicht relevant, ob Floating-Point Zahlen oder Text. 
+Speed
+
+Es existieren auch Entropie Kodierer, welche auf eine Art von Information spezialisiert sind. So kann
+
+
+ Es ist ein verlustfreies Verfahren Information mit möglichst wenigen Bytes abzubilden. In verlustbehafteten Kompressionsverfahren ist die Entropie Kodierung meist der letzte Schritt. Deshalb ist ein wichtiger Teilschritt der Entropie Kodierung die Anordnung und Darstellung der Daten.\\
+Je nach dem wie die Daten aussehen, ist ein Verfahren besser als das Andere.  Die Kodierungen werden oft kombiniert für eine bessere Kompression. Die kombinationen sind in Paketen mitgeliefert und können auf beliebige Inputdaten angewendet werden.\\
 
 Es existieren auch spezialisierte Entropie Kodierer beispielsweise für Floating Point Kodierer \cite{ratanaworabhan2006fast} effizient komprimieren können.\\
 Frage Kompressionsrate und Laufzeit.
