@@ -10,14 +10,14 @@ Die Feldlinien werden aber nur alle sechs Stunden berechnet und Solar Flares sin
 Wie im Abschnitt \ref{konzept:ist-komprimierung} beschrieben, wird bereits eine einfache verlustbehaftete Kompression durchgeführt. Für die Testdaten wurde diese entfernt, was die rohe Datenmenge entsprechend anwachsen liess auf etwa 10 MiBytes pro Aufnahme.
 
 \subsection{Berechnung der Standardabweichung}\label{testsetup:ablauf}
-Die dekomprimierte Linie ähnelt dem Original, wenn die Abweichung konstant und klein bleiben. Eine seltene, dafür grosse Abweichung kann das Aussehen massgebend verändern. Für diesen Fall wurde Die Standardabweichung ausgewählt. Die originale und dekomprimierte Feldlinie können unterschiedliche Abtastraten aufweisen. Die Standardabweichung muss deshalb unabhängig von der Abtastrate berechnet werden.
+Die dekomprimierte Linie ähnelt dem Original, wenn die Abweichung konstant und klein bleiben. Eine seltene, dafür grosse Abweichung kann das Aussehen massgebend verändern. Für diesen Fall wurde Die Standardabweichung ausgewählt. Die originale und dekomprimierte Feldlinie können unterschiedliche Abtastraten aufweisen. Die Standardabweichung muss deshalb unabhängig von der Abtastrate berechnet werden.\\
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/testsetup/errorcalc.png}
+	\includegraphics[width=0.9\textwidth,height=7cm,keepaspectratio]{./pictures/testsetup/errorcalc.png}
 	\caption{Darstellung der Fehlerberechnung. Die Punkte sind die Originaldaten, die Quadrate sind die Punkte nach der Kompression.}
 	\label{testsetup:ablauf:fehlerberechnung:diagramm}
 \end{figure} 
-Um die Abweichung zu berechnen wird konzeptionell zwischen den dekomprimierten Punkte eine Linie gezogen und den Abstand zwischen dieser Linie und den Originalpunkte berechnet. Der Vorgang ist dargestellt im Diagramm der Abbildung \ref{testsetup:ablauf:fehlerberechnung:diagramm}. Für jeden Punkt $P1'$ aus den dekomprimierten Punkten $D$, nehme $P1'$ und den folgenden Punkt $P2'$. Ziehe eine Strecke $s$ durch $P1'$ und $P2'$. Suche von $p1'$ den Originalpunkt $P1$ aus allen Originalpunkten $O$ und rechne den Abstand aus zur Strecke $s$. Führe das für alle folgenden Originalpunkte durch, bis $P2$ erreicht wurde. Der Abstand $s$ zu $P2$ wird nicht mehr berechnet.\\
+Um die Abweichung zu berechnen wird konzeptionell zwischen den dekomprimierten Punkte eine Linie gezogen und den Abstand zwischen dieser Linie und den Originalpunkte berechnet. Der Vorgang ist dargestellt im Diagramm der Abbildung \ref{testsetup:ablauf:fehlerberechnung:diagramm}. Für jeden Punkt $P_i'$ aus den dekomprimierten Punkten $D$, nehme $P_i'$, $P_{i-1}'$,$P_{i+1}'$ und $P_{i+2}'$. Ziehe drei Strecken, von $P_{i-1}'P_i'$, $P_{i}'P_{i+1}'$ und $P_{i+1}'P_{i+2}'$. Suche von $P_i'$ den Originalpunkt $P_i$ aus allen Originalpunkten $O$, berechne den minimalen Abstand zu den drei Strecken. Führe das für alle folgenden Originalpunkte durch, bis $P_{i+1}$ erreicht wurde.\\
 [\baselineskip]
 Die Abstandsberechnung von Strecke $s$ zu einem Punkt $P$ erfolgt in zwei Schritten: Zuerst wird mit der Formel \eqref{testsetup:ablauf:formula:on_line} überprüft  , ob eine Senkrechte durch $P$ auf der Strecke $s$ zu liegen kommt. Falls das der Fall ist, wird der Abstand von $P$ zu $s$ berechnet \eqref{testsetup:ablauf:formula:distance}. Falls nicht, wird die kürzeste Distanz der Eckpunkte der Strecke zu $P$ berechnet.\\
 \begin{equation} \label{testsetup:ablauf:formula:on_line}

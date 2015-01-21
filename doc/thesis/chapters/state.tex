@@ -34,19 +34,17 @@ In der Entropie Kodierung wird der Octree zuerst Binär abgebildet ($0$ für lee
 Für diesen Ansatz muss zu einem die Information, welcher Punkt zu welcher Linie gehört, gespeichert werden. Jedem Punkt kann eine Farbe zugewiesen werden. Die Farbe könnte man brauchen um die Punkte den Feldlinien zuzuordnen. Weiter müsste vermutlich die Prediktive Kodierung angepasst werden: Schnabel und Klein nehmen an, dass die Punktwolke eine Oberfläche darstellen. Die Feldlinien jedoch bilden im Allgemeinen keine Oberfläche und benötigen deshalb eine andere Prediktive Kodierung.
 
 \subsection{Curve Fitting Transformation}
-Im Curve Fitting wird ein Signal durch eine oder mehreren Funktionen dargestellt. Es ist dabei zwischen einem exakten Curve Fitting und einer Approximation zu unterscheiden. Die exakte Repräsentation wird typischerweise für die Signalinterpolation verwendet, wäherend eine Approximation in der Rauschunterdrückung zum Einsatz kommt. 
+Im Curve Fitting wird ein Signal durch eine oder mehreren Funktionen dargestellt. Es ist dabei zwischen einem exakten Curve Fitting und einer Approximation zu unterscheiden. Die exakte Repräsentation wird typischerweise für die Signalinterpolation verwendet, wäherend eine Approximation in der Rauschunterdrückung zum Einsatz kommt.
 
-Kompression, aber nicht tief erforscht. Fast B-Spline Approximation und gibt ein Beispiel einer Kompression an.
-Minimale Approximation.
-Curve Fitting ist ein Teilgebiet der Signalverarbeitung. Ein Signal wird aus einer oder mehreren Basisfunktionen ausgedrückt und findet typischerweise Anwendungen in den Bereichen Signalinterpolation, Differenzierung und Rauschunterdrückung. Aber auch eine verlustbehaftete Kompression ist Möglich.
+Unser et al \cite{unser1993b:spline} zeigt ein Algorithmus, welche ähnlich wie eine Diskrete Kosinus Transformation ein Diskretes Signal als Folge von B-Splines darstellt. Es wird ebenfalls eine verlustbehaftete Bildkompression vorgestellt als Anwendungsfall.
 
-Die B-Spline Transformation \cite{unser1993b:spline} ist in linearer Zeit. Möglichkeit, ein Signal mit B-Splines zu approximieren. Die Problematik liegt in den Details wie Anzahl Funktionen, Verteilung der Spline Knotenpunkten etc.
+Ein Curve-Fitting könnte die Daten approximieren und deutlich weniger Speicherplatz verbrauchen. Es existiert aber kein Datenformat, welche ein Curve-Fitting als Kompression verwendet. Hier liegt noch zusätzlichen Aufwand verborgen.
 
 \subsection{Compressive Sensing}
 
 
 \subsection{Entropie Kodierung}
-Die Entropie Kodierung findet in allen Bereichen der Informatik Anwendungen. Ziel ist es die gleiche Information mit einem Minimum an Daten darzustellen. Verlustbehaftete Kompressionsverfahren reduzieren die Information und verwenden im letzten Schritt eine Entropie Kodierung.
+Die Entropie Kodierung findet in allen Bereichen der Informatik Anwendungen. Ziel ist es die gleiche Information mit einem Minimum an Daten darzustellen. Verlustbehaftete Kompressionsverfahren reduzieren die Information und verwenden im letzten Schritt eine Entropie Kodierung um die Datenmenge zu reduzieren.
 
 Typische Verfahren sind Run Length, Huffman oder Aritmetische Kodierung. Die Information mit einem Minimum an Daten darzustellen hängt von der Information ab. Die typischen Verfahren sind weit verbreitet, da sie zwar nicht immer das Optimum finden, aber unabhängig von der Art der Information funktionieren. Es ist für Huffman nicht relevant, ob Floating-Point Zahlen oder Text. 
 Speed

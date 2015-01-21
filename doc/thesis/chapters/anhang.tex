@@ -1,7 +1,92 @@
 \section{Anhang}
 \subsection{Installationsanleitung}
+\subsubsection{Installation des JHelioviewers}
+\subsubsection{Installation der Kompression}
+\pagebreak
+
 \subsection{Dateiformat und Dekompression}
+This section describes the encoding and decompression algorithm used for compressing fieldline data. The data is written in the FITS Format \cite{website:fits} and compressed with Rar. The content of the FITS file is described in Table \ref{anhang:format:content}.\\
+\begin{table}[!htbp]
+\center
+\begin{tabular}{|c|c|c|c|}
+	\hline
+	Name  & Datatype & Encoding& Content Description	\\\hline
+    B0 & Double & None & Latitude to Earth\\
+    L0 & Double& None& Longitude to Earth\\
+    TYPE & Byte Array & None & Type of quantization used for each Fieldline\\
+    LINE\_LENGTH &Byte Array & Adaptive Precision Unsigned & Length of each Fieldline\\
+    StartPointR & Byte Array & Length + Adaptive Precision & Radius of the Startpoint for each Fieldline\\
+    StartPointPhi & Byte Array & Length + Adaptive Precision & Latitude of the Startpoint for each Fieldline\\
+    StartPointTheta & Byte Array & Length  + Adaptive Precision & Longitude of the Startpoint for each Fieldline\\
+    X & Byte Array & Length + Adaptive Precision & X Channel DCT Coefficients of each Fieldline\\
+    Y & Byte Array & Length + Adaptive Precision & Y Channel DCT Coefficients of each Fieldline\\
+    Z & Byte Array & Length + Adaptive Precision & Z Channel DCT Coefficients of each Fieldline\\\hline
+\end{tabular}
+\caption{Content of the FITS File}
+\label{anhang:format:content}
+\end{table}
+After decompressing the FITS file with Rar apply the decodings described in section \ref{anhang:format:encodings}. The next step is to split up the data for each fieldline. Each fieldline contains exactly one Type, one Length and one Startpoint. The Length describes the number of DCT Coefficients of the fieldline. The first batch of coefficients belong to the first fieldline, and the second batch to the second line etc.\\
+After splitting the data there are four steps left to do: 
+\begin{enumerate}
+	\item Transform the Startpoint to Euler coordinates
+	\item Multiply the DCT Coefficients according to the Type
+	\item Apply the Inverse Cosine Transform (Formula \eqref{konzept:loesung1:kosinus:formula:idct} in section \ref{konzept:loesung1:kosinus})
+	\item Integrate the channels
+\end{enumerate}
+How to Transform the Point to Euler coordinates is described in section \ref{anhang:format:euler}. The multiplication factors can be gathered from the JHelioviewer implementation. Take note that the decompression time will depend on your implementation of the Inverse Cosine Transform, and a naive implementation can take three seconds or more for one FITS file.\\
+The last step ''Integrate the channels'' needs further clarification: Each channel is derived before the Discrete Cosine Transform is applied. After the Inverse Transform, each channel contains the rises and not the actual points.
+
+\subsubsection{Encodings} \label{anhang:format:encodings}
+
+\textbf{Length Encoding}\\
+\begin{table}[!htbp]
+	\center
+	\begin{tabular}{||c|c|c|c|c||c|c|c}
+		\hline
+		\multicolumn{8}{|c|}{Encoded Channel}\\\hline\hline
+		 \multicolumn{5}{||c||}{Block of Fieldline 0} & \multicolumn{3}{c}{\ldots} \\\hline
+		$n_0$ &$x_{0,0}$ &$x_{0,1}$ & \ldots & $x_{0,n-1}$ & $n_1$ & $x_{1,0}$ & \ldots\\\hline
+	\end{tabular}
+	\caption{Beispiel eines abgespeicherten Kanals mit der Längenkodierung.}
+	\label{anhang:format:encodings:laengenkodierung}
+\end{table}
+
+\textbf{Unsigned Adaptive Precision Encoding}\\
+\begin{table}[!htbp]
+	\center
+	\begin{tabular}{|c|c|c|c||c|c|c|c|}
+	\hline
+	\multicolumn{8}{|c|}{Byte}\\\hline
+	Continue Flag & X & X & X & X & X & X & X \\\hline
+	\end{tabular}
+	\caption{Aufteilung eines Bytes der adaptiven Genauigkeitskodierung. X sind Nutz-Bits.}
+	\label{anhang:format:encodings:adaptiveUnsigned}
+\end{table}
+
+\textbf{Adaptive Precision Encoding}\\
+\begin{table}[!htbp]
+	\center
+	\begin{tabular}{|c|c|c|c||c|c|c|c|}
+	\hline
+	\multicolumn{8}{|c|}{Byte}\\\hline
+	Continue Flag & Sign Flag & X & X & X & X & X & X \\\hline
+	\end{tabular}
+	\caption{Aufteilung eines Bytes der adaptiven Genauigkeitskodierung. X sind Nutz-Bits.}
+	\label{anhang:format:encodings:adaptive}
+\end{table}
+
+\subsubsection{Transformation to Euler Coordinates} \label{anhang:format:euler}
+\pagebreak
+
 \subsection{Performance Tests} \label{anhang:performance}
-Tabelle
+\begin{table}[!htbp]
+\center
+\begin{tabular}{c|c}
+	Lösunsansatz & Durchschnittliche Dekompressionszeit (ms) \\\hline
+	Adaptives Subsampling & $19$ ms \\
+	DCT - Naive Inverse DCT & $3100$ ms \\
+	DCT - Mit Kosinus Caching & $65-350$ ms\\
+\end{tabular}
+\end{table}
 
 Testgerät

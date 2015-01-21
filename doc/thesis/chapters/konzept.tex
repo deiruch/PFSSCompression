@@ -1,6 +1,5 @@
 \section{Kompressionsverfahren der Feldlinien} \label{konzept}
-konzept der unterschiedlichen kompressionsverfahren. zwei lösungsansätze. 
-bereits eine simple Kompression implementiert.
+In diesem Abschnitt werden die einzelnen Verfahren zu den Lösungsansätzen vorgestellt. Im ersten Abschnitt \ref{konzept:ist-komprimierung} wird die Ist-Kompression analysiert, während in den nächsten Abschnitten die  Lösungsansätze vorgestellt werden und die Teilschritte erklärt.
 
 \subsection{Ist-Komprimierung} \label{konzept:ist-komprimierung}
 \begin{figure}[!htbp]
@@ -57,7 +56,7 @@ Die Anordnung der Daten wurde aus der Ist-Kompression übernommen, jedoch wird R
 Die Kompression dieses Lösungsansatzes ist Dargestellt im Diagramm der Abbildung \ref{konzept:loesung1:aufbau}. Konzeptionell ähnelt dieser Ansatz der JPEG/JFIF Kompression (dargestellt in der Abbildung \ref{state:jpeg:abb}), die einzelnen Teilschritte können aber andere Algorithmen verwenden. Im Vergleich zum JPEG/JFIF Standard ist der grösste Unterschied, dass das Eingangssignal vor der Kosinus Transformation abgeleitet wird.
 
 Die Feldlinien ähneln oft harmonischen Halbwellen, welche sich durch wenige Kosinusfunktionen approximieren lassen können. Um eine optimale Kompression mit dieser Variante zu erreichen, müssen Ringing Artefakte \cite{wiki:ringing:artefacts} behandelt werden. Sie äussern sich als Oszillieren im dekomprimierten Signal, was das menschliche Auge als störend empfindet. Beispiele für die Ringing Artefakten von Feldlinien sind im Abschnitt \ref{resultate:loesung1:ringing} zu finden.\\
-Es gibt Möglichkeiten, die Ringing Artefakte zu Dämpfen oder gar zu beheben: Die simpelste Variante ist es, das dekomprimierte Signal zu glätten. Die Glättung kann das Signal verfälschen und ist deshalb nicht die optimale Lösung. In der Bild- und Audioverarbeitung wird aktiv nach Filter geforscht, welche die Ringing Artefakte in der Dekompression vermindern \cite{kaup1998reduction} \cite{park1999postprocessing}.
+Es gibt Möglichkeiten, die Ringing Artefakte zu Dämpfen oder gar zu beheben: Die simpelste Variante ist es, das dekomprimierte Signal zu glätten. Die Glättung kann das Signal verfälschen und ist deshalb nicht die optimale Lösung. In der Bild- und Audioverarbeitung wird aktiv nach Post-Processing Filter geforscht, welche die Ringing Artefakte in der Dekompression vermindern \cite{kaup1998reduction} \cite{park1999postprocessing}. Ein angepasstes Postprocessing wurde im Rahmen dieser Arbeit nicht implementiert.
 
 \subsubsection{Subsampling} \label{konzept:loesung1:subsampling}
 Das Subsampling wurde aus der Ist-Kompression \ref{konzept:ist-komprimierung} übernommen und dient, die DCT zu beschleunigen. Da die DCT eine Komplexität von $O(n^2)$ aufweist, wird durch das Subsampling die Transformation wesentlich beschlenuitgt.\\
@@ -83,7 +82,7 @@ Die Wiederholung beeinflusst die Transformation nicht, wenn das Signal an den R�
 
 \subsubsection{Quantisierung}
 In der Visualisierung werden die Feldlinien in drei Typen unterschieden: ''Sonne zu Sonne'', ''Sonne ins Weltall'' und ''Weltall zur Sonne''.  Die ''Sonne zu Sonne'' Feldlinien können besser durch Kosinusfunktionen approximiert werden und sind weniger Anfällig auf die Ringing Artefakte. Dieser Typ von Feldlinien wird deshalb stärker Quantisiert. Für die ''Sonne zu Sonne'' Feldlinien werden maximal $35$ DCT Koeffizienten abgelegt, wobei die letzten zehn Koeffizienten kaum noch Einfluss besitzen. Sie werden mit einem hohen Faktor quantisiert, sodass sie im Normalfall ebenfalls Null sind.\\
-Die anderen Feldlinien benötigen mehr Koeffizienten für die Dämpfung der Ringing Artefakte. Bei ihnen liegt das Maximum bei $50$ Koeffizienten. Die Quantisierung 
+Die anderen Feldlinien benötigen mehr Koeffizienten für die Dämpfung der Ringing Artefakte. Bei ihnen liegt das Maximum bei $50$ Koeffizienten.
 
 \subsubsection{Entropie Kodierung}\label{konzept:loesung1:kodierung}
 Um die Entropie Kodierung zu verbessern wurden zwei Byte-Kodierungen hinzugefügt. Die Kanäle werden zuerst mit der Längenkodierung und darauf folgend mit der adaptive Genauigkeit kodiert.
@@ -106,7 +105,7 @@ Um einen Kanal zu Dekodieren, muss die Anzahl an DCT-Koeffizienten $n_i$ gelesen
 Die Längenkodierung ist effizient, wenn die hochfrequenten DCT-Koeffizienten einen grossen, zusammenhängenden Null-Block bilden. Im schlechtesten Fall währe der letzte DCT-Koeffizient nicht Null. In diesem Fall würde die Längenkodierung nichts abschneiden.\\
 
 \textbf{Adaptive Genauigkeits-Kodierung}\\
-Die quantisierten Koeffizienten liegen meistens zwischen $-50$ und $+50$. Acht Bit Genauigkeit reichen im Allgemeinen aus um einen Koeffizienten abzuspeichern, nur wenige Koeffizienten benötigen mehr Genauigkeit. Mit der adaptiven Genauigkeits-Kodierung sollen so wenige Bytes pro Koeffizient abgespeichert werden, wie benötigt werden. Dazu wird wie in Tabelle \ref{konzept:loesung1:entropie:adaptive} eine neue Byte-Kodierung eingeführt. Das MSB wird als ''Continue Flag'' verwendet. Wenn es gesetzt ist, gehört das folgende Byte ebenfalls zur Zahl.\\
+Die quantisierten Koeffizienten liegen meistens zwischen $-50$ und $+50$. Acht Bit Genauigkeit reichen im Allgemeinen aus um einen DCT-Koeffizienten abzuspeichern. Mit der adaptiven Genauigkeits-Kodierung sollen so wenige Bytes pro Koeffizient abgespeichert werden, wie benötigt werden. Dazu wird wie in Tabelle \ref{konzept:loesung1:entropie:adaptive} eine neue Byte-Kodierung eingeführt. Das MSB wird als ''Continue Flag'' verwendet. Wenn es gesetzt ist, gehört das folgende Byte ebenfalls zur Zahl.\\
 \begin{table}[!htbp]
 	\center
 	\begin{tabular}{|c|c|c|c||c|c|c|c|}
@@ -118,3 +117,14 @@ Die quantisierten Koeffizienten liegen meistens zwischen $-50$ und $+50$. Acht B
 	\label{konzept:loesung1:entropie:adaptive}
 \end{table}
 Wenn ein Kanal hauptsächlich aus tiefen Zahlen besteht, können so Bytes gespart werden, ohne Genauigkeit zu verlieren. Wenn aber der Kanal aus hauptsächlich grossen Zahlen besteht, welche zwei oder mehr Bytes an Genauigkeit brauchen, wird weniger Speicherplatz gespart.
+
+\pagebreak
+\subsection{Lösungsansatz: Prediktive Kodierung}
+Warum Prediktive Kodierung, was ist das gute: weniger sichtbare Artefakte, sie äussern sich hauptsächlich durch Verschiebungen. Prediktive Kodierung stammt aus der verlustfreien Kompression, wie also Daten gelöscht werden ist eine zentrale Frage.
+Bild Aufbau
+
+\subsubsection{subsample}
+
+\subsubsection{Principal Component Analysis} \label{konzept:prediktiv:pca}
+
+\subsubsection{Entropie Kodierung}

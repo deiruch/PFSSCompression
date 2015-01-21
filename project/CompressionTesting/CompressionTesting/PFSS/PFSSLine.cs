@@ -18,13 +18,13 @@ namespace CompressionTesting.PFSS
     class PFSSLine : IComparable<PFSSLine>
     {
         internal TYPE Type { get; private set; }
-        internal List<PFSSPoint> points { get; private set; }
+        internal List<PFSSPoint> points { get; set; }
 
         internal float[] extraX;
         internal float[] extraY;
         internal float[] extraZ;
         internal ExtraPoints[] extra;
-
+        internal Residuals residuals;
         internal Matrix<float> pcaTransform;
         internal float[] means;
         internal int minus = 0;

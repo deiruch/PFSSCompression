@@ -202,9 +202,9 @@ namespace CompressionTesting.FileWriter
         public static void WritePureShortFits(PFSSData input, int offset, FileInfo output)
         {
             short[] startPoints = new short[input.lines.Count * offset * 3];
-            short[] ptr;
-            short[] ptph;
-            short[] ptth;
+            int[] ptr;
+            int[] ptph;
+            int[] ptth;
             short[] ptr_nz_len = new short[input.lines.Count];
             //float[] startPoints = new float[input.lines.Count * 3 * offset];
             float[] means = new float[input.lines.Count * 3];
@@ -218,9 +218,9 @@ namespace CompressionTesting.FileWriter
                 ptr_nz_len[i] = (short)count;
             }
 
-            ptr = new short[totalCount];
-            ptph = new short[totalCount];
-            ptth = new short[totalCount];
+            ptr = new int[totalCount];
+            ptph = new int[totalCount];
+            ptth = new int[totalCount];
 
             int index = 0;
             int startPointIndex = 0;
@@ -268,7 +268,8 @@ namespace CompressionTesting.FileWriter
             Double[] b0a = new Double[] { input.b0 };
             Double[] l0a = new Double[] { input.l0 };
             Object[][] data = new Object[1][];
-            Object[] dataRow = new Object[] { b0a, l0a, means, pca, ptr_nz_len, startPoints, ptr, ptph, ptth };
+            //TODO: REMOVE DCT CODER
+            Object[] dataRow = new Object[] { b0a, l0a, means, pca, ptr_nz_len, startPoints, DCTCoder.EncodeAdaptive(ptr), DCTCoder.EncodeAdaptive(ptph), DCTCoder.EncodeAdaptive(ptth) };
             data[0] = dataRow;
             //means, pca, startPoints,
             BinaryTable table = new BinaryTable(data);
