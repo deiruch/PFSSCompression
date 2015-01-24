@@ -13,6 +13,7 @@ namespace CompressionTesting.FileWriter
 {
     class PCAWriter
     {
+        
         public static void WriteFits(PFSSData input, int offset, FileInfo output)
         {
             short[] startPoints = new short[input.lines.Count * offset*3];

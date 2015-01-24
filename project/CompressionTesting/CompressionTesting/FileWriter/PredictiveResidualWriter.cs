@@ -15,12 +15,12 @@ namespace CompressionTesting.FileWriter
     {
         public static void WritePureShortFits(PFSSData input, int offset, FileInfo output)
         {
-            short[] startPoints = new short[input.lines.Count * offset * 3];
-            short[] ptr;
-            short[] ptph;
-            short[] ptth;
+            offset = 1;
+            short[] startPoints = new short[input.lines.Count * offset * 3*2];
+            int[] ptr;
+            int[] ptph;
+            int[] ptth;
             short[] ptr_nz_len = new short[input.lines.Count];
-            short[] extraPoints = new short[input.lines.Count];
             float[] means = new float[input.lines.Count * 3];
             short[] pca = new short[input.lines.Count * 6];
 
@@ -28,22 +28,15 @@ namespace CompressionTesting.FileWriter
             for (int i = 0; i < ptr_nz_len.Length; i++)
             {
                 Residuals res = input.lines[i].residuals;
-                int count = 0;
-                while (res != null)
-                {
-                    count += res.points.Count;
-                    if (res.extra != null)
-                        count++;
-                    res = res.nextLevel;
-                }
-                
+                int count = res.predictionErrors.Count;
+
                 totalCount += count;
                 ptr_nz_len[i] = (short)count;
             }
 
-            ptr = new short[totalCount];
-            ptph = new short[totalCount];
-            ptth = new short[totalCount];
+            ptr = new int[totalCount];
+            ptph = new int[totalCount];
+            ptth = new int[totalCount];
 
             int index = 0;
             int startPointIndex = 0;
@@ -56,9 +49,12 @@ namespace CompressionTesting.FileWriter
                 //write start points
                 for (int i = 0; i < offset; i++)
                 {
-                    startPoints[startPointIndex++] = (short)l.residuals.startAverage.x;
-                    startPoints[startPointIndex++] = (short)l.residuals.startAverage.y;
-                    startPoints[startPointIndex++] = (short)l.residuals.startAverage.z;
+                    startPoints[startPointIndex++] = (short)l.residuals.startPoint.x;
+                    startPoints[startPointIndex++] = (short)l.residuals.startPoint.y;
+                    startPoints[startPointIndex++] = (short)l.residuals.startPoint.z;
+                    startPoints[startPointIndex++] = (short)l.residuals.endPoint.x;
+                    startPoints[startPointIndex++] = (short)l.residuals.endPoint.y;
+                    startPoints[startPointIndex++] = (short)l.residuals.endPoint.z;
                 }
 
                 //write coefficients
@@ -77,31 +73,17 @@ namespace CompressionTesting.FileWriter
 
                 Residuals res = l.residuals;
                 short extraPoint = 0;
-                while (res != null) 
-                { 
-                    for (int i = 0; i < res.points.Count; i++)
-                    {
-                        PFSSPoint p = res.points[i];
-                        ptr[index] = (short)p.x;
-                        ptph[index] = (short)p.y;
-                        ptth[index] = (short)p.z;
-                        index++;
-                        
-                    }
-
-                    if(res.extra != null) {
-                        PFSSPoint p = res.extra;
-                        ptr[index] = (short)p.x;
-                        ptph[index] = (short)p.y;
-                        ptth[index] = (short)p.z;
-                        index++;
-                        extraPoint++;
-                        
-                    }
-                    extraPoint <<= 1;
-                     res = res.nextLevel;
-                }
-                extraPoints[extraPointIndex++] = extraPoint;
+   
+                for (int i = 0; i < res.predictionErrors.Count; i++)
+                {
+                    PFSSPoint p = res.predictionErrors[i];
+                    ptr[index] = (short)p.x;
+                    ptph[index] = (short)p.y;
+                    ptth[index] = (short)p.z;
+                    System.Console.WriteLine(p.x);
+                    index++;
+                 }
+                
             }
 
             Fits fits = new Fits();
@@ -109,7 +91,7 @@ namespace CompressionTesting.FileWriter
             Double[] b0a = new Double[] { input.b0 };
             Double[] l0a = new Double[] { input.l0 };
             Object[][] data = new Object[1][];
-            Object[] dataRow = new Object[] { b0a, l0a, means, pca, ptr_nz_len,extraPoints, startPoints, ptr, ptph, ptth };
+            Object[] dataRow = new Object[] { b0a, l0a, means, pca, ptr_nz_len, startPoints, DCTCoder.EncodeAdaptive(ptr), DCTCoder.EncodeAdaptive(ptph), DCTCoder.EncodeAdaptive(ptth) };
             data[0] = dataRow;
             //means, pca, startPoints,
             BinaryTable table = new BinaryTable(data);
@@ -125,6 +107,109 @@ namespace CompressionTesting.FileWriter
             bhdu.SetColumnName(6, "PTR", null);
             bhdu.SetColumnName(7, "PTPH", null);
             bhdu.SetColumnName(8, "PTTH", null);
+
+            BufferedDataStream f = new BufferedDataStream(new FileStream(output.FullName, FileMode.Create));
+            fits.Write(f);
+            f.Close();
+
+        }
+
+        public static void WritePureShortFits_WithoutPCA(PFSSData input, int offset, FileInfo output)
+        {
+            offset = 1;
+            int[] startPointsR = new int[input.lines.Count * offset];
+            int[] startPointsPhi = new int[input.lines.Count * offset];
+            int[] startPointsTheta = new int[input.lines.Count * offset];
+            int[] endpointsR = new int[input.lines.Count * offset];
+            int[] endpointsPhi = new int[input.lines.Count * offset];
+            int[] endpointsTheta = new int[input.lines.Count * offset];
+            int[] ptr;
+            int[] ptph;
+            int[] ptth;
+            int[] ptr_nz_len = new int[input.lines.Count];
+
+            int totalCount = 0;
+            for (int i = 0; i < ptr_nz_len.Length; i++)
+            {
+                Residuals res = input.lines[i].residuals;
+                int count = res.predictionErrors.Count;
+
+                totalCount += count;
+                ptr_nz_len[i] = (short)count;
+            }
+
+            ptr = new int[totalCount];
+            ptph = new int[totalCount];
+            ptth = new int[totalCount];
+
+            int index = 0;
+            int startPointIndex = 0;
+            int meansIndex = 0;
+            int pcaIndex = 0;
+            int extraPointIndex = 0;
+
+            foreach (PFSSLine l in input.lines)
+            {
+                //write start points
+                for (int i = 0; i < offset; i++)
+                {
+                    startPointsR[startPointIndex] = (short)l.residuals.startPoint.x;
+                    startPointsPhi[startPointIndex] = (short)l.residuals.startPoint.y;
+                    startPointsTheta[startPointIndex] = (short)l.residuals.startPoint.z;
+                    endpointsR[startPointIndex] = (short)l.residuals.endPoint.x;
+                    endpointsPhi[startPointIndex] = (short)l.residuals.endPoint.y;
+                    endpointsTheta[startPointIndex] = (short)l.residuals.endPoint.z;
+                    startPointIndex++;
+                }
+
+                Residuals res = l.residuals;
+                short extraPoint = 0;
+
+                for (int i = 0; i < res.predictionErrors.Count; i++)
+                {
+                    PFSSPoint p = res.predictionErrors[i];
+                    ptr[index] = (short)p.x;
+                    ptph[index] = (short)p.y;
+                    ptth[index] = (short)p.z;
+                    index++;
+                }
+
+                res = res.nextLevel;
+
+            }
+
+            Fits fits = new Fits();
+            Double[] b0a = new Double[] { input.b0 };
+            Double[] l0a = new Double[] { input.l0 };
+            Object[][] data = new Object[1][];
+            Object[] dataRow = new Object[] { b0a, l0a, 
+                DCTCoder.EncodeAdaptiveUnsigned(ptr_nz_len), 
+                DCTCoder.EncodeStartPointChannel(startPointsR),
+                DCTCoder.EncodeStartPointChannel(startPointsPhi),
+                DCTCoder.EncodeStartPointChannel(startPointsTheta),
+                DCTCoder.EncodeStartPointChannel(endpointsR),
+                DCTCoder.EncodeStartPointChannel(endpointsPhi),
+                DCTCoder.EncodeStartPointChannel(endpointsTheta), 
+                DCTCoder.EncodeAdaptive(ptr), DCTCoder.EncodeAdaptive(ptph), DCTCoder.EncodeAdaptive(ptth) };
+            data[0] = dataRow;
+            //means, pca, startPoints,
+            BinaryTable table = new BinaryTable(data);
+            Header hdr = BinaryTableHDU.ManufactureHeader(table);
+            hdr.AddValue("Version", "1.0", null);
+            fits.AddHDU(new BinaryTableHDU(hdr, table));
+            BinaryTableHDU bhdu = (BinaryTableHDU)fits.GetHDU(1);
+            bhdu.SetColumnName(0, "B0", null);
+            bhdu.SetColumnName(1, "L0", null);
+            bhdu.SetColumnName(2, "PTR_NZ_LEN", null);
+            bhdu.SetColumnName(3, "StartPointsR", null);
+            bhdu.SetColumnName(4, "StartPointsPhi", null);
+            bhdu.SetColumnName(5, "StartPointsTheta", null);
+            bhdu.SetColumnName(6, "EndpointsR", null);
+            bhdu.SetColumnName(7, "EndpointsPhi", null);
+            bhdu.SetColumnName(8, "EndpointsTheta", null);
+            bhdu.SetColumnName(9, "R", null);
+            bhdu.SetColumnName(10, "PHI", null);
+            bhdu.SetColumnName(11, "THETA", null);
 
             BufferedDataStream f = new BufferedDataStream(new FileStream(output.FullName, FileMode.Create));
             fits.Write(f);

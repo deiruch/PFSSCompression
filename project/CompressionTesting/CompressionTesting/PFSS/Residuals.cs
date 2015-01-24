@@ -8,16 +8,28 @@ namespace CompressionTesting.PFSS
 {
     class Residuals
     {
+        public static int factor = 36;
+        public static int factor2 = 36;
+        #region tryout fields
         internal Residuals nextLevel { get; set; }
         internal List<PFSSPoint> points { get; set; }
         internal PFSSPoint extra { get; set; }
         internal PFSSPoint startAverage { get; set; }
+        #endregion
+
+        internal PFSSPoint startPoint { get; set; }
+        internal PFSSPoint endPoint { get; set; }
+        internal List<PFSSPoint> predictionErrors { get; set; }
+        internal short moreThanOne { get; set; }
 
         public Residuals(int count)
         {
             points = new List<PFSSPoint>(count);
+            predictionErrors = new List<PFSSPoint>(count);
+            
         }
 
+        #region pureWaveletTryout
         public static Residuals Forward(PFSSLine line)
         {
             List<PFSSPoint> currentLevel = new List<PFSSPoint>(line.points);
@@ -108,7 +120,7 @@ namespace CompressionTesting.PFSS
             Residuals current = l.residuals;
             Residuals before0 = null;
             Residuals before1 = null;
-
+            
             while (current != null)
             {
                 for (int i = 0; i < current.points.Count; i++)
@@ -120,6 +132,144 @@ namespace CompressionTesting.PFSS
                 }
             }
             //Residuals currentLevel = 
+        }
+        #endregion
+
+        public static void ForwardPrediction(PFSSData data)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                Residuals residuals = new Residuals(l.points.Count - 2);
+                residuals.startPoint = l.points[0];
+                residuals.endPoint = l.points[l.points.Count - 1];
+                l.residuals = residuals;
+
+                Queue<Tuple<int, int>> bfs = new Queue<Tuple<int, int>>();
+                if (l.points.Count > 2)
+                {
+                    bfs.Enqueue(new Tuple<int, int>(0, l.points.Count - 1));
+                    while (bfs.Count >= 1)
+                    {
+                        Tuple<int, int> i = bfs.Dequeue();
+                        PredictLinearBF(l, bfs, i.Item1, i.Item2);
+                    }
+                }
+            }
+        }
+
+        private static void PredictLinearBF(PFSSLine l, Queue<Tuple<int, int>> callQueue, int startIndex, int endIndex)
+        {
+            PFSSPoint start = l.points[startIndex];
+            PFSSPoint end = l.points[endIndex];
+
+            int toPredictIndex = (endIndex - startIndex) / 2+startIndex;
+            PFSSPoint toPredict = l.points[toPredictIndex];
+            PFSSPoint error = Predict(start, end, toPredict,startIndex,endIndex,toPredictIndex);
+            toPredict = new PFSSPoint(toPredict);
+            toPredict.x = error.x;
+            toPredict.y = error.y;
+            toPredict.z = error.z;
+            Strip(toPredict);
+            l.residuals.predictionErrors.Add(toPredict);
+            if (startIndex + 1 != toPredictIndex)
+            {
+                Tuple<int, int> t0 = new Tuple<int, int>(startIndex, toPredictIndex);
+                callQueue.Enqueue(t0);
+            }
+            if (endIndex - 1 != toPredictIndex)
+            {
+                Tuple<int, int> t1 = new Tuple<int, int>(toPredictIndex, endIndex);
+                callQueue.Enqueue(t1);
+            }
+            
+        }
+
+        private static PFSSPoint Predict(PFSSPoint start, PFSSPoint end, PFSSPoint actual,int startIndex,int endIndex, int actualIndex)
+        {
+            int len = endIndex - startIndex;
+            float fac0 = (actualIndex-startIndex) / ((float)len);
+            float fac1 = (endIndex-actualIndex) / ((float)len);
+            PFSSPoint prediction = new PFSSPoint((int)(fac0 * start.x + fac1 * end.x), (int)(fac0 * start.y + fac1 * end.y), (int)(fac0*start.z + fac1 * end.z) );
+
+            return new PFSSPoint(prediction.x - actual.x, prediction.y - actual.y, prediction.z - actual.z);
+        }
+
+        private static void Strip(PFSSPoint p)
+        {
+            if (Math.Abs(p.x) < factor2)
+                p.x = 0;
+            if (Math.Abs(p.y) < factor2)
+                p.y = 0;
+            if (Math.Abs(p.z) < factor2)
+                p.z = 0;
+
+            if (Math.Abs(p.x) < factor)
+                p.x = (int)(p.x / 2);
+            if (Math.Abs(p.y) < factor)
+                p.y = (int)(p.y / 2);
+            if (Math.Abs(p.z) < factor)
+                p.z = (int)(p.z / 2);
+        }
+        private static void Push(PFSSPoint p)
+        {
+            if (Math.Abs(p.x) < factor/2)
+                p.x = (int)(p.x * 2);
+            if (Math.Abs(p.y) < factor / 2)
+                p.y = (int)(p.y * 2);
+            if (Math.Abs(p.z) < factor / 2)
+                p.z = (int)(p.z * 2);
+        }
+        public static void BackwardPrediction(PFSSData data)
+        {
+            foreach (PFSSLine l in data.lines)
+            {
+                Queue<PFSSPoint> bfs = new Queue<PFSSPoint>(l.residuals.predictionErrors);
+                Queue<Tuple<int, int>> bfsIndices = new Queue<Tuple<int, int>>();
+                bfsIndices.Enqueue(new Tuple<int, int>(0, l.points.Count - 1));
+
+                l.points[0].x = l.residuals.startPoint.x;
+                l.points[0].y = l.residuals.startPoint.y;
+                l.points[0].z = l.residuals.startPoint.z;
+                l.points[l.points.Count - 1].x = l.residuals.endPoint.x;
+                l.points[l.points.Count - 1].y = l.residuals.endPoint.y;
+                l.points[l.points.Count - 1].z = l.residuals.endPoint.z;
+                if (l.points.Count > 2)
+                {
+                    while (bfs.Count >= 1)
+                    {
+                        Tuple<int, int> i = bfsIndices.Dequeue();
+                        PredictLinearBFBackwards(l, bfs, bfsIndices, i.Item1, i.Item2);
+                    }
+                }
+            }
+        }
+
+        private static void PredictLinearBFBackwards(PFSSLine l, Queue<PFSSPoint> pointQueue, Queue<Tuple<int,int>> callQueue,int startIndex, int endIndex)
+        {
+            PFSSPoint start = l.points[startIndex];
+            PFSSPoint end = l.points[endIndex];
+
+            int toPredictIndex = (endIndex - startIndex) / 2 + startIndex;
+            PFSSPoint toPredict = pointQueue.Dequeue();
+            PFSSPoint actual = Predict(start, end, toPredict, startIndex, endIndex, toPredictIndex);
+            Push(actual);
+            if (l.points[(endIndex - startIndex) / 2].y != actual.y)
+                System.Console.Write("");
+            l.points[toPredictIndex].x = actual.x;
+            l.points[toPredictIndex].y = actual.y;
+            l.points[toPredictIndex].z = actual.z;
+            if (startIndex + 1 != toPredictIndex)
+            {
+                Tuple<int, int> t0 = new Tuple<int, int>(startIndex, toPredictIndex);
+                callQueue.Enqueue(t0);
+            }
+            if (endIndex - 1 != toPredictIndex)
+            {
+                Tuple<int, int> t1 = new Tuple<int, int>(toPredictIndex, endIndex);
+                callQueue.Enqueue(t1);
+            }
+            
+
         }
     }
 }

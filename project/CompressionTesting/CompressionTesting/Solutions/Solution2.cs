@@ -17,17 +17,17 @@ namespace CompressionTesting.Solutions
     {
         public int GetQualityLevels()
         {
-            return 6;
+            return 5;
         }
 
         public string GetName()
         {
-            return "Solution2_two";
+            return "Solution2_five";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
-            return Two(data, qualityLevel, folder);
+            return Five(data, qualityLevel, folder);
         }
 
         public void SelectIntermediateSolution(int i)
@@ -334,82 +334,49 @@ namespace CompressionTesting.Solutions
             //Subsampling.Subsample(data, 4);
             Subsampling.AngleSubsample(data, 3);
 
-            PCATransform.Forward(data, 0);
+            //PCATransform.Forward(data, 0);
 
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_OUTSIDE, new FileInfo(Path.Combine(folder, this.GetName() + "_sto_curve.csv")));
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_sts_curve.csv")));
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.OUTSIDE_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_ots_curve.csv")));
-            PCACoefficient.ForwardQuantization(data, 50000);
-
+            /*PCACoefficient.ForwardQuantization(data, 50000);
             Discretizer.DividePoint(data, 50000, 0);
             Discretizer.Divide(data, 50000, 1);
-
-            //LinearPredictor.Forward(data);
-            Discretizer.ToShorts(data, 0);
-
+            Discretizer.ToShorts(data, 0);*/
             foreach (PFSSLine l in data.lines)
             {
-                l.residuals = Residuals.Forward(l);
+                for (int i = 0; i < l.points.Count; i++)
+                {
+                    Spherical.ForwardToSpherical(l.points[i]);
+                    Spherical.ForwardMoveSpherical(l.points[i]);
+                }
             }
-
-            switch (qualityLevel)
-            {
-                case 0:
-                    LinearPredictor.Forward(data);
-                    break;
-                case 1:
-                    LinearPredictor.ForwardAdaptive(data);
-                    break;
-                case 2:
-                    LinearPredictor.MovAveragePredictorForwards(data, 1);
-                    break;
-                case 3:
-                    LinearPredictor.MovAveragePredictorForwards(data, 4);
-                    break;
-                case 4:
-                    LinearPredictor.AdaptiveMovAveragePredictorForwards(data, 4);
-                    break;
-                case 5:
-                    break;
-            }
+            Residuals.factor = qualityLevel * 12;
+            Residuals.factor2 = Residuals.factor / 4;
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_OUTSIDE, new FileInfo(Path.Combine(folder, this.GetName() + "_sto_curve_disk.csv")));
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_sts_curve_disk.csv")));
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.OUTSIDE_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_ots_curve_disk.csv")));
+            Residuals.ForwardPrediction(data);
 
-            //InterleavedWriter.WriteFits(data, fits, offset);
-            PredictiveResidualWriter.WritePureShortFits(data, offset, fits);
+            //PredictiveResidualWriter.WritePureShortFits(data, offset, fits);
+            PredictiveResidualWriter.WritePureShortFits_WithoutPCA(data, offset, fits);
             long size = RarCompression.DoRar(rarFits, fits);
             result.fileSize = size;
             result.lineCount = data.lines.Count;
 
-            switch (qualityLevel)
-            {
-                case 0:
-                    LinearPredictor.Backward(data);
-                    break;
-                case 1:
-                    LinearPredictor.BackwardAdaptive(data);
-                    break;
-                case 2:
-                    LinearPredictor.MovAveragePredictorBackwards(data, 1);
-                    break;
-                case 3:
-                    LinearPredictor.MovAveragePredictorBackwards(data, 4);
-                    break;
-                case 4:
-                    LinearPredictor.AdaptiveMovAveragePredictorBackwards(data, 4);
-                    break;
-                case 5:
-                    break;
-            }
-            foreach (PFSSLine l in data.lines)
-            {
-                Residuals.Backward(l, l.residuals);
-            }
-            PCACoefficient.BackwardQuantization(data, 50000);
+            Residuals.BackwardPrediction(data);
+            /*PCACoefficient.BackwardQuantization(data, 50000);
             Discretizer.Multiply(data, 50000, 1);
             Discretizer.MultiplyPoint(data, 50000, 0);
-            PCATransform.Backward(data, 0);
+            PCATransform.Backward(data, 0);*/
+            foreach (PFSSLine l in data.lines)
+            {
+                for (int i = 0; i < l.points.Count; i++)
+                {
+                    Spherical.BackwardMoveSpherical(l.points[i]);
+                    Spherical.BackwardToSpherical(l.points[i], data);
+                }
+            }
 
             return result;
         }
