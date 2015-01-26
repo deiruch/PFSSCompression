@@ -53,7 +53,5 @@ namespace CompressionTesting.Quantization
             return null;
         }
 
-
-
     }
 }

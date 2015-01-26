@@ -1,13 +1,13 @@
 \section{Diskussion}
 
-\subsection{Diskussion Lösungsansatz Adaptives Subsampling}
+\subsection{Lösungsansatz Adaptives Subsampling}
 Der Lösungsansatz des adaptiven Subsamplings erreicht eine Kompressionsrate von $11.6$ gegenüber dem Ist-Zustand, indem es nur die Punkte überträgt, welche der JHelioviewers darstellt. Dadurch sind die visualisierten Feldlinie der Ist-Kompression mit diesem Lösungsansatz identisch. In Zukunft ist es aber denkbar, dass im JHelioviewer deutlich mehr Punkte dargestellt werden sollen. In diesem Fall müssen entweder mehr Punkte übertragen werden oder der JHelioviewer mit einer Interpolation erweitert werden.
 
 Der JHelioviewer muss in der Lage sein $1000$ komprimierte Simulationen im Arbeitsspeicher abzulegen. Mit dieser Kompression werden durchschnittlich $85$ Megabyte an Arbeitsspeicher benötigt. Wenn von einer $10$ Megabit Internetverbindung ausgegangen wird, werden für das Herunterladen von $1000$ Simulationen $70$ Sekunden benötigt. Das ist eine deutliche Verbesserung gegenüber zum Ist-Zustand, welcher unter den selben Bedingungen $790$ Sekunden ($13$ Minuten) benötigt. Mit dieser Kompression können etwa $14$ komprimierte Simulationen pro Sekunde übertragen werden. Der Benutzer erhält eine flüssige Animation der Feldlinien, wenn pro Sekunde weniger als $14$ unterschiedliche Simulationen angezeigt werden müssen.
 
 Ein Vorteil dieses Lösungsansatzes ist die Laufzeit Dekompression: Da keine rechenaufwändige Transformationen verwendet werden braucht dieser Lösungsansatz $19$ Millisekunden für eine Dekompression (Siehe Abschnitt \ref{anhang:performance}). Mit einem Thread ist die Testmaschine in der Lage $50$ Simulationen pro Sekunde zu dekomprimieren. Anders als der DCT Lösungsansatz wird für die Dekompression keine Parameter zwischengespeichert. Dieser Lösungsansatz verbraucht für die Dekompression am wenigsten Ressourcen, vorausgesetzt dass keine Interpolation benötigt wird.
 
-\subsection{Diskussion Lösungsansatz DCT}
+\subsection{Lösungsansatz Diskrete Kosinus Transformation}
 Die DCT Kompression kann eine Kompressionsrate von $14.1$ erreicht werden. Im Vergleich mit dem Lösungsansatz des adaptiven Subsampling wird eine höhere Kompressionsrate erreicht, obwohl eine höhere Anzahl an Punkte übertragen werden. Die Problematik dieses Ansatzes liegt darin, dass die DCT Kompression Ringing Artefakte hinzufügt (siehe Abschnitt \ref{resultate:loesung1:ringing}). Die Artefakte können bei allen Kompressionsverfahren mit einer Kosinus Transformation auftreten, wie bei JPEG/JFIF Bilder und MP3 Audiodateien. Der JHelioviewer bietet die Möglichkeit, an die Feldlinien heranzuzoomen. Sobald Ringing Artefakte existieren ist der Benutzer in der Lage sie zu finden. Bei der Entwicklung der Kompression wurde nach Möglichkeiten gesucht, die Ringing Artefakte zu dämpfen. Die Daten sind Artefaktfrei bei etwa der Hälfte des Zoombereichs. Mit einer Glättung der Feldlinien konnten die Ringing Artefakte für alle Zoomstufen behoben werden. In der Bildverarbeitung wird nach weiteren Post-Processing Methoden geforscht, welche Ringing Artefakte vermindern. Die Qualität oder die Kompressionsrate könnte durch ein angepasstes Post-Processing weiter verbessert werden. 
 Wavelet Transformation
 
@@ -15,5 +15,11 @@ Beim Caching von $1000$ Simulationen benötigt dieser Ansatz $70$ Megabyte Arbei
 
 Die bessere Kompressionsrate kommt auf Kosten der Komplexität der Dekompression. Die Laufzeit der Dekompression hängt im Wesentlichen von der Implementation der inversen DCT ab. Eine naive Implementation braucht für eine Dekompression etwa drei Sekunden. Die grösste Zeit wird in der Berechnung der Kosinus-Werte verbraucht. Bei der Implementation in dieser Arbeit werden die Kosinus-Werte über SoftReferences gecached. Der Cache passt sich somit an den Arbeitsspeicher an. Wie schnell die Dekompression ist, hängt im Wesentlichen vom verfügbaren Arbeitsspeicher ab. Im besten Fall ergibt das eine Laufzeit von $65$ Millisekunden und im schlechtesten Fall $350$, was zu einem Durchsatz zwischen $3$ und $15$ Simulationen pro Sekunde pro Thread führt.
 
+\subsection{Lösungsansatz Prediktive Kodierung}
+Kompression und Artefakte. 
+
+Caching
+Komplexität und Laufzeit $30.6$ Millisekunden
+Vorteil
 
 Falls 60 Frames pro sekunde erreicht werden sollen.

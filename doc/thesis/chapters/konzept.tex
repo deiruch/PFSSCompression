@@ -119,40 +119,40 @@ Die quantisierten Koeffizienten liegen meistens zwischen $-50$ und $+50$. Acht B
 Wenn ein Kanal hauptsächlich aus tiefen Zahlen besteht, können so Bytes gespart werden, ohne Genauigkeit zu verlieren. Wenn aber der Kanal aus hauptsächlich grossen Zahlen besteht, welche zwei oder mehr Bytes an Genauigkeit brauchen, wird weniger Speicherplatz gespart.
 
 \pagebreak
+
 \subsection{Lösungsansatz: Prediktive Kodierung} \label{konzept:prediktiv}
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution2/aufbau.png}
 	\caption{Aufbau des Lösungsansatzes: Adaptives Subsampling.}
 	\label{konzept:loesung2:aufbau}
-\end{figure} 
-Warum Prediktive Kodierung, was ist das gute: weniger sichtbare Artefakte, sie äussern sich hauptsächlich durch Verschiebungen. Prediktive Kodierung stammt aus der verlustfreien Kompression, wie also Daten gelöscht werden ist eine zentrale Frage.
-Idee aus state of the art point cloud. Dort wird ein Octree verwendet, welche immer genauer die Daten approximiert.
+\end{figure}
+Prediktive Kodierungen sind typische Ansätze für verlustfreie Kompressionen. In diesem Lösungsansatz werden die Daten vor und nach der Kodierung quantisiert, was einen Informationsverlust verursacht. Der Aufbau dieser Lösung ist im Diagramm der Abbildung \ref{konzept:loesung2:aufbau} dargestellt. Im ersten Schritt wird ein Subsampling und eine Quantisierung der Daten durchgeführt. Darauf folgend werden die quantisierten Daten mit einer Prediktiven Kodierung versehen. Der zweite Quantisierungsschritt versucht unwichtige Informationen der Prediktiven Kodierung zu löschen. 
 
-\subsubsection{Angle Subsampling}
-selbe subsampling wie lösung zuvor. es werden aber mehr punkte übertragen. Grund liegt darin dass das angle subsampling eine gute heuristik darstellt, unwichtige Informationen zu löschen.
+Für eine Prediktive Kodierung existieren unterschiedliche Algorithmen. Die Güte der Kodierung ist abhängig von den Eigenschaften der Daten. Der Algorithmus der hier vorgestellt wird basiert auf der Prediktiven Kodierung der Point Cloud Kompression aus Abschnitt \ref{state:pointcloud}: Die Punktwolke wird in einen Octree überführt. Jeder Level des Octrees stellt eine Approximation der Punktwolke dar. Die Kodierung nutzt diese Eigenschaft aus und versucht aus den vorhergehenden Approximationen die nächst genauere vorherzusagen. Das Prinzip wurde für eindimensionale Kanäle umgesetzt.
 
-\subsubsection{Quantisierung}
-quantisierung in diskretisierten spärischen koordinaten. selbe wie in Lösung 0 aber angepasst?
+\subsubsection{Angle Subsampling und Quantisierung}
+Das Angle-Subsampling wurde vom Lösungsansatz aus Abschnitt \ref{konzept:loesung0} übernommen. Das Subsampling wird mit schwächeren Parametern ausgeführt und es bleiben 50\% mehr Punkte übrig. Es wurde dieser Ansatz gewählt, da es sonst schwierig wird in die selben Grössenordnung der Kompression zu gelangen.
 
-\subsubsection{Wavelet Prediktive Kodierung}
- Das selbe Prinzip wird nun auf die Kurven der Kanäle übertragen werden. Kurven dar (ref pca der resultate).
-Im Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step1} ist der erste Schritt des Algorithmus dargestellt. Start und Endpunkt werden ohne Kodierung abgespeichert. Es wird der mittlere Punkt des Kanals kodiert. Es wird angenommen, dass der mittlere Punkt des Signals auf der Linie zwischen Start- und Endpunkt liegt.
-Algorithmus Schritt 1: Residual
+Der Subsampling Ansatz scheint eine gute Heuristik darzustellen, welche unwichtige Informationen löscht. Die Schwierigkeit liegt aber die Daten mit einer Prediktiven Kodierung zu kodieren. 
+
+Die Quantisierung überführt die Punkte in ein diskretes, sphärisches Koordinatensystem. Dieses System erlaubt es die Punkte mit 16 Bit genauigkeit abzuspeichern. 
+
+\subsubsection{Median Prediktive Kodierung}
+Idee mit approximation.
+Der Algorithmus kodiert den Median des Kanals. Im Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step1} ist der erste Schritt des Algorithmus dargestellt. Die Prediktive Kodierung nimmt an, dass der Median auf der Strecke zwischen Start- und Endwert liegt. Es wird der Vorhersagefehler berechnet und abgespeichert. Der Algorithmus führt das ganze Rekursif für die Zwei neue Teilstrecken aus. Der nächste Schritt ist im Diagramm \ref{konzept:loesung2:algorithm:step2} dargestellt.\\
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution2/algorithm_step1.png}
 	\caption{Erster Schritt der Wavelet Prediktiven Kodierung. Zu sehen sind das zu kodierende Signal, die Vorhersage und den Fehler der Vorhersage.}
 	\label{konzept:loesung2:algorithm:step1}
 \end{figure} 
-Fehler von der Vorhersage zum Mittelpunkt. Nächster Schritt ist nun das ganze rekursiv für die neuen Teilstrecken zu wiederholen. Der nächste Schritt ist im Diagramm \ref{konzept:loesung2:algorithm:step2} dargestellt.
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution2/algorithm_step2.png}
 	\caption{Zweiter Schritt der Wavelet Prediktiven Kodierung. Die Vorhersage beinhaltet nun zwei Strecken.}
 	\label{konzept:loesung2:algorithm:step2}
 \end{figure} 
-wiederholung, bis alles abgelegt ist. Residuals werden immer kleiner
 
 \subsubsection{Quantisierung}
 Eine weitere Quantisierung. darf nicht zu viel passieren, sonst geht alles hops. es wurde deshalb noch eine sehr schwache quantisierung eingeführt.

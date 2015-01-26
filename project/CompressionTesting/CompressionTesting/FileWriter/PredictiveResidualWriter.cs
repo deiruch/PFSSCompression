@@ -144,9 +144,6 @@ namespace CompressionTesting.FileWriter
 
             int index = 0;
             int startPointIndex = 0;
-            int meansIndex = 0;
-            int pcaIndex = 0;
-            int extraPointIndex = 0;
 
             foreach (PFSSLine l in input.lines)
             {
@@ -163,7 +160,6 @@ namespace CompressionTesting.FileWriter
                 }
 
                 Residuals res = l.residuals;
-                short extraPoint = 0;
 
                 for (int i = 0; i < res.predictionErrors.Count; i++)
                 {
@@ -171,6 +167,7 @@ namespace CompressionTesting.FileWriter
                     ptr[index] = (short)p.x;
                     ptph[index] = (short)p.y;
                     ptth[index] = (short)p.z;
+                    System.Console.WriteLine(p.x);
                     index++;
                 }
 
@@ -200,7 +197,7 @@ namespace CompressionTesting.FileWriter
             BinaryTableHDU bhdu = (BinaryTableHDU)fits.GetHDU(1);
             bhdu.SetColumnName(0, "B0", null);
             bhdu.SetColumnName(1, "L0", null);
-            bhdu.SetColumnName(2, "PTR_NZ_LEN", null);
+            bhdu.SetColumnName(2, "LINE_LENGTH", null);
             bhdu.SetColumnName(3, "StartPointsR", null);
             bhdu.SetColumnName(4, "StartPointsPhi", null);
             bhdu.SetColumnName(5, "StartPointsTheta", null);

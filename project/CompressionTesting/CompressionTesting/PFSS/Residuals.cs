@@ -9,7 +9,7 @@ namespace CompressionTesting.PFSS
     class Residuals
     {
         public static int factor = 36;
-        public static int factor2 = 36;
+        public static int factor2 = 8;
         #region tryout fields
         internal Residuals nextLevel { get; set; }
         internal List<PFSSPoint> points { get; set; }
@@ -196,28 +196,23 @@ namespace CompressionTesting.PFSS
 
         private static void Strip(PFSSPoint p)
         {
-            if (Math.Abs(p.x) < factor2)
-                p.x = 0;
-            if (Math.Abs(p.y) < factor2)
-                p.y = 0;
-            if (Math.Abs(p.z) < factor2)
-                p.z = 0;
+
 
             if (Math.Abs(p.x) < factor)
-                p.x = (int)(p.x / 2);
+                p.x = (int)Math.Truncate(p.x / factor2);
             if (Math.Abs(p.y) < factor)
-                p.y = (int)(p.y / 2);
+                p.y = (int)Math.Truncate(p.y / factor2);
             if (Math.Abs(p.z) < factor)
-                p.z = (int)(p.z / 2);
+                p.z = (int)Math.Truncate(p.z / factor2);
         }
         private static void Push(PFSSPoint p)
         {
-            if (Math.Abs(p.x) < factor/2)
-                p.x = (int)(p.x * 2);
-            if (Math.Abs(p.y) < factor / 2)
-                p.y = (int)(p.y * 2);
-            if (Math.Abs(p.z) < factor / 2)
-                p.z = (int)(p.z * 2);
+            if (Math.Abs(p.x) < factor / factor2)
+                p.x = (int)(p.x * factor2);
+            if (Math.Abs(p.y) < factor / factor2)
+                p.y = (int)(p.y * factor2);
+            if (Math.Abs(p.z) < factor / factor2)
+                p.z = (int)(p.z * factor2);
         }
         public static void BackwardPrediction(PFSSData data)
         {
@@ -251,8 +246,8 @@ namespace CompressionTesting.PFSS
 
             int toPredictIndex = (endIndex - startIndex) / 2 + startIndex;
             PFSSPoint toPredict = pointQueue.Dequeue();
+            Push(toPredict);
             PFSSPoint actual = Predict(start, end, toPredict, startIndex, endIndex, toPredictIndex);
-            Push(actual);
             if (l.points[(endIndex - startIndex) / 2].y != actual.y)
                 System.Console.Write("");
             l.points[toPredictIndex].x = actual.x;

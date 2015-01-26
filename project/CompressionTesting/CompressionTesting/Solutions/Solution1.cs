@@ -18,18 +18,18 @@ namespace CompressionTesting.Solutions
         int counter = 0;
         public int GetQualityLevels()
         {
-            return  9;
+            return  1;
         }
 
         public string GetName()
         {
-            return "Solution1_One";
+            return "Solution1_Seven";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return One(data, qualityLevel, folder);
+            return Seven(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -336,7 +336,6 @@ namespace CompressionTesting.Solutions
             Subsampling.Subsample(data, 4);
             DCTImprover.AddExtraPoints(data, 100000);
             DCTransformer.ForwardExtra(data, 0);
-
             ExtraPointDiscretizer.DivideExtra(data,1000);
             ExtraPointDiscretizer.DivideLinearExtra(data, 0, 2 * (qualityLevel * 8 + 10), 0, 1);
             ExtraPointDiscretizer.DivideLinearExtra(data, 1, 2 * (qualityLevel * 8 + 10), 0, 1);

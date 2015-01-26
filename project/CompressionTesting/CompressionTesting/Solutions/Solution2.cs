@@ -15,9 +15,10 @@ namespace CompressionTesting.Solutions
 {
     class Solution2 : ISolution
     {
+        private static int counter = 0;
         public int GetQualityLevels()
         {
-            return 5;
+            return 1;
         }
 
         public string GetName()
@@ -327,7 +328,7 @@ namespace CompressionTesting.Solutions
 
         public TestResult Five(PFSS.PFSSData data, int qualityLevel, string folder)
         {
-            FileInfo fits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".fits"));
+            FileInfo fits = new FileInfo(Path.Combine(folder, this.GetName() + counter++ + ".fits"));
             FileInfo rarFits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".rar"));
             TestResult result = new TestResult();
             int offset = 1;
@@ -335,7 +336,6 @@ namespace CompressionTesting.Solutions
             Subsampling.AngleSubsample(data, 3);
 
             //PCATransform.Forward(data, 0);
-
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_OUTSIDE, new FileInfo(Path.Combine(folder, this.GetName() + "_sto_curve.csv")));
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_sts_curve.csv")));
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.OUTSIDE_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_ots_curve.csv")));
@@ -351,8 +351,9 @@ namespace CompressionTesting.Solutions
                     Spherical.ForwardMoveSpherical(l.points[i]);
                 }
             }
-            Residuals.factor = qualityLevel * 12;
-            Residuals.factor2 = Residuals.factor / 4;
+            qualityLevel += 3;
+            Residuals.factor = 100000;
+            Residuals.factor2 = 8;
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_OUTSIDE, new FileInfo(Path.Combine(folder, this.GetName() + "_sto_curve_disk.csv")));
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_sts_curve_disk.csv")));
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.OUTSIDE_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_ots_curve_disk.csv")));

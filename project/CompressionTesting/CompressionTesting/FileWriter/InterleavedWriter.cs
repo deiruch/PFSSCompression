@@ -84,9 +84,9 @@ namespace CompressionTesting.FileWriter
 
         public static void WritePredictiveFits(PFSSData input, FileInfo output, int offset = 1)
         {
-            int[] ptr;
-            int[] ptph;
-            int[] ptth;
+            short[] ptr;
+            short[] ptph;
+            short[] ptth;
             int[] ptr_nz_len = new int[input.lines.Count];
             float[] startPoints = new float[input.lines.Count * offset * 3];
 
@@ -98,9 +98,9 @@ namespace CompressionTesting.FileWriter
                 ptr_nz_len[i] = (short)count;
             }
 
-            ptr = new int[totalCount];
-            ptph = new int[totalCount];
-            ptth = new int[totalCount];
+            ptr = new short[totalCount];
+            ptph = new short[totalCount];
+            ptth = new short[totalCount];
 
             int index = 0;
             int startPointIndex = 0;
@@ -128,7 +128,7 @@ namespace CompressionTesting.FileWriter
             Double[] b0a = new Double[] { input.b0 };
             Double[] l0a = new Double[] { input.l0 };
             Object[][] data = new Object[1][];
-            Object[] dataRow = new Object[] { b0a, l0a, DCTCoder.EncodeAdaptiveUnsigned(ptr_nz_len), startPoints, DCTCoder.EncodeAdaptive(ptr), DCTCoder.EncodeAdaptive(ptph), DCTCoder.EncodeAdaptive(ptth) };
+            Object[] dataRow = new Object[] { b0a, l0a, DCTCoder.EncodeAdaptiveUnsigned(ptr_nz_len), startPoints, ptr, ptph, ptth };
             data[0] = dataRow;
 
             BinaryTable table = new BinaryTable(data);
