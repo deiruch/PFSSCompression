@@ -249,8 +249,8 @@ namespace CompressionTesting.Solutions
             FileInfo rarFits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".rar"));
             TestResult result = new TestResult();
             int offset = 2;
-            //Subsampling.Subsample(data, 4);
-            Subsampling.AngleSubsample(data, 3);
+            Subsampling.Subsample(data, 4);
+            //Subsampling.AngleSubsample(data, 3);
 
             PCATransform.Forward(data, 0);
 

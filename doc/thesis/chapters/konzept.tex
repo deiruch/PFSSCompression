@@ -127,35 +127,33 @@ Wenn ein Kanal hauptsächlich aus tiefen Zahlen besteht, können so Bytes gespar
 	\caption{Aufbau des Lösungsansatzes: Adaptives Subsampling.}
 	\label{konzept:loesung2:aufbau}
 \end{figure}
-Prediktive Kodierungen sind typische Ansätze für verlustfreie Kompressionen. In diesem Lösungsansatz werden die Daten vor und nach der Kodierung quantisiert, was einen Informationsverlust verursacht. Der Aufbau dieser Lösung ist im Diagramm der Abbildung \ref{konzept:loesung2:aufbau} dargestellt. Im ersten Schritt wird ein Subsampling und eine Quantisierung der Daten durchgeführt. Darauf folgend werden die quantisierten Daten mit einer Prediktiven Kodierung versehen. Der zweite Quantisierungsschritt versucht unwichtige Informationen der Prediktiven Kodierung zu löschen. 
+Der Aufbau dieser Lösung ist im Diagramm der Abbildung \ref{konzept:loesung2:aufbau} dargestellt. Im ersten Schritt wird ein Subsampling und eine Quantisierung der Daten durchgeführt. Darauf folgend werden die quantisierten Daten mit einer Prediktiven Kodierung versehen. Der zweite Quantisierungsschritt versucht unwichtige Informationen der Prediktiven Kodierung zu löschen. 
 
-Für eine Prediktive Kodierung existieren unterschiedliche Algorithmen. Die Güte der Kodierung ist abhängig von den Eigenschaften der Daten. Der Algorithmus der hier vorgestellt wird basiert auf der Prediktiven Kodierung der Point Cloud Kompression aus Abschnitt \ref{state:pointcloud}: Die Punktwolke wird in einen Octree überführt. Jeder Level des Octrees stellt eine Approximation der Punktwolke dar. Die Kodierung nutzt diese Eigenschaft aus und versucht aus den vorhergehenden Approximationen die nächst genauere vorherzusagen. Das Prinzip wurde für eindimensionale Kanäle umgesetzt.
+Das Adaptive Subsampling reduziert die Anzahl Punkte und verändert die Eigenschaften der Kanäle der einzelnen Feldlinien. Stetige Steigungen werden zerstört, ein Beispiel ist im Diagramm der Abbildung \ref{resultate:loesung2:adaptive:channel} im Abschnitt \ref{resultate:loesung2:adaptive}. Einfache Prediktoren wie zum Beispiel ein linearer Prediktor kann auf solche Daten keine zuverlässige Vorhersage treffen und verbessert die Kompressionsrate nicht. Es wurde deshalb der Rekursiver Linearer Prediktor entwickelt, welche auf der Idee der Point Cloud Kompression aus Abschnitt \ref{state:pointcloud} basiert. Die Daten werden in unterschiedlich genauen Approximationen dargestellt. Der Prediktor benutzt die ungenaue Approximation um die nächst genauere vorherzusagen. Das Prinzip wurde für den Median Prediktor übernommen.
 
 \subsubsection{Angle Subsampling und Quantisierung}
-Das Angle-Subsampling wurde vom Lösungsansatz aus Abschnitt \ref{konzept:loesung0} übernommen. Das Subsampling wird mit schwächeren Parametern ausgeführt und es bleiben 50\% mehr Punkte übrig. Es wurde dieser Ansatz gewählt, da es sonst schwierig wird in die selben Grössenordnung der Kompression zu gelangen.
+Das Angle-Subsampling vom Lösungsansatz aus Abschnitt \ref{konzept:loesung0} wurde mit angepassten Parametern übernommen. In diesem Ansatz werden $50\%$ mehr Punkte übertragen. Die Zusätzliche Punkte werden übertragen, damit die Kompression nicht angepasst werden muss, falls der JHelioviewer in Zukunft mehr Punkte anzeigt.
 
-Der Subsampling Ansatz scheint eine gute Heuristik darzustellen, welche unwichtige Informationen löscht. Die Schwierigkeit liegt aber die Daten mit einer Prediktiven Kodierung zu kodieren. 
+Die Quantisierung überführt die Punkte in ein diskretes, sphärisches Koordinatensystem. In diesem Koordinatensystem können die Koordinatenachse mit 16 Bit Genauigkeit abgebildet werden, ohne hohe Abweichungen vom Originalpunkt in kauf zu nehmen.
 
-Die Quantisierung überführt die Punkte in ein diskretes, sphärisches Koordinatensystem. Dieses System erlaubt es die Punkte mit 16 Bit genauigkeit abzuspeichern. 
-
-\subsubsection{Median Prediktive Kodierung}
-Idee mit approximation.
-Der Algorithmus kodiert den Median des Kanals. Im Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step1} ist der erste Schritt des Algorithmus dargestellt. Die Prediktive Kodierung nimmt an, dass der Median auf der Strecke zwischen Start- und Endwert liegt. Es wird der Vorhersagefehler berechnet und abgespeichert. Der Algorithmus führt das ganze Rekursif für die Zwei neue Teilstrecken aus. Der nächste Schritt ist im Diagramm \ref{konzept:loesung2:algorithm:step2} dargestellt.\\
+\subsubsection{Rekursiver Linearer Kodierung}
+Der Algorithmus der Rekursiver Linearer Kodierung versucht aus einer ungenauen Approximation die nächst genauere vorherzusagen. Im Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step1} ist der erste Schritt des Algorithmus dargestellt. Es wird angenommen, dass der mittlere Wert des Kanals auf der Strecke zwischen Start- und Endwert liegt. Der nächste Schritt ist im Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step2} dargestellt. Der Algorithmus wird rekursiv für die zwei Teilstücke des Kanals wiederholt, bis alle Werte des Kanals kodiert wurden, mit Ausnahme des Start- und Endwertes. Sie werden ohne Kodierung abgespeichert.
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution2/algorithm_step1.png}
-	\caption{Erster Schritt der Wavelet Prediktiven Kodierung. Zu sehen sind das zu kodierende Signal, die Vorhersage und den Fehler der Vorhersage.}
+	\caption{Erster Schritt der Rekursiver Linearer Kodierung. Zu sehen sind das zu kodierende Signal, die Vorhersage und den Fehler der Vorhersage.}
 	\label{konzept:loesung2:algorithm:step1}
 \end{figure} 
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution2/algorithm_step2.png}
-	\caption{Zweiter Schritt der Wavelet Prediktiven Kodierung. Die Vorhersage beinhaltet nun zwei Strecken.}
+	\caption{Zweiter Schritt der Rekursiver Linearer Kodierung. Die Vorhersage beinhaltet nun zwei Strecken.}
 	\label{konzept:loesung2:algorithm:step2}
 \end{figure} 
 
 \subsubsection{Quantisierung}
-Eine weitere Quantisierung. darf nicht zu viel passieren, sonst geht alles hops. es wurde deshalb noch eine sehr schwache quantisierung eingeführt.
+Der Vorteil der Rekursiver Linearer Kodierung liegt darin, dass der Kanal mit zwei bis drei Rekusionsstufen gut approximiert wird und die restlichen Vorhersagefehler minimal werden. Die minimalen Vorhersagefehler haben einen minimalen Einfluss auf die Rekonstruktion des Kanals. Die Vorhersagefehler werden für eine bessere Kompression quantisiert.
 
 \subsubsection{Entropie Kodierung}
+
 adaptive Kodierung aus DCT. die Längenkodierung wird nicht verwendet, da sie nicht viel auf 0 quantisieren wird. 

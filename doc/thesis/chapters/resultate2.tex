@@ -1,5 +1,4 @@
 \subsection{Lösungsansatz: Prediktive Kodierung}
-Wie daten verloren gehen, warum 
 
 \subsubsection{Variante: einfaches Subsampling}
 Für die erste Variante wird das Subsampling des DCT-Lösungsansatzes verwendet. Es reduziert die Punktmenge auf die Anzahl des Ist-Zustands. Die Feldlinien werden mit einer PCA in ein lokales Koordinatensystem transformiert. Im lokalen System können die Koordinaten mit 16 Bit Genauigkeit dargestellt werden. 16 Bit im Koordinatensystem der Sonne reichen nicht aus und führen zu einem grösseren Fehler als der Ist-Zustand.\\
@@ -29,26 +28,41 @@ Eine mögliche Optimierung ist die Adaptive Byte Kodierung der DCT-Variante, bes
 Der Linare Prediktor kann eine Feldinie mit etwa $214$ Bytes darstellen, was eine Kompressionsrate von $4$ ergibt.
 
 \subsubsection{Variante: Adaptives Subsampling}
-Um mit diesem Ansatz in die selbe Grössenordnung zu gelangen wie die Lösungsansätze Adaptives Subsampling und DCT müssen mehr Informationen gelöscht werden. Es werden andere Parameter verwendet und im Schnitt $50\%$ mehr Punkte übertragen als im Lösungsansatz des Adaptiven Subsampling.
+Um mit diesem Ansatz in die selbe Grössenordnung zu gelangen wie die Lösungsansätze Adaptives Subsampling und DCT müssen mehr Informationen gelöscht werden. Es werden andere Parameter verwendet und im Schnitt $50\%$ mehr Punkte übertragen als im Lösungsansatz des Adaptiven Subsampling.\\
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante1/resultate_euler.png}
 	\caption{Kompressionsraten der Prediktiven Kodierungen mit dem adaptiven Subsampling.}
 	\label{resultate:loesung2:adaptive:euler}
 \end{figure}
-Das Diagramm der Abbildung \ref{resultate:loesung2:adaptive:euler} zeigt die Kompressionsraten. Die Resultate liegen dicht beieinander und der Abstand zwischen Kodierung und der Kompression, welche ohne Kodierung erreicht wird wurde drastisch vermindert. Die Kodierungen erreichen eine PSNR-HVS-M von $139,2$. Dies liegt an den Eigenschaften des Outputs vom Angle Subsampling: Die Kanäle einer Feldlinie sind nach dem Subsampling weniger stetig. Der Lineare Prediktor ist bei diesen Daten nicht besser als keine Kodierung.
-
-Um die Vorhersage zu verbessern werden die Punkte in das sphärische Koordinatensystem transformiert. Mit dieser Transformation und dem Angle-Subsampling werden sich stetigere Kanäle erhofft.
+Das Diagramm der Abbildung \ref{resultate:loesung2:adaptive:euler} zeigt die Kompressionsraten. Die Resultate liegen dicht beieinander und der Abstand zwischen Kodierung und der Kompression, welche ohne Kodierung erreicht wird wurde drastisch vermindert. Die Kodierungen erreichen eine PSNR-HVS-M von $139,2$. Das Angle Subsampling verändert die Eigenschaften der Daten. Die Diagramme der Abbildung \ref{resultate:loesung2:adaptive:channel} visualisiert die Veränderung. Monotone Steigungen sind nach dem Subsampling nicht mehr vorhanden. Die einfachen Prediktoren können die Daten nicht zuverlässig vorhersagen. 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante1/resultate_spherical.png}
-	\caption{Kompressionsraten der Prediktiven Kodierungen mit im sphärischen Koordinatensystem.}
-	\label{resultate:loesung2:adaptive:spherial}
+	\includegraphics[width=0.49\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante1/channel_sub.png}
+	\includegraphics[width=0.49\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante1/channel_angle.png}
+	\caption{Änderung der Eigenschaften der Daten durch das Angle Subsampling. Links der Kanal einer Feldlinie vor, rechts der Kanal nach dem Angle Subsampling.}
+	\label{resultate:loesung2:adaptive:channel}
 \end{figure}
-Die Kompressionsraten der Kodierungen im sphärischen Koordinatensystem sind im Diagramm der Abbildung \ref{resultate:loesung2:adaptive:spherial} dargestellt. Die Phänomene im Diagramm der Abbildung \ref{resultate:loesung2:adaptive:euler} wurden weiter verstärkt, die Kodierungen erbringen keine Verbesserung mit Ausnahme der konstanten Kodierung. Durch die Verwendung des sphärischen Koordinatensystems wird eine bessere Kompression erreicht, da die PCA-Koeffizienten gespart werden können.
 
-\subsubsection{Median Prediktive Kodierung}
-Allgemeine Kurven kodieren, beschrieben im Abschnitt \ref{konzept:prediktiv}. Zusätzliche Quantisierung eingebaut.
-figure
-figure psnr-hvs-m
-Deutliche Verbesserung. Schlägt die Lösung 0. Ziel ist es, eine artefaktfreie Lösung zu generieren.
+\subsubsection{Rekursive Lineare Kodierung}
+Die Rekursive Lineare Kodierung ist in der Lage nicht-stetigen Kanälen eine sinnvolle Vorhersage zu berechnen. Das Verfahren ist im Abschnitt \ref{konzept:prediktiv} genauer erleutert. Die Punkte werden ins sphärische Koordinatensystem überführt. In diesem Koordinatensystem sind 16 Bit Genauigkeit pro Koordinatenachse ausreichend und die PCA muss nicht berechnet werden. Im Schnitt können dadurch $30$ Bytes pro Feldlinie eingespart werden. 
+Zusätzlich werden die Vorhersagefehler quantisiert. Bei den einfachen Prediktoren wurde keine Quantisierung des Fehlers vorgenommen. Jede Quantisierung führte zu einem markanten Anstieg der Abweichung.\\
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante2/resultate.png}
+	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante2/resultate_psnr.png}
+	\caption{Kompressionsraten der Rekursive Lineare Kodierung mit dem adaptiven Subsampling.}
+	\label{resultate:loesung2:adaptive:median}
+\end{figure}
+Das Diagramm der Abbildung \ref{resultate:loesung2:adaptive:median} zeigt die Standardabweichung und PSNR-HVS-M der Rekursiven Linearen Kodierung zu unterschiedlichen Quantisierungen. Die Resultate der einfachen Prediktoren wurden ebenfalls ohne PCA im sphärischen Koordinatensystem gemessen. Die Rekursive Lineare Kodierung kann eine bessere Kompressionsrate erreichen als die Lösung des Adaptiven Subsamplings. Bei Datenmenge von $68$ Bytes pro Feldlinie erreicht diese Variante eine tiefere Standardabweichung als das Adaptive Subsampling und eine höhere PSNR-HVS-M als die DCT Lösung. Die DCT Lösung weist eine tiefere Standardabweichung auf. Die Variante ereicht eine Kompressionsrate von $12.6$ und fällt somit zwischen den Lösungsansätzen DCT und Adaptives Subsampling.
+
+Die Artefakte der Dekompression äussern sich meist als leichte Verschiebungen einzelner Punkte. Ein Extremfall führte zu Ringing ähnlichen Artefakte, welche in der Abbildung \ref{resultate:loesung2:adaptive:median:artefakte} dargestellt sind. Die Artefakte entstehen durch das Runden der quantisierten Vorhersagefehler. Die Artefakte aus Abbildung \ref{resultate:loesung2:adaptive:median:artefakte} entstehen, wenn die Nachkommastellen abgeschnitten werden. Die Artefakte, welche durch das Abschneiden entstehen, am schwierigsten vom blossen Auge zu erkennen. Durch eine Glättung können die Artefakte beinahe komplett versteckt werden.
+\begin{figure}[!htbp]
+	\center
+	\frame{
+	\includegraphics[width=0.8\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante2/artefakte1.png}}
+		\frame{
+	\includegraphics[width=0.8\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante2/artefakte2.png}}
+	\caption{Artefakte der Rekursiven Linearen Kodierung. Links ohne Glättung, rechts mit Glättung}
+	\label{resultate:loesung2:adaptive:median:artefakte}
+\end{figure}

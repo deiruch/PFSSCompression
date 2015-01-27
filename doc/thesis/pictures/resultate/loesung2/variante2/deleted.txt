@@ -1,0 +1,9 @@
+Eine Verbesserungsmöglichkeit ist die Daten ins sphärische Koordinatensystem
+Um die Vorhersage zu verbessern werden die Punkte in das sphärische Koordinatensystem transformiert. Mit dieser Transformation und dem Angle-Subsampling werden sich stetigere Kanäle erhofft.
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante1/resultate_spherical.png}
+	\caption{Kompressionsraten der Prediktiven Kodierungen mit im sphärischen Koordinatensystem.}
+	\label{resultate:loesung2:adaptive:spherial}
+\end{figure}
+Die Kompressionsraten der Kodierungen im s Koordinatensystem sind im Diagramm der Abbildung \ref{resultate:loesung2:adaptive:spherial} dargestellt. Die Phänomene im Diagramm der Abbildung \ref{resultate:loesung2:adaptive:euler} wurden weiter verstärkt, die Kodierungen erbringen keine Verbesserung mit Ausnahme der konstanten Kodierung. Durch die Verwendung des sphärischen Koordinatensystems wird eine bessere Kompression erreicht, da die PCA-Koeffizienten gespart werden können.
