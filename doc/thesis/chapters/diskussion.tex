@@ -15,9 +15,10 @@ Beim Caching von $1000$ Simulationen benötigt dieser Ansatz $70$ Megabyte Arbei
 Die bessere Kompressionsrate kommt auf Kosten der Komplexität der Dekompression. Die Laufzeit der Dekompression hängt im Wesentlichen von der Implementation der inversen DCT ab. Eine naive Implementation braucht für eine Dekompression etwa drei Sekunden. Die grösste Zeit wird in der Berechnung der Kosinus-Werte verbraucht. Bei der Implementation in dieser Arbeit werden die Kosinus-Werte über SoftReferences gecached. Der Cache passt sich somit an den Arbeitsspeicher an. Wie schnell die Dekompression ist, hängt im Wesentlichen vom verfügbaren Arbeitsspeicher ab. Im besten Fall ergibt das eine Laufzeit von $65$ Millisekunden und im schlechtesten Fall $350$, was zu einem Durchsatz zwischen $3$ und $15$ Simulationen pro Sekunde pro Thread führt.
 
 \subsection{Lösungsansatz Prediktive Kodierung}
-Das Caching von $1000$ Simulationen verbraucht mit diesem Ansatz $78$ Megabyte an Arbeitsspeicher Die Übertragungszeit von $1000$ Simulationen beträgt  $62$ Sekunden und die Übertragungsrate, liegt bei $16$ Simulationen pro Sekunde. Die Kompressionsrate fällt zwischen zwischen dem DCT und dem adaptiven Subsampling Ansatz. Die Laufzeit der Dekompression fällt mit $30.6$ Millisekunden pro Simulation ebenfalls zwischen den beiden Ansätzen. Im Durchschnitt kann ein einzelner Thread $32$ Simulationen pro Sekunde dekomprimieren.
+Das Caching von $1000$ Simulationen verbraucht mit diesem Ansatz $78$ Megabyte an Arbeitsspeicher Die Übertragungszeit von $1000$ Simulationen beträgt  $62$ Sekunden und die Übertragungsrate, liegt bei $16$ Simulationen pro Sekunde. Die Kompressionsrate fällt zwischen zwischen dem DCT und dem adaptiven Subsampling Ansatz. Die Laufzeit der Dekompression fällt mit $1$ Millisekunden pro Simulation ebenfalls zwischen den beiden Ansätzen. Im Durchschnitt kann ein einzelner Thread $32$ Simulationen pro Sekunde dekomprimieren.
 
 Die Artefakte der Dekompression sind meistens für das menschliche Auge unsichtbar. Es können leichte Verschiebungen einzelner Punkte auftreten, welche erst bei maximaler Zoomstufe als Artefakte erkennbar werden. Mit einer Glättung können die letzten Anzeichen von Artefakten versteckt werden. 
 
+Der Lösungsansatz der 
 Sind Artefakte genügen klein um die tiefere Kompression zu rechtfertigen?  Wie kann diese Variante verbessert werden?
-warum diese Kompression?
+Vorteil: einfache

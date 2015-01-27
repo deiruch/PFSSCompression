@@ -9,68 +9,64 @@ Im Ist-Zustand führt der JHelioviewer nach der Dekompression ein adaptives Subs
 	\caption{Vergleich des Lösungsansatzes: Adaptives Subsampling zur Ist-Kompression.}
 	\label{resultate:loesung0:loesung0_0}
 \end{figure}
-Wie im Diagramm \ref{resultate:loesung0:loesung0_0} erkennbar ist, braucht dieser Lösungsansatz deutlich weniger Speicher als die Ist-Kompression. Das Adaptive Subsampling reduziert deutlich die Anzahl Punkte, während die Rar eine bessere Kompression erbringt. Dieser Ansatz kann die Daten um Faktor $11.6$ besser komprimieren.\\
+Wie im Diagramm \ref{resultate:loesung0:loesung0_0} erkennbar ist, braucht dieser Lösungsansatz deutlich weniger Speicher als die Ist-Kompression zur selben Genauigkeit. Mit diesem Ansatz wird eine Kompressionsrate von $11.6$ erreicht.\\
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,height=8cm,keepaspectratio]{./pictures/resultate/loesung0/loesung0_artefakte.png}
-	\caption{Artefakte der Lösung 0}
+	\caption{Artefakte des Lösungsansatzes Adaptives Subsampling.}
 	\label{resultate:loesung0:artefakte}
 \end{figure}
-Die Abbildung \ref{resultate:loesung0:artefakte} zeigt die Artefakte, die bei der Komprimierung der Lösung 0 entstehen. Es ist anzumerken, dass der Ist-Zustand die selben Artefakte aufweist.
+Die Abbildung \ref{resultate:loesung0:artefakte} zeigt die Artefakte, die bei der Kompression entstehen. Der Ist-Zustand weist die selben Artefakten auf.
 \pagebreak
 
 \subsection{Lösungansatz: Diskrete Kosinus Transformation}
-In diesem Abschnitt wird der Lösungsansatz mittels Diskreter Kosinus Transformation behandelt. Es wurden verschiedene Transformationen getestet, welche eine Approximation mittels Kosinus Funktionen vereinfachen könnten.\\
-Um die Feldlinien optimal mit der DCT zu approximieren, müssen Ringing Artefakte, behandelt werden. Das Auftreten der Artefakte wird im Abschnitt \ref{resultate:loesung1:ringing} und die Behandlung im Abschnitt \ref{resultate:loesung1:behandlung_ringing} besprochen .\\
-[\baselineskip]
-Für alle Tests wurde eine lineare Quantisierung verwendet. Jeder DCT Koeffizient wird durch einen Faktor geteilt, der sich stetig ehöht. Zum Beispiel wird der erste Koeffizient durch zwei geteilt, der zweite durch Vier, der Dritte durch Sechse etc.  Die Kompressionsrate kann durch einen höheren oder tieferen Faktor gesteuert werden. Diese Quantifizierung ist nicht das Optimum. Eine bessere Quantifizierung wird für die beste Variante ausgearbeitet. Wie die beste Variante im Detail umgesetzt wurde, wird im Abschnitt \ref{konzept:loesung0:kodierung} behandelt. 
+In diesem Abschnitt wird der Lösungsansatz mittels Diskreter Kosinus Transformation behandelt. Es wurden verschiedene Transformationen getestet, welche eine Approximation mittels Kosinus Funktionen vereinfachen.\\
+Um die Feldlinien optimal mit der DCT zu approximieren, müssen Ringing Artefakte, behandelt werden. Das Auftreten der Artefakte wird im Abschnitt \ref{resultate:loesung1:ringing} und die Behandlung im Abschnitt \ref{resultate:loesung1:behandlung_ringing} besprochen .
 
 \subsubsection{Variante: DCT}\label{resultate:dct}
-Diese Variante verwendet einzig die Diskrete Kosinus Transformation und der linearen Quantisierung.
+Diese Variante verwendet die Diskrete Kosinus Transformation. Es wird erforscht welche Kompressionsrate ohne zusätzliche Transformationen möglich ist.
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/loesung1-0/loesung1_0.png}
-	\caption{Vergleich der DCT Kompression mit der Lösung0}
+	\caption{Vergleich der DCT Kompression mit dem Lösungsansatz des Adaptiven Subsamplings}
 	\label{resultate:loesung1:dct:resultate}
 \end{figure}
-Die Abbildung \ref{resultate:loesung1:dct:resultate} zeigt den Vergleich der DCT Kompression mit dem Lösungsansatz des Adaptiven Subsamplings (siehe \ref{resultate:loesung0}). Es ist deutlich zu erkennen, dass die Standardabweichung schnell steigt bei leicht sinkender Grösse. Der Grund dafür kann im Diagramm der Abbildung \ref{resultate:loesung1:dct:artefakte} entnommen werden. 
+Die Abbildung \ref{resultate:loesung1:dct:resultate} zeigt den Vergleich der DCT Kompression mit dem Lösungsansatz des Adaptiven Subsamplings (siehe \ref{resultate:loesung0}). Die Standardabweichung steigt unerwartet schnell an. Der Grund kann im Diagramm der Abbildung \ref{resultate:loesung1:dct:artefakte} entnommen werden. 
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=8cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-0/loesung1_0_artefakte.png}
 	\caption{Artefakte der DCT Dekompression anhand Beispieldaten}
 	\label{resultate:loesung1:dct:artefakte}
 \end{figure}
-Un den meisten Fällen kann die DCT die Feldlinie gut approximieren. Bei dieser Feldlinie wird der Anfang der Kurve nicht richtig dargestellt. Das ist ein typisches Problem der DCT. Die Diskrete Kosinus Transformation nimmt an, dass das Signal sich periodisch wiederholt. Die implemementierte Transformation (siehe Abschnitt \ref{konzept:loesung1:kosinus}) nimmt an, dass am Anfang und am Ende das Signal in umgekehrter Reihenfolge wiederholt. Bei den Feldlinien kann das zu einer Diskontinuität im Signal führen, welches hochfrequente Kosinus Anteile. Wenn die Quantisierung Hochfrequente Schwingungen verschluckt, entstehen die Artefakte der Abbildung \ref{resultate:loesung1:dct:artefakte}.\\
-Eine Möglichkeit ist die Feldlinie um Punkte zu erweitern. Wenn die Feldlinie am Anfang und am Ende abflacht, sollte die resultierende Transformation weniger hochfrequente Schwingungen enthalten. Diese Variante wird im Abschnitt \ref{resultate:loesung1:dct:randbeh+byte} behandelt und führt zu einer deutlich besseren Approximation. Durch eine andere Darstellung der Daten kann das Problem ebenfalls gelöst werden.
+Der Start und Endpunkt der Feldlinie kann nicht richtig dargestellt werden. Dies ist ein typisches Problem der DCT: Ein Inputsignal wird in der DCT konzeptionell wiederholt. Bei der implemementierten Kosinus Transformation (siehe Abschnitt \ref{konzept:loesung1:kosinus}) wird das Signal jeweils in umgekehrter Reihenfolge wiederholt. Bei der Beispielfeldlinie aus Abbildung \ref{resultate:loesung1:dct:artefakte} führt die Wiederholung zu einer Diskontinuität im Signal. Die Diskontinuität wird in der DCT mit hochfrequenten Anteilen abgebildet, welche von der Quantisierung gelöscht werden. Das Ergebnis ist eine Verschiebung an den Stellen, wo die Diskontinuität auftritt. In diesem Fall ist es jeweils am Anfang und am Ende der Feldlinie.\\
+Das Problem kann entweder durch eine andere Darstellung der Feldlinie oder durch zusätzliche Punkte am Anfang und am Ende der Linie gelöst werden. Die Variante, welche die Feldlinie mit Punkten erweitert, wird im Abschnitt ref{resultate:loesung1:dct:randbeh+byte} behandelt. Eine andere Darstellung der Feldlinie wird in den folgenden Abschnitten behandelt.
 
 \subsubsection{Variante: Ableitung+DCT}\label{resultate:dct:ableitung_dct}
-Vor der DCT werden die Feldlinien abgeleitet. Mit der Ableitung soll das Randproblem dargestellt in \ref{resultate:loesung1:dct:artefakte} gelöst werden. Der Nachteil ist, dass Ungenauigkeiten sich durch die Kurve durchziehen und summieren. Am Ende kann die Approximation ungenauer sen, wie am Anfang der Feldlinie.\\
+Vor der Diskreten Kosinus Transformation werden die Feldlinien abgeleitet. Durch diese Darstellung werden die Artefakte aus der Abbildung \ref{resultate:loesung1:dct:artefakte} behoben.\\
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/loesung1-1/loesung1_1.png}
 	\caption{Vergleich der DCT Kompression der Ableitung mit der DCT Kompression}
 	\label{resultate:loesung1:dct_ableitung:resultate}
 \end{figure}
-Das Diagramm der Abbildung \ref{resultate:loesung1:dct_ableitung:resultate} zeigt, dass die abgeleiteten Feldlinien besser approximiert werden können und erreichen dadurch eine Kompressionsrate von $14.3$ mit einer vergleichbaren Genauigkeit. Das Randproblem wurde ebenfalls verbessert. Eine Darstellung der Artefakte ist im Diagramm der Abbildung\ref{resultate:loesung1:dct:byte:artefakte} zu finden.\\
+Das Diagramm der Abbildung \ref{resultate:loesung1:dct_ableitung:resultate} zeigt, dass die abgeleiteten Feldlinien besser approximiert werden können als die vorhergehende Variante. Bei einer vergleichbaren Genauigkeit wie der Ist-Zustand erreicht diese Variante eine Kompressionsrate von $14.3$. Eine Darstellung der Artefakte ist im Diagramm der Abbildung\ref{resultate:loesung1:dct:byte:artefakte} zu finden. Die Artefakte der Kompression äussern sich als Dämpfungen. Die Artefakte sind jedoch für das menschliche Auge nicht sichtbar. Die Dämpfung ist erst zu erkennen, wenn das Original zur Verfügung steht.
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=8cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-6/artefakte.png}
 	\caption{Artefakte der DCT Kompression der Ableitung}
 	\label{resultate:loesung1:dct:byte:artefakte}
 \end{figure} 
-Es ist deutlich zu sehen, dass die Kurve durch die Quantisierung gedämpft wird. das Maximum der Kurve ist tiefer, sowie das lokale Minima der letzten Halbwelle höher. Der Vorteil dieser Variante ist, dass die resultierende Feldline sehr glatt verläuft. Ohne die Originalkurve währen die Artefakte nicht zu identifizieren.
 
 \subsubsection{Variante: PCA+Ableitung+DCT}
-Die Feldlinien liegen meist auf einer Ebene im dreidimensionalen Raum. Wenn die X,Y und Z Kanäle Kosinus-Transformiert werden, ist die Information etwa gleichmässig auf den Kanälen verteilt. Eine Linie könnte sich durch weniger Kosinus-Funktionen approximieren lassen, wenn die Linie zuerst in ein lokales Koordinatensystem transformiert wird.\\
-Die Principal Component Analysis (PCA)\cite{abdi2010principal} ist ein Verfahren aus der Statistik, welches Daten in ein neues koordinatensystem Transformiert. Dabei werden die Achsen so gelegt, dass die Daten entlang der ersten Achse die grösste Varianz aufweisen, entlang der zweiten Achse, welche orthogonal zur ersten liegt, die zweithöchste Varianz etc. Wenn das Vefahren auf die Feldlinien angewandt wird, werden die Feldlinien in ein lokales System transformiert indem der Z-Kanal 0 ist, wenn die Feldlinie in einer Ebene liegt..\\
-Um die PCA wieder rückgängig zu machen, müssen pro Feldlinie sechs Parameter für die neuen Koordinatenachsen und 3 Parameter für die Verschiebung abgespeichert werden.
+Die Feldlinien liegen im Allgemeinen in einer Ebene im dreidimensionalen Raum. Durch eine Principal Component Analysis (PCA)\cite{abdi2010principal} können die Feldlinien in ein lokales Koordinatensystem transformiert werden, in welchem der Z Kanal in den meisten Fällen nicht gebraucht wird.\\
+Für die Rücktransformation ins Sonnen-Koordinatensystem werden pro Feldlinie zusätzlich sech Parameter für die neuen Koordinatenachsen und drei Parameter für die Verschiebung abgespeichert.
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/loesung1-4/loesung1_4.png}
 	\caption{Vergleich der PCA DCT Kompression der Ableitung mit der DCT Kompression der Ableitung}
 	\label{resultate:loesung1:dct:pca}
 \end{figure}
-Die PCA scheint die Kompression nicht verbessern zu können. Der Grund ist, dass die Variante ohne PCA zwischen 5 und 20 Kosinus-Funktionen braucht, um einen Kanal einer Feldlinie zu approximieren. Durch die PCA können 2-5 Parameter gespart werden, jedoch verbrauchen die zusätzlichen Koordinatenachsen und Verschiebungen mehr Speicher, als die Transformation gewinnt.
+Im Diagramm der Abbildung \ref{resultate:loesung1:dct:pca} sind die Resultate der Messung dargestellt. Die PCA konnte keine Verbesserung erbringen. Die zusätzlichen Parameter verbrauchen mehr Speicherplatz als durch die PCA gewonnen werden kann.
 
 \subsubsection{Variante: Ableitung+DCT+Byte Kodierung} \label{resultate:loesung1:ableitung_dct_kodierung}
 Ein Kanal einer Feldlinie kann mit 5-20 DCT-Koeffizienten ausreichend approximiert werden. Die quantisieren Koeffizienten kommen meistens zwischen -50 und +50 zu liegen. 8 Bit Genauigkeit reichen im Allgemeinen aus, um einen quantisierten Koeffizienten abzuspeichern. Um die Kompressionsrate zu verbessern, werden zwei Byte-Kodierungen eingeführt: die Längenkodierung und die Byte-Kodierung (beschrieben im Abschnitt \ref{konzept:loesung1:kodierung}).\\
@@ -101,7 +97,7 @@ Obwhol die Variante \ref{resultate:loesung1:dct:randbeh+byte } eine vergleichbar
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/ringing/actual.png}}
 		\frame{
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/ringing/sol7.png}}
-	\caption{Artefakte der Kompression, links sind die originalen Feldlinien, rechts die Dekomprimierten.}
+	\caption{Artefakte der Kompression. Links sind die originalen Feldlinien, rechts die Dekomprimierten.}
 	\label{resultate:loesung1:dct:randbehandlung:jvhartefakte}
 \end{figure} 
 In diesem Fall scheint die Standardabweichung als Fehlermass zu versagen: Da die Oszillationen nahe an der originalen Feldlinie liegen, bleiben die Abstände klein. Jedoch sind die Artefakte für das menschliche Auge inakzeptabel.\\
@@ -155,7 +151,7 @@ Das Diagramm der Abbildung \ref{resultate:loesung1:dct:abschliessend:standardabw
 	\includegraphics[width=0.8\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-12/without_average_line.png}}
 		\frame{
 	\includegraphics[width=0.8\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-12/with_average_line.png}}
-	\caption{Artefakte der abschliessenden Variante. Links ohne Glättung, rechts mit Glättung}
+	\caption{Die am stärksten ausgeprägten Artefakte der abschliessenden Variante. Links ohne Glättung, rechts mit Glättung}
 	\label{resultate:loesung1:dct:final:artefakte}
 \end{figure}
 Die Verbesserung in der Genauigkeit wurde erreicht, indem die Feldlinientypen unterschiedlich quantisiert wurden. Die ''Sonne zu Sonne'' können mit wenigeren Koeffizienten approximiert werden als die anderen Typen. Würde die Simulation nur aus diesen Feldlinien bestehen, könnte eine Kompressionsrate von $18-20$ erreicht werden zu einer ähnlichen Genauigkeit. Die Schwierigkeit liegt darin die anderen Feldlinien mit möglichst wenigen Artefakten zu approximieren. Eine Kompression mit der Diskreten Kosinus Transformation wird ab einer gewissen Zoom-Stufe immer Artefakte mit sich bringen, welche das menschliche Auge erkennen kann.\\

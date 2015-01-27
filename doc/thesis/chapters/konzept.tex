@@ -66,7 +66,7 @@ Falls die Laufzeit der Dekompression weiter verbessert werden soll, kann die Fas
 Das Eingabesignal wird abgeleitet und alle folgenden Transformationen werden auf den Steigungen des Signals ausgeführt. Damit die Transformation umkehrbar ist, muss der Startpunkt zusätzlich abgespeichert werden.\\
 Die Artefakte, welche das abgeleitete dekomprimierte Signal beinhaltet, sind bei der Feldliniensimulation weniger störend für das menschliche Auge. Die Feldlinie bleibt tendenziell glatt und Artefakte äussern sich meist in veränderten Amplituden, welche erst erkennbar sind, wenn die Originalfeldlinie zum Vergleich bereit steht. Diese Eigenschaft wirkt sich ebenfalls auf die Ringing-Artefakte aus. Die Ableitung hat einen dämpfenden Effekt auf die Ringing Artefakte.
 
-\subsubsection{Cosinus-Transformation} \label{konzept:loesung1:kosinus}
+\subsubsection{Diskrete Kosinus Transformation} \label{konzept:loesung1:kosinus}
 Die Diskrete Kosinus Transformation stellt eine endliche Menge von $N$ Datenpunkten als $N$ Kosinusfunktionen zu verschiedenen Frequenzen dar. Die Werte DCT-Koeffizienten stellt dar, wie hoch der Anteil einer bestimmten Frequenz ist im Originalsignal. Im optimalen Fall kann ein Signal durch niederfrequente Funktionen approximiert werden. Die hochfrequenten Anteile stellen Details dar, welche meist nicht relevant sind.\\
 Es gibt verschiedene Möglichkeiten die Punkte zu transformieren. Hier wurde sich am JPEG/JFIF Standard orientiert, welche die DCT-II \eqref{konzept:loesung1:kosinus:formula:fdct} als Forwärts und die DCT-III \eqref{konzept:loesung1:kosinus:formula:idct} als Rückwärtstransformation verwendet \cite{wallace1992jpeg}. 
 \begin{equation} \label{konzept:loesung1:kosinus:formula:fdct}
@@ -152,8 +152,19 @@ Der Algorithmus der Rekursiver Linearer Kodierung versucht aus einer ungenauen A
 \end{figure} 
 
 \subsubsection{Quantisierung}
-Der Vorteil der Rekursiver Linearer Kodierung liegt darin, dass der Kanal mit zwei bis drei Rekusionsstufen gut approximiert wird und die restlichen Vorhersagefehler minimal werden. Die minimalen Vorhersagefehler haben einen minimalen Einfluss auf die Rekonstruktion des Kanals. Die Vorhersagefehler werden für eine bessere Kompression quantisiert.
+Die Vorhersagefehler  Rekursiven Linearen Kodierung werden von Rekursionsstufe zu Rekursionsstufe kleiner. In der letzten Rekursion werden Detailinformationen kodiert, welche für meist nicht relevant sind. Die Vorhersagefehler werden mit einem konstanten Faktor quantisiert. Die Vorhersagefehler werden mit weniger Genauigkeit abgespeichert. Fehler, welche kleiner sind als der Quantisierungsfakter, werden komplett gelöscht.
 
 \subsubsection{Entropie Kodierung}
-
-adaptive Kodierung aus DCT. die Längenkodierung wird nicht verwendet, da sie nicht viel auf 0 quantisieren wird. 
+Die Vorhersagefehler werden in Breadth-First Ordnung abgespeichert. Der Fehler der Rekursionsstufe 0 wird zuerst abgelegt, gefolgt von den Fehlern der Stufe 1 etc. Die Tabelle \ref{konzept:loesung2:entropie:breath} zeigt den Aufbau. Die Vorhersagefehler der ersten Levels sind grösser, als die der Letzten. Diese Ordnung hilft ähnliche Strukturen beieinander zu halten.\\
+\begin{table}[!htbp]
+	\center
+	\begin{tabular}{|c||c|c||c|c|c|c||c}
+		\hline
+		\multicolumn{8}{|c|}{Vorhersagefehler}\\\hline\hline
+		 Stufe 0& \multicolumn{2}{|c||}{Stufe 1} & \multicolumn{4}{|c|}{Stufe 2} &\ldots \\\hline
+		$Fehler_0$ & $Fehler_1$ &$Fehler_2$ &$Fehler_3$ & $Fehler_4$ & $Fehler_5$ & $Fehler_6$   & \ldots \\\hline
+	\end{tabular}
+	\caption{Breadth First Ordnung der Vorhersagefehler.}
+	\label{konzept:loesung2:entropie:breath}
+\end{table}
+Die Vorhersagefehler werden mit der Adaptiven Genauigkeitskodierung aus Abschnitt \ref{konzept:loesung1:kodierung} kodiert. Nach der Quantisierung reichen im Allgemeinen 8 Bit aus um einen Fehler abzulegen. Die Längenkodierung wurde nicht verwendet. Es existiert im Allgemeinen kein zusammenhängender Block von 0-Fehler. 

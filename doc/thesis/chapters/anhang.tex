@@ -1,10 +1,12 @@
 \section{Anhang}
-\subsection{Installationsanleitung}
-\subsubsection{Installation des JHelioviewers}
-\subsubsection{Installation der Kompression}
+\subsection*{Installationsanleitung}
+\subsubsection*{Installation des JHelioviewers}
+
+
+\subsubsection*{Installation der Kompression}
 \pagebreak
 
-\subsection{Dateiformat und Dekompression}
+\subsection*{Dateiformat und Dekompression}
 This section describes the encoding and decompression algorithm used for compressing fieldline data. The data is written in the FITS Format \cite{website:fits} and compressed with Rar. The content of the FITS file is described in Table \ref{anhang:format:content}.\\
 \begin{table}[!htbp]
 \center
@@ -25,7 +27,7 @@ This section describes the encoding and decompression algorithm used for compres
 \caption{Content of the FITS File}
 \label{anhang:format:content}
 \end{table}
-After decompressing the FITS file with Rar apply the decodings described in section \ref{anhang:format:encodings}. The next step is to split up the data for each fieldline. Each fieldline contains exactly one Type, one Length and one Startpoint. The Length describes the number of DCT Coefficients of the fieldline. The first batch of coefficients belong to the first fieldline, and the second batch to the second line etc.\\
+After decompressing the FITS file with Rar apply the decodings described in section \ref{anhang:format:encodings}. The next step is to split up the data for each fieldline. Each fieldline contains exactly one Type, one Length and one Startpoint. The length describes the number of DCT Coefficients of the fieldline. The first batch of coefficients belong to the first fieldline, and the second batch to the second line etc.\\
 After splitting the data there are four steps left to do: 
 \begin{enumerate}
 	\item Transform the Startpoint to Euler coordinates
@@ -36,7 +38,7 @@ After splitting the data there are four steps left to do:
 How to Transform the Point to Euler coordinates is described in section \ref{anhang:format:euler}. The multiplication factors can be gathered from the JHelioviewer implementation. Take note that the decompression time will depend on your implementation of the Inverse Cosine Transform, and a naive implementation can take three seconds or more for one FITS file.\\
 The last step ''Integrate the channels'' needs further clarification: Each channel is derived before the Discrete Cosine Transform is applied. After the Inverse Transform, each channel contains the rises and not the actual points.
 
-\subsubsection{Encodings} \label{anhang:format:encodings}
+\subsubsection*{Encodings} \label{anhang:format:encodings}
 
 \textbf{Length Encoding}\\
 \begin{table}[!htbp]
@@ -75,10 +77,42 @@ The last step ''Integrate the channels'' needs further clarification: Each chann
 	\label{anhang:format:encodings:adaptive}
 \end{table}
 
-\subsubsection{Transformation to Euler Coordinates} \label{anhang:format:euler}
+\subsubsection*{Transformation to cartesian Coordinates} \label{anhang:format:euler}
+The spherical coordinates can be transformed into the sun's cartesian coordinate system with a few simple calculations.
+Step 1: Add the displacement of the Compression. 
+\begin{equation}
+\begin{split}
+	R_{raw} &= R_{raw} + 8192\\
+	Phi_{raw} &= Phi_{raw} + 16384\\
+	Theta_{raw} &= Theta_{raw} + 8192
+\end{split}
+\end{equation}
+Step 2: Convert to Floating point numbers.
+\begin{equation}
+\begin{split}
+	R &= R_{raw} / 8192 * Sunradius (Meter)\\
+	Phi &= Phi_{raw} / 32768.0 * 2 *\pi\\
+	Theta &= Theta_{raw} /32768.0 * 2 *\pi
+	\end{split}
+\end{equation}
+Step 3: Rotate the coordinates so they are centered around the viewpoint of Earth.
+\begin{equation}
+\begin{split}
+	Phi &= Phi - l0 /180 * \pi\\
+	Theta &= Theta + b0 /180 * \pi
+	\end{split}
+\end{equation}
+Step 4: Transform from spherical to cartesian.
+\begin{equation}
+\begin{split}
+	X &= R * sinus(Theta) * sinus(Phi)\\
+	Y &= R * cosinus(Theta)\\
+	Z &= R * sinus(Theta) * cosinus(Phi)
+	\end{split}
+\end{equation}
 \pagebreak
 
-\subsection{Performance Tests} \label{anhang:performance}
+\subsection*{Performance Tests} \label{anhang:performance}
 \begin{table}[!htbp]
 \center
 \begin{tabular}{c|c}
@@ -86,7 +120,16 @@ The last step ''Integrate the channels'' needs further clarification: Each chann
 	Adaptives Subsampling & $19$ ms \\
 	DCT - Naive Inverse DCT & $3100$ ms \\
 	DCT - Mit Kosinus Caching & $65-350$ ms\\
+	Prediktive Kodierung & $31$ ms\\
 \end{tabular}
 \end{table}
 
-Testgerät
+\textbf{Testmaschine}
+\begin{table}[!htbp]
+\center
+\begin{tabular}{c|c}
+	Prozessor & Intel i7-4600 \\\hline
+	Arbeitsspeicher & 16GB \\
+	OS & Windows 8.1 Enterprise 64bit \\
+\end{tabular}
+\end{table}

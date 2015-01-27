@@ -128,15 +128,19 @@ namespace CompressionTesting.FileWriter
             int[] ptth;
             int[] ptr_nz_len = new int[input.lines.Count];
 
+            List<PFSSLine> lines = new List<PFSSLine>(input.lines);
+            lines.Sort();
+
             int totalCount = 0;
             for (int i = 0; i < ptr_nz_len.Length; i++)
             {
-                Residuals res = input.lines[i].residuals;
+                Residuals res = lines[i].residuals;
                 int count = res.predictionErrors.Count;
 
                 totalCount += count;
                 ptr_nz_len[i] = (short)count;
             }
+
 
             ptr = new int[totalCount];
             ptph = new int[totalCount];
@@ -145,7 +149,7 @@ namespace CompressionTesting.FileWriter
             int index = 0;
             int startPointIndex = 0;
 
-            foreach (PFSSLine l in input.lines)
+            foreach (PFSSLine l in lines)
             {
                 //write start points
                 for (int i = 0; i < offset; i++)
@@ -167,11 +171,8 @@ namespace CompressionTesting.FileWriter
                     ptr[index] = (short)p.x;
                     ptph[index] = (short)p.y;
                     ptth[index] = (short)p.z;
-                    System.Console.WriteLine(p.x);
                     index++;
                 }
-
-                res = res.nextLevel;
 
             }
 
