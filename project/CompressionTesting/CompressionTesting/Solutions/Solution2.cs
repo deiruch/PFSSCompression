@@ -351,9 +351,9 @@ namespace CompressionTesting.Solutions
                     Spherical.ForwardMoveSpherical(l.points[i]);
                 }
             }
-            qualityLevel += 3;
+            //qualityLevel += 3;
             Residuals.factor = 100000;
-            Residuals.factor2 = 8;
+            Residuals.factor2 = 10;
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_OUTSIDE, new FileInfo(Path.Combine(folder, this.GetName() + "_sto_curve_disk.csv")));
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_sts_curve_disk.csv")));
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.OUTSIDE_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_ots_curve_disk.csv")));

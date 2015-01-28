@@ -16,7 +16,7 @@ Die Teilschritte einer verlustbehaftete Kompressionen können in drei Verarbeitu
 \end{figure}
 Der JPEG/JFIF Standard ist eines der meist verwendeten Bildkompressionsalgorithmen für natürliche Bilder. Das Diagramm der Abbildung \ref{state:jpeg:abb} zeigt den Aufbau der Kompressionspipeline. JPEG/JFIF unterteilt das Eingabebild in $8*8$ Blöcke und führt eine Diskrete Kosinus Transformation (DCT) durch. Der Bildblock ist nun als Folge von Kosinus Funktionen dargestellt.\\
 Die Quantisierung versucht nun Frequenzen, welche das menschliche Auge schlecht erkennen kann weniger Präzise darzustellen. Wenn die Quantisierung gut gewählt wurde, kann der Mensch das dekomprimierte Bild nicht vom Original unterscheiden, verbraucht aber weniger Speicherplatz. JPEG/JFIF bietet vorgefertigte Quantisierungstabellen an. Der Benutzer kann aber eigene Tabellen für spezifizieren. Wie die Quantisierungstabelle optimal gewählt wird, ist ein aktives Forschungsfeld \cite{wu1993rate:jpeg} \cite{wang2001designing:jpeg} und kann von Anwendungsfall zu Anwendungsfall unterschiedlich sein.\\
-Nach der Quantisierung werden die quantisierten Blöcke im Zick-Zack-Muster angeordnet, sodass die Entropie Kodierung eine bessere Kompression durchführen kann. JPEG/JFIF führt eine Run-Length und eine Huffman-Kodierung durch. JPEG bietet auch hier an, eine benutzerspezifizierte Huffman-Tabelle zu verwenden.
+Nach der Quantisierung werden die quantisierten Blöcke im Zick-Zack-Muster angeordnet, sodass die Entropie Kodierung eine bessere Kompression durchführen kann. JPEG/JFIF führt eine Run-Length\cyte{wiki:rle} und eine Huffman-Kodierung\cite{huffman1952method} durch. JPEG bietet auch hier an, eine benutzerspezifizierte Huffman-Tabelle zu verwenden.
 
 Wenn für die Kompression von wissenschaftlichen Daten eine Diskrete Kosinus Transformation eingesetzt werden soll, kann ein ähnlicher Aufbau verwendet werden wie der JPEG/JFIF Strandard. Für eine optimale Kompression wird die Umsetzung der einzelnen Schritte vom Standard abweichen.
 
@@ -40,10 +40,13 @@ Unser et al \cite{unser1993b:spline} zeigt ein Algorithmus, welcher ähnlich die
 Eine Datenkompression mit Curve Fitting ist im Vergleich mit der Kosinus Transformation weniger erforscht. Es sind ebenfalls keine Kompressionsstandards bekannt, welche ein Curve Fitting für die Datenkompression verwenden. Ein Kompressionsverfahren zu entwickeln zieht zusätzlichen Aufwand mit sich als Verfahren, welche in der Datenkompression etabliert sind.
 
 \subsection{Compressive Sensing}
-
+Compressive Sensing ist ein Verfahren aus der Signalverarbeitung \cite{baraniuk2007compressive}.
+Underdetermined linear system?
 
 \subsection{Entropie Kodierung}
 Die Entropie Kodierung findet in allen Bereichen der Informatik Anwendungen. Ziel ist es die gleiche Information mit einem Minimum an Daten darzustellen. Verlustbehaftete Kompressionsverfahren reduzieren die Information und verwenden im letzten Schritt eine Entropie Kodierung um die Datenmenge zu reduzieren.
 
-Es ist zwischen spezialisierten und allgemeinen Entropie Kodierer zu unterscheiden. Unter den spezialisierten Verfahren ist Beispielswiese die die Arbeit von Ratanaworabhan et al.\cite{ratanaworabhan2006fast} einzuordnern, welche in der Lage ist Floating Point Daten performant zu kodieren und dekodieren. Unter den allgemeinen Verfahren sind Archivierer wie GZIP\cite{website:gzip}, 7-ZIP\cite{website:7zip} und RAR\cite{website:rar} angesiedelt. Archivierungsverfahren finden in allen Bereichen Anwendung und dienen in der Entwicklung von spezialisierten Kodierer als Messbasis.\\
-Im Vorfeld wurden die Kompressionsraten der Archivierer gemessen. RAR konnte bei den Feldliniendaten die höchste Kompression erreichen.
+Es ist zwischen spezialisierten und allgemeinen Entropie Kodierer zu unterscheiden. Unter den spezialisierten Verfahren ist Beispielswiese die Arbeit von Ratanaworabhan et al.\cite{ratanaworabhan2006fast} einzuordnern, welche in der Lage ist Floating Point Daten performant zu kodieren und dekodieren. 
+Unter den allgemeinen Verfahren sind Archivierer wie GZIP\cite{website:gzip}, 7-ZIP\cite{website:7zip} und RAR\cite{website:rar} angesiedelt.\\ Archivierungsverfahren finden in allen Bereichen Anwendung und dienen in der Entwicklung von spezialisierten Kodierer als Messbasis. Im Vorfeld wurde die Kompressionsraten von GZIP, 7-ZIP und RAR von Feldliniendaten gemessen. Die Entropie Kodierung von RAR konnte stets eine höhere Kompressionsrate erreichen als andere Archivierungsverfahren. Die RAR Kompression ist urheberrechtlich Geschützt und die verwendeten Algorithmen sind nicht bekannt. 
+
+Es verwendet aber für unterschiedliche Datentypen unterschiedliche Verfahren

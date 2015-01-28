@@ -20,7 +20,7 @@ Die Daten der Feldlinien durchlaufen im JHelioviewer vier Zustände, welche durc
 Um die Animation der Feldlinien möglichst Unterbrechungsfrei zu gestalten, werden die komprimierten und dekomprimierten Feldliniendaten vorgeladen und gecached. Mit dem Vorladen wird erreicht, dass der Wechsel von der Visualisierung einer Simulation zur anderen möglichst ohne Unterbrechung durchgeführt werden kann. Das Caching hilft, wenn der Benutzer einen anderen Zeitpunkt der Animation nochmals darstellen möchte. Aus dem Zustandsdiagramm der Abbildung \ref{implementation:architektur:datenfluss} kann entnommen werden, dass die Komprimierten Feldlinien von den ''PFSSData'' Objekten und die dekomprimierten Daten von den ''PFSSFrame'' Objekten repräsentiert werden. Die Implementation ist im Diagramm der Abbildung \ref{implementation:architektur:caching} dargestellt.
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=0.9\textwidth,height=8cm,keepaspectratio]{./pictures/implementation/architectureCache.png}
+	\includegraphics[width=1\textwidth,height=8cm,keepaspectratio]{./pictures/implementation/architectureCache.png}
 	\caption{Diagramm der Implementation vom Vorladen und Caching}
 	\label{implementation:architektur:caching}
 \end{figure}

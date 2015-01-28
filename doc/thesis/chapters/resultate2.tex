@@ -1,4 +1,5 @@
 \subsection{Lösungsansatz: Prediktive Kodierung}
+Prediktoren sind typische Ansätze für verlustfreie Kompressionsverfahren. Die Frage ist, wie Informationen gelöscht werden. In erster Linie werden zwei Subsampling verfahren getestet, ein einfaches Subsampling und das Adaptive Subsampling. Das Adaptive Subsampling ist gut in unwichtige Informationen zu löschen, ist aber schwieriger zu kodieren. Das 
 
 \subsubsection{Variante: einfaches Subsampling}
 Für die erste Variante wird das Subsampling des DCT-Lösungsansatzes verwendet. Es reduziert die Punktmenge auf die Anzahl des Ist-Zustands. Die Feldlinien werden mit einer PCA in ein lokales Koordinatensystem transformiert. Im lokalen System können die Koordinaten mit 16 Bit Genauigkeit dargestellt werden. 16 Bit im Koordinatensystem der Sonne reichen nicht aus und führen zu einem grösseren Fehler als der Ist-Zustand.\\
