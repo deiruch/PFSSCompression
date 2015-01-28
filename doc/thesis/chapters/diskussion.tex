@@ -22,6 +22,3 @@ Mit dem Lösungsansatz der Prediktiven Kodierung wurde eine Kompressionsrate von
 Das Caching von $1000$ Simulationen und die Übertragungszeit fallen ebenfalls zwischen die anderen Lösungsansätzen mit $78$ Megabyte an Arbeitsspeicher beziehungsweise $62$ Sekunden Übertragungszeit. Bei einer Internetverbindung von $10$ Megabit ist eine Übertragungsrate von $16$ Simulationen in der Sekunde zu rechnen. Die Laufzeit der Dekompression liegt mit $30.6$ Millisekunden auch zwischen den Lösungsansätzen Adaptives Subsampling und DCt. Mit dieser Laufzeit kann ein Thread durchschnittlich $32$ Simulationen pro Sekunde dekomprimieren.
 
 Dieser Lösungsansatz ist ein Kompromiss zwischen Kompressionsrate und Qualität. Die Daten enthalten Kompressionsartefakte. Sie sind aber schwach ausgeprägt sodass auf eine Glättung gegebenenfalls verzichtet werden kann. Die Kompressionsrate ist höher als die des Adaptiven Subsamplings, obwhol etwa $50\%$ mehr Punkte übertragen werden. Falls die JHelioviewer Visualisierung mehr Punkte darstellen möchte ist es ohne Interpolation oder zusätzliche Punkte möglich.
-
-Sind Artefakte genügen klein um die tiefere Kompression zu rechtfertigen?  Wie kann diese Variante verbessert werden?
-Vorteil: einfache
