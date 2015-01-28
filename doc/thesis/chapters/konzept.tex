@@ -1,5 +1,5 @@
-\section{Kompressionsverfahren der Feldlinien} \label{konzept}
-In diesem Abschnitt werden die einzelnen Verfahren zu den Lösungsansätzen vorgestellt. Im ersten Abschnitt \ref{konzept:ist-komprimierung} wird die Ist-Kompression analysiert, während in den nächsten Abschnitten die  Lösungsansätze vorgestellt werden und die Teilschritte erklärt.
+\section{Umgesetzte Kompressionsverfahren} \label{konzept}
+In diesem Abschnitt werden die einzelnen Verfahren zu den Lösungsansätzen vorgestellt. Im ersten Abschnitt \ref{konzept:ist-komprimierung} wird die Ist-Kompression analysiert. In den nächsten Abschnitten \ref{konzept:loesung0} bis \ref{konzept:prediktiv} werden die Lösungsansätze und ihre Teilschritte vorgestellt.
 
 \subsection{Ist-Komprimierung} \label{konzept:ist-komprimierung}
 \begin{figure}[!htbp]
@@ -9,6 +9,7 @@ In diesem Abschnitt werden die einzelnen Verfahren zu den Lösungsansätzen vorg
 	\label{konzept:ist:aufbau:diagramm}
 \end{figure}
 Das Ziel der Ist-Kompression ist es, die Datenmenge mit einfachen Mitteln drastisch zu reduzieren. Der Aufbau ist im Diagramm der Abbildung \ref{konzept:ist:aufbau:diagramm} dargestellt. Die Ist-Kompression führt zuerst ein Subsampling durch. Drei Viertel aller Punkte werden in diesem Schritt verworfen. Im nächsten Schritt werden die übrigen Punkte  auf 16-Bit Integer diskretisiert. Das reduziert die Anzahl Bytes und verbessert die Kompression im Schritt Entropie Kodierung. Die Implementationen der Entropie Kodierer scheinen Integer-Werte einfacher komprimieren zu können. In der Entropie Kodierung werden die Daten geordnet wie in Tabelle \ref{konzept:ist:entropie} dargestellt.
+
 \begin{table}[!htbp]
 	\center
 	\begin{tabular}{|c|c|c|c|}
@@ -33,6 +34,7 @@ Dieser Ansatz überträgt nur die Information, die der JHelioviewer zur Visualis
 
 \subsubsection{Adaptives Subsampling}\label{konzept:loesung0:subsampling}
 Konzeptionell approximiert das adaptive Subsambling eine Kurve diruch eine Folge von Strecken. Je stärker die Krümmung der Kurve, desto mehr Strecken werden für die Approximation benötigt.
+
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution0/anglesubsampling.png}
@@ -88,7 +90,8 @@ Die anderen Feldlinien benötigen mehr Koeffizienten für die Dämpfung der Ring
 Um die Entropie Kodierung zu verbessern wurden zwei Byte-Kodierungen hinzugefügt. Die Kanäle werden zuerst mit der Längenkodierung und darauf folgend mit der adaptive Genauigkeit kodiert.
 
 \textbf{Längenkodierung}\\
-Die Quantisierung erlaubt nur eine maximale Anzahl an Koeffizienten. Ab dem $50$ Koeffizient, sind die Werte Null. Die Längenkodierung schneidet den Block von Null-Koeffizienten ab und fügt die Länge des Nicht-Null Blockes hinzu. Alle Längen und alle Blöcke werden zusammen abgespeichert, die Tabelle \ref{konzept:loesung1:entropie:laengenkodierung} verdeutlicht das Konzept. $n_i$ ist die Länge der Feldlinie $i$ und $x_{i,j}$ ist der $j$ DCT-Koeffizient der Feldlinie $i$.\\
+Die Quantisierung erlaubt nur eine maximale Anzahl an Koeffizienten. Ab dem $50$ Koeffizient, sind die Werte Null. Die Längenkodierung schneidet den Block von Null-Koeffizienten ab und fügt die Länge des Nicht-Null Blockes hinzu. Alle Längen und alle Blöcke werden zusammen abgespeichert, die Tabelle \ref{konzept:loesung1:entropie:laengenkodierung} verdeutlicht das Konzept. $n_i$ ist die Länge der Feldlinie $i$ und $x_{i,j}$ ist der $j$ DCT-Koeffizient der Feldlinie $i$.
+
 \begin{table}[!htbp]
 	\center
 	\begin{tabular}{||c|c|c|c|c||c|c|c}
@@ -105,7 +108,8 @@ Um einen Kanal zu Dekodieren, muss die Anzahl an DCT-Koeffizienten $n_i$ gelesen
 Die Längenkodierung ist effizient, wenn die hochfrequenten DCT-Koeffizienten einen grossen, zusammenhängenden Null-Block bilden. Im schlechtesten Fall währe der letzte DCT-Koeffizient nicht Null. In diesem Fall würde die Längenkodierung nichts abschneiden.\\
 
 \textbf{Adaptive Genauigkeits-Kodierung}\\
-Die quantisierten Koeffizienten liegen meistens zwischen $-50$ und $+50$. Acht Bit Genauigkeit reichen im Allgemeinen aus um einen DCT-Koeffizienten abzuspeichern. Mit der adaptiven Genauigkeits-Kodierung sollen so wenige Bytes pro Koeffizient abgespeichert werden, wie benötigt werden. Dazu wird wie in Tabelle \ref{konzept:loesung1:entropie:adaptive} eine neue Byte-Kodierung eingeführt. Das MSB wird als ''Continue Flag'' verwendet. Wenn es gesetzt ist, gehört das folgende Byte ebenfalls zur Zahl.\\
+Die quantisierten Koeffizienten liegen meistens zwischen $-50$ und $+50$. Acht Bit Genauigkeit reichen im Allgemeinen aus um einen DCT-Koeffizienten abzuspeichern. Mit der adaptiven Genauigkeits-Kodierung sollen so wenige Bytes pro Koeffizient abgespeichert werden, wie benötigt werden. Dazu wird wie in Tabelle \ref{konzept:loesung1:entropie:adaptive} eine neue Byte-Kodierung eingeführt. Das MSB wird als ''Continue Flag'' verwendet. Wenn es gesetzt ist, gehört das folgende Byte ebenfalls zur Zahl.
+
 \begin{table}[!htbp]
 	\center
 	\begin{tabular}{|c|c|c|c||c|c|c|c|}
@@ -155,7 +159,8 @@ Der Algorithmus der Rekursiver Linearer Kodierung versucht aus einer ungenauen A
 Die Vorhersagefehler  Rekursiven Linearen Kodierung werden von Rekursionsstufe zu Rekursionsstufe kleiner. In der letzten Rekursion werden Detailinformationen kodiert, welche für meist nicht relevant sind. Die Vorhersagefehler werden mit einem konstanten Faktor quantisiert. Die Vorhersagefehler werden mit weniger Genauigkeit abgespeichert. Fehler, welche kleiner sind als der Quantisierungsfakter, werden komplett gelöscht.
 
 \subsubsection{Entropie Kodierung}
-Die Vorhersagefehler werden in Breadth-First Ordnung abgespeichert. Der Fehler der Rekursionsstufe 0 wird zuerst abgelegt, gefolgt von den Fehlern der Stufe 1 etc. Die Tabelle \ref{konzept:loesung2:entropie:breath} zeigt den Aufbau. Die Vorhersagefehler der ersten Levels sind grösser, als die der Letzten. Diese Ordnung hilft ähnliche Strukturen beieinander zu halten.\\
+Die Vorhersagefehler werden in Breadth-First Ordnung abgespeichert. Der Fehler der Rekursionsstufe 0 wird zuerst abgelegt, gefolgt von den Fehlern der Stufe 1 etc. Die Tabelle \ref{konzept:loesung2:entropie:breath} zeigt den Aufbau. Die Vorhersagefehler der ersten Levels sind grösser, als die der Letzten. Diese Ordnung hilft ähnliche Strukturen beieinander zu halten.
+
 \begin{table}[!htbp]
 	\center
 	\begin{tabular}{|c||c|c||c|c|c|c||c}
