@@ -18,7 +18,7 @@ namespace CompressionTesting.Solutions
         private static int counter = 0;
         public int GetQualityLevels()
         {
-            return 1;
+            return 6;
         }
 
         public string GetName()
@@ -352,8 +352,9 @@ namespace CompressionTesting.Solutions
                 }
             }
             //qualityLevel += 3;
-            Residuals.factor = 100000;
-            Residuals.factor2 = 10;
+            Residuals.factor = qualityLevel+1;
+            Residuals.factor2 = qualityLevel + 5;
+            Residuals.factor3 = qualityLevel + 11;
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_OUTSIDE, new FileInfo(Path.Combine(folder, this.GetName() + "_sto_curve_disk.csv")));
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_sts_curve_disk.csv")));
             DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.OUTSIDE_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_ots_curve_disk.csv")));
@@ -464,6 +465,49 @@ namespace CompressionTesting.Solutions
             }
             //PCACoefficient.BackwardQuantization(data, 50000);
 
+            //PCATransform.Backward(data, 0);
+
+            return result;
+        }
+
+
+        public TestResult Seven(PFSS.PFSSData data, int qualityLevel, string folder)
+        {
+            FileInfo fits = new FileInfo(Path.Combine(folder, this.GetName() + counter++ + ".fits"));
+            FileInfo rarFits = new FileInfo(Path.Combine(folder, this.GetName() + qualityLevel + ".rar"));
+            TestResult result = new TestResult();
+            int offset = 1;
+            //Subsampling.Subsample(data, 4);
+            Subsampling.AngleSubsample(data, 3);
+            DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_OUTSIDE, new FileInfo(Path.Combine(folder, this.GetName() + "_sto_curve.csv")));
+            DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_sts_curve.csv")));
+            DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.OUTSIDE_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_ots_curve.csv")));
+            //PCATransform.Forward(data, 0);
+            //PCACoefficient.ForwardQuantization(data, 50000);
+            Discretizer.DividePoint(data, 50000, 0);
+            Discretizer.Divide(data, 50000, 1);
+            Discretizer.ToInt(data, 0);
+
+            //qualityLevel += 3;
+            Residuals.factor = 100000;
+            Residuals.factor2 = 64;
+
+            Residuals.ForwardPrediction(data);
+
+            //PredictiveResidualWriter.WritePureShortFits(data, offset, fits);
+            PredictiveResidualWriter.WritePureShortFits_WithoutPCA(data, offset, fits);
+            long size = RarCompression.DoRar(rarFits, fits);
+            result.fileSize = size;
+            result.lineCount = data.lines.Count;
+
+            Residuals.BackwardPrediction(data);
+            //PCACoefficient.BackwardQuantization(data, 50000);
+            Discretizer.Multiply(data, 50000, 1);
+            Discretizer.MultiplyPoint(data, 50000, 0);
+
+            DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_OUTSIDE, new FileInfo(Path.Combine(folder, this.GetName() + "_sto_curve_disk.csv")));
+            DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_sts_curve_disk.csv")));
+            DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.OUTSIDE_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_ots_curve_disk.csv")));
             //PCATransform.Backward(data, 0);
 
             return result;

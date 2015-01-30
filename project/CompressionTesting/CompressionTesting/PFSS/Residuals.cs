@@ -8,8 +8,9 @@ namespace CompressionTesting.PFSS
 {
     class Residuals
     {
-        public static int factor = 36;
+        public static int factor = 6;
         public static int factor2 = 8;
+        public static int factor3 = 12;
         #region tryout fields
         internal Residuals nextLevel { get; set; }
         internal List<PFSSPoint> points { get; set; }
@@ -144,41 +145,53 @@ namespace CompressionTesting.PFSS
                 residuals.endPoint = l.points[l.points.Count - 1];
                 l.residuals = residuals;
 
-                Queue<Tuple<int, int>> bfs = new Queue<Tuple<int, int>>();
+                Queue<Tuple<int, int, PFSSPoint>> bfs = new Queue<Tuple<int, int, PFSSPoint>>();
                 if (l.points.Count > 2)
                 {
-                    bfs.Enqueue(new Tuple<int, int>(0, l.points.Count - 1));
+                    bfs.Enqueue(new Tuple<int, int, PFSSPoint>(0, l.points.Count - 1,new PFSSPoint(0,0,0)));
                     while (bfs.Count >= 1)
                     {
-                        Tuple<int, int> i = bfs.Dequeue();
-                        PredictLinearBF(l, bfs, i.Item1, i.Item2);
+                        Tuple<int, int, PFSSPoint> i = bfs.Dequeue();
+                        PredictLinearBF(l, bfs, i.Item1, i.Item2, i.Item3);
                     }
                 }
+                quantize(l.residuals);
             }
         }
 
-        private static void PredictLinearBF(PFSSLine l, Queue<Tuple<int, int>> callQueue, int startIndex, int endIndex)
+        private static void PredictLinearBF(PFSSLine l, Queue<Tuple<int, int, PFSSPoint>> callQueue, int startIndex, int endIndex, PFSSPoint currentError)
         {
             PFSSPoint start = l.points[startIndex];
             PFSSPoint end = l.points[endIndex];
 
             int toPredictIndex = (endIndex - startIndex) / 2+startIndex;
             PFSSPoint toPredict = l.points[toPredictIndex];
+            /*toPredict.x -= currentError.x;
+            toPredict.y -= currentError.y;
+            toPredict.z -= currentError.z;*/
             PFSSPoint error = Predict(start, end, toPredict,startIndex,endIndex,toPredictIndex);
             toPredict = new PFSSPoint(toPredict);
             toPredict.x = error.x;
             toPredict.y = error.y;
             toPredict.z = error.z;
-            Strip(toPredict);
+            //Strip(toPredict);
             l.residuals.predictionErrors.Add(toPredict);
+
+            toPredict = new PFSSPoint(toPredict);
+            //Push(toPredict);
+            PFSSPoint actual = Predict(start, end, toPredict, startIndex, endIndex, toPredictIndex);
+            PFSSPoint nextError = new PFSSPoint(-l.points[toPredictIndex].x + actual.x, -l.points[toPredictIndex].y + actual.y, -l.points[toPredictIndex].z + actual.z);
+            /*l.points[toPredictIndex].x = actual.x;
+            l.points[toPredictIndex].y = actual.y;
+            l.points[toPredictIndex].z = actual.z;*/
             if (startIndex + 1 != toPredictIndex)
             {
-                Tuple<int, int> t0 = new Tuple<int, int>(startIndex, toPredictIndex);
+                Tuple<int, int, PFSSPoint> t0 = new Tuple<int, int, PFSSPoint>(startIndex, toPredictIndex,nextError);
                 callQueue.Enqueue(t0);
             }
             if (endIndex - 1 != toPredictIndex)
             {
-                Tuple<int, int> t1 = new Tuple<int, int>(toPredictIndex, endIndex);
+                Tuple<int, int, PFSSPoint> t1 = new Tuple<int, int, PFSSPoint>(toPredictIndex, endIndex, nextError);
                 callQueue.Enqueue(t1);
             }
             
@@ -194,30 +207,73 @@ namespace CompressionTesting.PFSS
             return new PFSSPoint(prediction.x - actual.x, prediction.y - actual.y, prediction.z - actual.z);
         }
 
+        private static void quantize(Residuals res)
+        {
+            for (int i = 0; i < 5 && i < res.predictionErrors.Count; i++)
+            {
+                res.predictionErrors[i].x = (int)Math.Truncate(res.predictionErrors[i].x / factor);
+                res.predictionErrors[i].y = (int)Math.Truncate(res.predictionErrors[i].y / factor);
+                res.predictionErrors[i].z = (int)Math.Truncate(res.predictionErrors[i].z / factor);
+            }
+
+            for (int i = 5; i < 16 && i < res.predictionErrors.Count; i++)
+            {
+                res.predictionErrors[i].x = (int)Math.Truncate(res.predictionErrors[i].x / factor2);
+                res.predictionErrors[i].y = (int)Math.Truncate(res.predictionErrors[i].y / factor2);
+                res.predictionErrors[i].z = (int)Math.Truncate(res.predictionErrors[i].z / factor2);
+            }
+
+            for (int i = 16; i < res.predictionErrors.Count; i++)
+            {
+                res.predictionErrors[i].x = (int)Math.Truncate(res.predictionErrors[i].x / factor3);
+                res.predictionErrors[i].y = (int)Math.Truncate(res.predictionErrors[i].y / factor3);
+                res.predictionErrors[i].z = (int)Math.Truncate(res.predictionErrors[i].z / factor3);
+            }
+        }
+
+        private static void dequantize(Residuals res)
+        {
+            for (int i = 0; i < 5 && i < res.predictionErrors.Count; i++)
+            {
+                res.predictionErrors[i].x = res.predictionErrors[i].x * factor;
+                res.predictionErrors[i].y = res.predictionErrors[i].y * factor;
+                res.predictionErrors[i].z = res.predictionErrors[i].z * factor;
+            }
+
+            for (int i = 5; i < 16 && i < res.predictionErrors.Count; i++)
+            {
+                res.predictionErrors[i].x = res.predictionErrors[i].x * factor2;
+                res.predictionErrors[i].y = res.predictionErrors[i].y * factor2;
+                res.predictionErrors[i].z = res.predictionErrors[i].z * factor2;
+            }
+
+            for (int i = 16; i < res.predictionErrors.Count; i++)
+            {
+                res.predictionErrors[i].x = res.predictionErrors[i].x * factor3;
+                res.predictionErrors[i].y = res.predictionErrors[i].y * factor3;
+                res.predictionErrors[i].z = res.predictionErrors[i].z * factor3;
+            }
+        }
+
         private static void Strip(PFSSPoint p)
         {
-
-
-            if (Math.Abs(p.x) < factor)
-                p.x = (int)Math.Truncate(p.x / factor2);
-            if (Math.Abs(p.y) < factor)
-                p.y = (int)Math.Truncate(p.y / factor2);
-            if (Math.Abs(p.z) < factor)
-                p.z = (int)Math.Truncate(p.z / factor2);
+            p.x = (int)Math.Truncate(p.x / factor2);
+            p.y = (int)Math.Truncate(p.y / factor2);
+            p.z = (int)Math.Truncate(p.z / factor2);
         }
+
         private static void Push(PFSSPoint p)
         {
-            if (Math.Abs(p.x) < factor / factor2)
-                p.x = (int)(p.x * factor2);
-            if (Math.Abs(p.y) < factor / factor2)
-                p.y = (int)(p.y * factor2);
-            if (Math.Abs(p.z) < factor / factor2)
-                p.z = (int)(p.z * factor2);
+
+            p.x = (int)(p.x * factor2);
+            p.y = (int)(p.y * factor2);
+            p.z = (int)(p.z * factor2);
         }
         public static void BackwardPrediction(PFSSData data)
         {
             foreach (PFSSLine l in data.lines)
             {
+                dequantize(l.residuals);
                 Queue<PFSSPoint> bfs = new Queue<PFSSPoint>(l.residuals.predictionErrors);
                 Queue<Tuple<int, int>> bfsIndices = new Queue<Tuple<int, int>>();
                 bfsIndices.Enqueue(new Tuple<int, int>(0, l.points.Count - 1));
@@ -246,9 +302,9 @@ namespace CompressionTesting.PFSS
 
             int toPredictIndex = (endIndex - startIndex) / 2 + startIndex;
             PFSSPoint toPredict = pointQueue.Dequeue();
-            Push(toPredict);
+            //Push(toPredict);
             PFSSPoint actual = Predict(start, end, toPredict, startIndex, endIndex, toPredictIndex);
-            if (l.points[(endIndex - startIndex) / 2].y != actual.y)
+            if (l.points[(endIndex - startIndex) / 2+startIndex].x != actual.x)
                 System.Console.Write("");
             l.points[toPredictIndex].x = actual.x;
             l.points[toPredictIndex].y = actual.y;

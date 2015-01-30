@@ -16,7 +16,7 @@ Die Teilschritte einer verlustbehaftete Kompressionen können in drei Verarbeitu
 \end{figure}
 Der JPEG/JFIF Standard ist eines der meist verwendeten Bildkompressionsalgorithmen für natürliche Bilder. Das Diagramm der Abbildung \ref{state:jpeg:abb} zeigt den Aufbau der Kompressionspipeline. JPEG/JFIF unterteilt das Eingabebild in $8*8$ Blöcke und führt eine Diskrete Kosinus Transformation (DCT) durch. Der Bildblock ist nun als Folge von Kosinus Funktionen dargestellt.\\
 Die Quantisierung versucht nun Frequenzen, welche das menschliche Auge schlecht erkennen kann weniger Präzise darzustellen. Wenn die Quantisierung gut gewählt wurde, kann der Mensch das dekomprimierte Bild nicht vom Original unterscheiden, verbraucht aber weniger Speicherplatz. JPEG/JFIF bietet vorgefertigte Quantisierungstabellen an. Der Benutzer kann aber eigene Tabellen für spezifizieren. Wie die Quantisierungstabelle optimal gewählt wird, ist ein aktives Forschungsfeld \cite{wu1993rate:jpeg} \cite{wang2001designing:jpeg} und kann von Anwendungsfall zu Anwendungsfall unterschiedlich sein.\\
-Nach der Quantisierung werden die quantisierten Blöcke im Zick-Zack-Muster angeordnet, sodass die Entropie Kodierung eine bessere Kompression durchführen kann. JPEG/JFIF führt eine Run-Length\cyte{wiki:rle} und eine Huffman-Kodierung\cite{huffman1952method} durch. JPEG bietet auch hier an, eine benutzerspezifizierte Huffman-Tabelle zu verwenden.
+Nach der Quantisierung werden die quantisierten Blöcke im Zick-Zack-Muster angeordnet, sodass die Entropie Kodierung eine bessere Kompression durchführen kann. JPEG/JFIF führt eine Run-Length\cite{wiki:rle} und eine Huffman-Kodierung\cite{huffman1952method} durch. JPEG bietet auch hier an, eine benutzerspezifizierte Huffman-Tabelle zu verwenden.
 
 Wenn für die Kompression von wissenschaftlichen Daten eine Diskrete Kosinus Transformation eingesetzt werden soll, kann ein ähnlicher Aufbau verwendet werden wie der JPEG/JFIF Strandard. Für eine optimale Kompression wird die Umsetzung der einzelnen Schritte vom Standard abweichen.
 
@@ -40,8 +40,9 @@ Unser et al \cite{unser1993b:spline} zeigt ein Algorithmus, welcher ähnlich die
 Eine Datenkompression mit Curve Fitting ist im Vergleich mit der Kosinus Transformation weniger erforscht. Es sind ebenfalls keine Kompressionsstandards bekannt, welche ein Curve Fitting für die Datenkompression verwenden. Ein Kompressionsverfahren zu entwickeln zieht zusätzlichen Aufwand mit sich als Verfahren, welche in der Datenkompression etabliert sind.
 
 \subsection{Compressive Sensing}
-Compressive Sensing ist ein Verfahren aus der Signalverarbeitung \cite{baraniuk2007compressive}.
-Underdetermined linear system?
+Das Compressive Sensing Verfahren stellt ein Inputsignal aus vordefinierten Funkionen dar. Das sogenannte Dictionary. Das Signal wird durch möglichst wenige Funktionen im Dictionary dargestellt (Sparse representation). Die Funktionen sind anders als bei der Wavelet Transformation nicht an Eigenschaften gebunden und können allgemein sein. Das Überführen in die Sparse representation ist ein $np-hard$ Problem \cite{wiki:npHard}. Es existieren aber gute heuristiken wie Orhtogonal Matching Pursuit \cite{tropp2007signal}, welches in linearer Laufzeit eine genügend gute approximation erstellt.\\
+
+Mit einem genügend allgemeinen Dictionary ist jedes Signal rekonstruierbar. Die Stärke des Compressive Sensing Ansatzes ist, dass das Dictionary auf die Signale optimiert werden kann. Ein möglicher Algorithmus ist der K-SVD \cite{bryt2008compression} Ansatz.
 
 \subsection{Entropie Kodierung}
 Die Entropie Kodierung findet in allen Bereichen der Informatik Anwendungen. Ziel ist es die gleiche Information mit einem Minimum an Daten darzustellen. Verlustbehaftete Kompressionsverfahren reduzieren die Information und verwenden im letzten Schritt eine Entropie Kodierung um die Datenmenge zu reduzieren.

@@ -1,4 +1,12 @@
 \section{Fazit}
+Adaptives Subsampling ist sehr einfach und beinhaltet keine artefakte. Es werden aber nur eine begrenzte Anzahl an Punkte übertragen, weshalb dieser Ansatz in Zukunft an seine Grenzen stossen könnte. Mit dieser Variante ist das Caching von Feldlinien umsetzbar, sowie das Streaming unter genügend Bandbreite.
+
+Die Kompression mit der Diskreten Kosinus Transformation erreicht eine hohe Kompressionsrate, doch die Artefakte beeinträchtigen die Visualisierung. Die Umsetzung der Dekompression gestaltet sich komplexer. Durch die hohe Kompressionsrate kann dieser Lösungsansatz die Feldliniendaten am effizientesten Cachen. Streaming ist auch dementsprechend schneller, aber nicht um Grössenordnungen wie zum Lösungsansatz des Adaptiven Subsamplings.\\
+andere Universitäten/Forschungseinrichtungen sind ebenfalls an den Feldliniendaten interessiert. Die Komplexität ist ein Problem, aber die Ringing-Artefakte ein anderes. Für die Visualisierung ist eine Kurvenglättung akzeptabel, für andere Anwendungsfälle nicht unbedingt.
+
+Prediktive Kodierung 
+Zusammenfassung
+
 Auswahl des Lösungsansatzes. Kandidatur DCT und Prediktive Kodierung. 
 Es wurde der Lösungsansatz der Prediktiven Kodierung ausgewählt.
 

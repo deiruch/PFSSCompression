@@ -87,7 +87,7 @@ In der Visualisierung werden die Feldlinien in drei Typen unterschieden: ''Sonne
 Die anderen Feldlinien benötigen mehr Koeffizienten für die Dämpfung der Ringing Artefakte. Bei ihnen liegt das Maximum bei $50$ Koeffizienten.
 
 \subsubsection{Entropie Kodierung}\label{konzept:loesung1:kodierung}
-Um die Entropie Kodierung zu verbessern wurden zwei Byte-Kodierungen hinzugefügt. Die Kanäle werden zuerst mit der Längenkodierung und darauf folgend mit der adaptive Genauigkeit kodiert.
+Um die Entropie Kodierung zu verbessern wurden zwei Byte-Kodierungen hinzugefügt. Die Längenkodierung reduziert 0-Einträge der Kanäle und die adaptive Genauigkeits-Kodierung reduziert die benötigten Bytes pro Wert eines Kanals.
 
 \textbf{Längenkodierung}\\
 Die Quantisierung erlaubt nur eine maximale Anzahl an Koeffizienten. Ab dem $50$ Koeffizient, sind die Werte Null. Die Längenkodierung schneidet den Block von Null-Koeffizienten ab und fügt die Länge des Nicht-Null Blockes hinzu. Alle Längen und alle Blöcke werden zusammen abgespeichert, die Tabelle \ref{konzept:loesung1:entropie:laengenkodierung} verdeutlicht das Konzept. $n_i$ ist die Länge der Feldlinie $i$ und $x_{i,j}$ ist der $j$ DCT-Koeffizient der Feldlinie $i$.
@@ -155,8 +155,14 @@ Der Algorithmus der Rekursiver Linearer Kodierung versucht aus einer ungenauen A
 	\label{konzept:loesung2:algorithm:step2}
 \end{figure} 
 
-\subsubsection{Quantisierung}
-Die Vorhersagefehler  Rekursiven Linearen Kodierung werden von Rekursionsstufe zu Rekursionsstufe kleiner. In der letzten Rekursion werden Detailinformationen kodiert, welche für meist nicht relevant sind. Die Vorhersagefehler werden mit einem konstanten Faktor quantisiert. Die Vorhersagefehler werden mit weniger Genauigkeit abgespeichert. Fehler, welche kleiner sind als der Quantisierungsfakter, werden komplett gelöscht.
+\subsubsection{Quantisierung} \label{konzept:loesung2:resudial_quant}
+Die Vorhersagefehler Rekursiven Linearen Kodierung werden von Rekursionsstufe zu Rekursionsstufe kleiner. In der letzten Rekursion werden Detailinformationen kodiert, welche für meist nicht relevant sind. Angepasste Quantisierung, welche
+
+Wenn die 
+Durch die Quantisierung entstehen Abweichungen, welche im Extremfall Ringing ähnliche Artefakte verursachen können. Die Abbildung \ref{resultate:loesung2:adaptive:median:artefakte} im Abschnitt \ref{resultate:loesung2:wavelet} zeigt die Artefakte der Kompression. 
+
+. Die Lösung ist eine Quantisierung ähnlich 
+ Wie die Abweichungen behandelt werden bestimmt die Genauigkeit und die
 
 \subsubsection{Entropie Kodierung}
 Die Vorhersagefehler werden in Breadth-First Ordnung abgespeichert. Der Fehler der Rekursionsstufe 0 wird zuerst abgelegt, gefolgt von den Fehlern der Stufe 1 etc. Die Tabelle \ref{konzept:loesung2:entropie:breath} zeigt den Aufbau. Die Vorhersagefehler der ersten Levels sind grösser, als die der Letzten. Diese Ordnung hilft ähnliche Strukturen beieinander zu halten.

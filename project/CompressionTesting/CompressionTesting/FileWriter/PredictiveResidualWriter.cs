@@ -129,7 +129,7 @@ namespace CompressionTesting.FileWriter
             int[] ptr_nz_len = new int[input.lines.Count];
 
             List<PFSSLine> lines = new List<PFSSLine>(input.lines);
-            lines.Sort();
+            //lines.Sort();
 
             int totalCount = 0;
             for (int i = 0; i < ptr_nz_len.Length; i++)
@@ -138,7 +138,7 @@ namespace CompressionTesting.FileWriter
                 int count = res.predictionErrors.Count;
 
                 totalCount += count;
-                ptr_nz_len[i] = (short)count;
+                ptr_nz_len[i] = (int)count;
             }
 
 
@@ -154,12 +154,12 @@ namespace CompressionTesting.FileWriter
                 //write start points
                 for (int i = 0; i < offset; i++)
                 {
-                    startPointsR[startPointIndex] = (short)l.residuals.startPoint.x;
-                    startPointsPhi[startPointIndex] = (short)l.residuals.startPoint.y;
-                    startPointsTheta[startPointIndex] = (short)l.residuals.startPoint.z;
-                    endpointsR[startPointIndex] = (short)l.residuals.endPoint.x;
-                    endpointsPhi[startPointIndex] = (short)l.residuals.endPoint.y;
-                    endpointsTheta[startPointIndex] = (short)l.residuals.endPoint.z;
+                    startPointsR[startPointIndex] = (int)l.residuals.startPoint.x;
+                    startPointsPhi[startPointIndex] = (int)l.residuals.startPoint.y;
+                    startPointsTheta[startPointIndex] = (int)l.residuals.startPoint.z;
+                    endpointsR[startPointIndex] = (int)l.residuals.endPoint.x;
+                    endpointsPhi[startPointIndex] = (int)l.residuals.endPoint.y;
+                    endpointsTheta[startPointIndex] = (int)l.residuals.endPoint.z;
                     startPointIndex++;
                 }
 
@@ -168,9 +168,9 @@ namespace CompressionTesting.FileWriter
                 for (int i = 0; i < res.predictionErrors.Count; i++)
                 {
                     PFSSPoint p = res.predictionErrors[i];
-                    ptr[index] = (short)p.x;
-                    ptph[index] = (short)p.y;
-                    ptth[index] = (short)p.z;
+                    ptr[index] = (int)p.x;
+                    ptph[index] = (int)p.y;
+                    ptth[index] = (int)p.z;
                     index++;
                 }
 
@@ -183,10 +183,10 @@ namespace CompressionTesting.FileWriter
             Object[] dataRow = new Object[] { b0a, l0a, 
                 DCTCoder.EncodeAdaptiveUnsigned(ptr_nz_len), 
                 DCTCoder.EncodeStartPointChannel(startPointsR),
-                DCTCoder.EncodeStartPointChannel(startPointsPhi),
-                DCTCoder.EncodeStartPointChannel(startPointsTheta),
                 DCTCoder.EncodeStartPointChannel(endpointsR),
+                DCTCoder.EncodeStartPointChannel(startPointsPhi),
                 DCTCoder.EncodeStartPointChannel(endpointsPhi),
+                DCTCoder.EncodeStartPointChannel(startPointsTheta),
                 DCTCoder.EncodeStartPointChannel(endpointsTheta), 
                 DCTCoder.EncodeAdaptive(ptr), DCTCoder.EncodeAdaptive(ptph), DCTCoder.EncodeAdaptive(ptth) };
             data[0] = dataRow;
@@ -200,10 +200,10 @@ namespace CompressionTesting.FileWriter
             bhdu.SetColumnName(1, "L0", null);
             bhdu.SetColumnName(2, "LINE_LENGTH", null);
             bhdu.SetColumnName(3, "StartPointsR", null);
-            bhdu.SetColumnName(4, "StartPointsPhi", null);
-            bhdu.SetColumnName(5, "StartPointsTheta", null);
-            bhdu.SetColumnName(6, "EndpointsR", null);
-            bhdu.SetColumnName(7, "EndpointsPhi", null);
+            bhdu.SetColumnName(4, "EndpointsR", null);
+            bhdu.SetColumnName(5, "StartPointsPhi", null);
+            bhdu.SetColumnName(6, "EndpointsPhi", null);
+            bhdu.SetColumnName(7, "StartPointsTheta", null);
             bhdu.SetColumnName(8, "EndpointsTheta", null);
             bhdu.SetColumnName(9, "R", null);
             bhdu.SetColumnName(10, "PHI", null);
