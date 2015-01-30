@@ -1,5 +1,5 @@
 \subsection{Lösungsansatz: Prediktive Kodierung}
-Prediktoren sind typische Ansätze für verlustfreie Kompressionsverfahren. Die Frage ist, wie Informationen gelöscht werden. In erster Linie werden zwei Subsampling verfahren getestet, ein einfaches Subsampling und das Adaptive Subsampling. Das Adaptive Subsampling ist gut in unwichtige Informationen zu löschen, ist aber schwieriger zu kodieren. Das 
+In diesem Abschnitt wird der Lösungsansatz der Prädiktiven Kodierung besprochen. Es wurde der Einfluss von verschiedenen Prädiktoren getestet. Die Schwierigkeit dieses Lösungsansatzes liegt in der Quantisierung des Vorhersagefehleres. Die Quantisierung der Fehler von einfacher Prädiktoren führt zu hohen Abweichungen in der Dekompression. Der Rekursive Lineare Prädiktor unter Abschnitt \ref{resultate:loesung2:wavelet} löst das Problem.
 
 \subsubsection{Variante: einfaches Subsampling}
 Für die erste Variante wird das Subsampling des DCT-Lösungsansatzes verwendet. Es reduziert die Punktmenge auf die Anzahl des Ist-Zustands. Die Feldlinien werden mit einer PCA in ein lokales Koordinatensystem transformiert. Im lokalen System können die Koordinaten mit 16 Bit Genauigkeit dargestellt werden. 16 Bit im Koordinatensystem der Sonne reichen nicht aus und führen zu einem grösseren Fehler als der Ist-Zustand.\\
@@ -65,22 +65,38 @@ Die Artefakte der Dekompression äussern sich meist als Verschiebungen einzelner
 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=0.8\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante2/artefakte1.png}
-	\caption{Artefakte der Rekursiven Linearen Kodierung.}
+		\includegraphics[width=0.49\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante3/no_artifacts.png}
+	\includegraphics[width=0.49\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante3/artifacts_8.png}
+	\caption{Artefakte der Rekursiven Linearen Kodierung. Links sind die originalen Feldlinien.}
 	\label{resultate:loesung2:adaptive:median:artefakte}
 \end{figure}
 
 \subsubsection{Rekursive Lineare Kodierung mit angepasster Quantisierung}
 Um die Artefakte der Dekompression zu dämpfen werden die Vorhersagefehler der Rekursionsstufe angepasst quantisiert. Die ersten Rekursionsstufen werden mit höherer Genauigkeit abgelegt.
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante3/resultate.png}
+		\label{resultate:loesung2:adaptive:median:quant}
+		\caption{Kompressionsraten der Rekursive Lineare Kodierung mit angepasster Quantisierung.}
+\end{figure}
+\begin{figure}[!htbp]
+	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante3/resultate_psnr.png}
+	\label{resultate:loesung2:adaptive:median:quant_psnr}
+	\caption{Kompressionsraten der Rekursive Lineare Kodierung mit angepasster Quantisierung.}
+\end{figure}
+Die Angepasste Quantisierung bringt eine Verbesserung in der Standardabweichung mit sich. Die Diagramme der Abbildungen \ref{resultate:loesung2:adaptive:median:quant} und \ref{resultate:loesung2:adaptive:median:quant_psnr} visualisieren die Standardabweichung und PSNR-HVS-M zur jeweiligen Kompression. Mit der angepassten Quantisierung kann diese Variante eine ähnliche Kompression zu vergleichbaren PSNR-HVS-M erreichen, wie der DCT Lösungsansatz.Mit einer PSNR-HVS-M von $95.5$ verbraucht diese Variante $63$ Bytes pro Feldlinie, was zu einer Kompressionsrate von $13.6$ führt. Der Vorteil dieser Variante gegenüber der DCT Lösung ist, das wenige zusätzliche Bytes die Artefakten stark dämpfen können. 
 
-Figure
-Durch die angepasste Quantisierung konnte weiter Genauigkeit gewonnen werden und liegt nun fast gleichauf mit der DCT Lösung. Die Artefakte 
+Die Artefakte haben sich im Vergleich zur vorhergehenden Variante verbessert: Die Abbildung \ref{resultate:loesung2:adaptive:median_extra:artefakte}
+Auch bei hohen Zoom sind die Artefakte schwer zu erkennen. Eine leichte Glättung der Feldlinien ist für die Visualisierung dennoch angebracht. Leichte Verschiebungen einzelner Punkte sind meist nicht zu erkennen. Bei hoher Dichte der Feldlinien werden die Verschiebungen sichtbar, da sie sich häufig kreuzen und eine unästhetische Visualisierung abgeben.
 
-Artefakte wurden ebenfalls verbessert. Eine leichte Glättung ist aber dennoch willkommen, da sonst alles ein wenig wirr ist.
-Durch die veränderte Quantisierung konnte weiter an Genauigkeit gewonnen werden. Das Diagramm der Abbildung
+\begin{figure}[!htbp]
+	\center
+		\includegraphics[width=0.49\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante3/no_artifacts.png}
+	\includegraphics[width=0.49\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante3/artifacts_extra.png}
+	\caption{Artefakte der Rekursiven Linearen Kodierung mit angepasster Quantisierung.Links sind die originalen Feldlinien.}
+	\label{resultate:loesung2:adaptive:median_extra:artefakte}
+\end{figure}
 
-
-
-Das Caching von $1000$ Simulationen und die Übertragungszeit fallen zwischen die anderen Lösungsansätzen mit $73$ Megabyte an Arbeitsspeicher beziehungsweise $59$ Sekunden Übertragungszeit. Zum Vergleich: Die DCT Lösung verbraucht unter den selben Bedingungen $70$ und das Adaptive Subsampling $85$ Megabyte an Arbeitsspeicher. Bei einer Internetverbindung von $10$ Megabit ist bei diesem Lösungsansatz mit einer Übertragungsrate von $16$ Simulationen in der Sekunde zu rechnen. Die Laufzeit der Dekompression liegt mit $30.6$ Millisekunden ebenfalls zwischen den Lösungsansätzen Adaptives Subsampling und DCT. Mit dieser Laufzeit kann ein Thread durchschnittlich $32$ Simulationen pro Sekunde dekomprimieren.
+Das Caching von $1000$ Simulationen und die Übertragungszeit fallen zwischen die anderen Lösungsansätzen mit $72$ Megabyte an Arbeitsspeicher beziehungsweise $58$ Sekunden Übertragungszeit. Zum Vergleich: Die DCT Lösung verbraucht unter den selben Bedingungen $70$ und das Adaptive Subsampling $85$ Megabyte an Arbeitsspeicher. Bei einer Internetverbindung von $10$ Megabit ist bei diesem Lösungsansatz mit einer Übertragungsrate von $16$ Simulationen in der Sekunde zu rechnen. Die Laufzeit der Dekompression liegt mit $30.6$ Millisekunden ebenfalls zwischen den Lösungsansätzen Adaptives Subsampling und DCT. Mit dieser Laufzeit kann ein Thread durchschnittlich $32$ Simulationen pro Sekunde dekomprimieren.
 
 Dieser Lösungsansatz ist ein Kompromiss zwischen Kompressionsrate und Qualität. Die Daten enthalten Kompressionsartefakte. Sie sind aber schwach ausgeprägt sodass auf eine Glättung gegebenenfalls verzichtet werden kann.
