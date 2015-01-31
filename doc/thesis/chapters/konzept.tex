@@ -127,19 +127,17 @@ Im Allgemeinen reichen sieben Bit Genauigkeit um die quantisierten DCT Koeffizie
 	\caption{Aufbau des Lösungsansatzes: Adaptives Subsampling.}
 	\label{konzept:loesung2:aufbau}
 \end{figure}
-Die Prädiktive Kodierung ist ein Verfahren, welches typischerweise in der verlustfreien Kompressionen Anwendung findet. Mittels eines Prädiktors und den bereits kodierten Daten wird eine Vorhersage erstellt, wie die nächsten Daten aussehen werden. Die Prädiktive Kodierung speichert den Vorhersagefehler.
+Die Prädiktive Kodierung ist ein Verfahren, welches typischerweise in der verlustfreien Kompressionen Anwendung findet. Mittels eines Prädiktors und den bereits kodierten Daten wird eine Vorhersage erstellt für die folgenden Daten erstellt. Die Prädiktive Kodierung speichert ausschliesslich den Vorhersagefehler.
 
 Der Aufbau dieser Lösung ist im Diagramm der Abbildung \ref{konzept:loesung2:aufbau} dargestellt. Im ersten Schritt wird ein Subsampling und eine Quantisierung der Daten durchgeführt. Darauf folgend werden die quantisierten Daten mit einer Prediktiven Kodierung versehen. Der zweite Quantisierungsschritt versucht unwichtige Informationen der Prediktiven Kodierung zu löschen. 
 
-Das Adaptive Subsampling reduziert die Anzahl Punkte und verändert die Eigenschaften der Kanäle der einzelnen Feldlinien. Stetige Steigungen werden zerstört, ein Beispiel ist im Diagramm der Abbildung \ref{resultate:loesung2:adaptive:channel} im Abschnitt \ref{resultate:loesung2:adaptive}. Einfache Prediktoren wie zum Beispiel ein linearer Prediktor kann auf solche Daten keine zuverlässige Vorhersage treffen und verbessert die Kompressionsrate nicht. Es wurde deshalb der Rekursiver Linearer Prediktor entwickelt, welche auf der Idee der Point Cloud Kompression aus Abschnitt \ref{state:pointcloud} basiert. Die Daten werden in unterschiedlich genauen Approximationen dargestellt. Der Prediktor benutzt die ungenaue Approximation um die nächst genauere vorherzusagen. Das Prinzip wurde für den Median Prediktor übernommen.
+Das Adaptive Subsampling reduziert die Anzahl Punkte und verändert die Eigenschaften der Kanäle der einzelnen Feldlinien. Stetige Steigungen werden zerstört, ein Beispiel ist im Diagramm der Abbildung \ref{resultate:loesung2:adaptive:channel} im Abschnitt \ref{resultate:loesung2:adaptive}. Einfache Prediktoren wie zum Beispiel ein linearer Prediktor kann auf solche Daten keine zuverlässige Vorhersage treffen und verbessert die Kompressionsrate nicht. Es wurde deshalb der Rekursiver Linearer Prediktor entwickelt, welche auf der Idee der Point Cloud Kompression aus Abschnitt \ref{state:pointcloud} basiert. Die Daten werden in unterschiedlich genauen Approximationen dargestellt. Der Prediktor benutzt die ungenaue Approximation um die nächst genauere vorherzusagen.
 
 \subsubsection{Angle Subsampling und Quantisierung}
-Das Angle-Subsampling vom Lösungsansatz aus Abschnitt \ref{konzept:loesung0} wurde mit angepassten Parametern übernommen. In diesem Ansatz werden $50\%$ mehr Punkte übertragen. Die Zusätzliche Punkte werden übertragen, damit die Kompression nicht angepasst werden muss, falls der JHelioviewer in Zukunft mehr Punkte anzeigt.
-
-Die Quantisierung überführt die Punkte in ein diskretes, sphärisches Koordinatensystem. In diesem Koordinatensystem können die Koordinatenachse mit 16 Bit Genauigkeit abgebildet werden, ohne hohe Abweichungen vom Originalpunkt in kauf zu nehmen.
+Das Angle-Subsampling vom Lösungsansatz aus Abschnitt \ref{konzept:loesung0} wurde mit angepassten Parametern übernommen. In diesem Ansatz werden $50\%$ mehr Punkte übertragen. Die Quantisierung überführt die Punkte in ein diskretes, sphärisches Koordinatensystem. In diesem Koordinatensystem können die Koordinatenachse mit 16 Bit Genauigkeit abgebildet werden, ohne hohe Abweichungen vom Originalpunkt in kauf zu nehmen.
 
 \subsubsection{Rekursiver Linearer Kodierung}
-Der Algorithmus der Rekursiver Linearer Kodierung versucht aus einer ungenauen Approximation die nächst genauere vorherzusagen. Im Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step1} ist der erste Schritt des Algorithmus dargestellt. Es wird angenommen, dass der mittlere Wert des Kanals auf der Strecke zwischen Start- und Endwert liegt. Der nächste Schritt ist im Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step2} dargestellt. Der Algorithmus wird rekursiv für die zwei Teilstücke des Kanals wiederholt, bis alle Werte des Kanals kodiert wurden, mit Ausnahme des Start- und Endwertes. Sie werden ohne Kodierung abgespeichert.
+Der Algorithmus der Rekursiver Linearer Kodierung versucht aus einer ungenauen Approximation die nächst genauere vorherzusagen. Im Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step1} ist der Kodierungsschritt des Algorithmus dargestellt. Es wird angenommen, dass der mittlere Wert des Kanals auf der Strecke zwischen Start- und Endwert liegt. Der Algorithmus wird rekursiv für die zwei Teilstücke des Kanals wiederholt, bis alle Werte zwischen Start- und Endwert des Kanals kodiert wurden. Start und Endwert des Kanals werden unkodiert abgespeichert. Die Kodierung der nächsten Rekursionsstufe ist im Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step2} dargestellt.
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution2/algorithm_step1.png}
@@ -154,7 +152,7 @@ Der Algorithmus der Rekursiver Linearer Kodierung versucht aus einer ungenauen A
 \end{figure} 
 
 \subsubsection{Quantisierung} \label{konzept:loesung2:resudial_quant}
-Die Vorhersagefehler Rekursiven Linearen Kodierung werden von Rekursionsstufe zu Rekursionsstufe kleiner. In der letzten Rekursion werden Detailinformationen kodiert, welche für meist nicht relevant sind. Die Vorhersagefehler der ersten Rekursionsstufen werden mit höherer Genauigkeit abgespeichert. So können die Artefakte in Grenzen gehalten werden und trotzdem eine gute Kompressionsrate erreicht werden.
+Die Vorhersagefehler der Rekursiven Linearen Kodierung werden von Rekursionsstufe zu Rekursionsstufe kleiner. In der letzten Rekursion werden Detailinformationen kodiert, welche für meist nicht relevant sind. Die Vorhersagefehler der ersten Rekursionsstufen werden mit höherer Genauigkeit abgespeichert. So können die Artefakte in Grenzen gehalten werden und trotzdem eine gute Kompressionsrate erreicht werden.
 
 \subsubsection{Entropie Kodierung}
 Die Vorhersagefehler werden in Breadth-First Ordnung abgespeichert. Der Fehler der Rekursionsstufe 0 wird zuerst abgelegt, gefolgt von den Fehlern der Stufe 1 etc. Die Tabelle \ref{konzept:loesung2:entropie:breath} zeigt den Aufbau. Die Vorhersagefehler der ersten Levels sind grösser, als die der Letzten. Diese Ordnung hilft ähnliche Strukturen beieinander zu halten.
@@ -170,4 +168,4 @@ Die Vorhersagefehler werden in Breadth-First Ordnung abgespeichert. Der Fehler d
 	\caption{Breadth First Ordnung der Vorhersagefehler.}
 	\label{konzept:loesung2:entropie:breath}
 \end{table}
-Die Vorhersagefehler werden mit der Adaptiven Genauigkeitskodierung aus Abschnitt \ref{konzept:loesung1:kodierung} kodiert. Nach der Quantisierung reichen im Allgemeinen 8 Bit aus um einen Fehler abzulegen. Die Längenkodierung wurde nicht verwendet. Es existiert im Allgemeinen kein zusammenhängender Block von 0-Fehler. 
+Die Vorhersagefehler werden mit der Adaptiven Genauigkeitskodierung aus Abschnitt \ref{konzept:loesung1:kodierung} kodiert. Nach der Quantisierung reichen im Allgemeinen 8 Bit aus um einen Fehler abzulegen. Die Längenkodierung wurde nicht verwendet.

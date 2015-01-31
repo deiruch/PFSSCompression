@@ -35,16 +35,16 @@ Um die Point Cloud Kompression auf die Feldlinien anzuwenden muss die Informatio
 
 \subsection{Curve Fitting}
 Curve Fitting ist ein Prozess, welcher ein Signal durch eine oder mehrere Funktionen abbildet. Es ist zwischen einem exakten Curve Fitting und einer Approximation zu unterscheiden. Die exakte Repräsentation wird typischerweise für die Signalinterpolation und eine Approximation in der Rauschunterdrückung verwendet. Eine Datenkompression ist mit Curve Fitting möglich, wenn die Parameter der approximierenden Funktionen weniger Speicherplatz benötigen, als das Signal.\\
-Unser et al \cite{unser1993b:spline} zeigt ein Algorithmus, welcher ein diskretes Signal als Folge von B-Splines darstellt. Unser stellt ein mögliches Verfahren für verlustbehaftete Bildkompression mittels B-Splines vor\cite{unser1993b2:spline}. Der Vorteil der B-Splines ist, dass die Artefakte der Dekompression als Rauschunterdrückung und Schärfung des Originalbildes ausdrücken.
+Unser et al \cite{unser1993b:spline} zeigt ein Algorithmus, welcher ein diskretes Signal als Folge von B-Splines darstellt. Es existieren Ansätze für verlustbehaftete Bildkompression mittels B-Splines\cite{unser1993b2:spline}. Der Vorteil der B-Splines ist, dass die Artefakte der Dekompression als Rauschunterdrückung und Schärfung des Originalbildes ausdrücken.
 
 Eine Datenkompression mit Curve Fitting ist im Vergleich mit der Kosinus Transformation weniger erforscht. Es sind ebenfalls keine Kompressionsstandards bekannt, welche ein Curve Fitting für die Datenkompression verwenden. Ein Kompressionsverfahren zu entwickeln zieht zusätzlichen Aufwand mit sich als Verfahren, welche in der Datenkompression etabliert sind.
 
 \subsection{Compressive Sensing}
-Compressive Sensing ist ein Verfahren, welches ein Signal mit einer minimalen Anzahl an Funktionen aus einem Dictionary darstellt (sparse representation).  Die Funktionen im Dictionary sind durch keine Rahmenbedingungen begrenzt, jede allgemeine Funktion im Dictionary des Compressive Sensing verwendet werden. 
+Compressive Sensing ist ein Verfahren, welches ein Signal mit einer minimalen Anzahl an vordefinierten Funktionen darstellt (sparse representation). Die Funktionen sind durch keine Rahmenbedingungen begrenzt, jede allgemeine Funktion im Compressive Sensing verwendet werden. 
 
 Das Überführen in die sparse representation ist ein $np-hard$ Problem \cite{wiki:npHard}. Es existieren aber Heurisiken wie Orthogonal Matching Pursuit\cite{tropp2007signal}, welches in linearer Laufzeit eine approximation erstellt. Die Approximation ist für jeden Anwendungsfall genügend genau.
 
-Mit einem allgemeinen Dictionary ist jedes Signal rekonstruierbar. Die Stärke des Compressive Sensing Ansatzes ist, dass das Dictionary auf die Signale optimiert werden kann. Ein möglicher Algorithmus ist der K-SVD \cite{bryt2008compression} Algorithmus. K-SVD ist ein Unsupervised Learning Algorithmus und erlernt ein Dictionary anhand von Beispielsignalen.
+Mit einem allgemeinen Dictionary von vordefinierten Funktionen ist jedes Signal rekonstruierbar. Die Stärke des Compressive Sensing Ansatzes ist, dass das Dictionary auf die Signale optimiert werden kann. Der K-SVD \cite{bryt2008compression} Algorithmus erlernt mittels Unsupervised Learning ein Dictionary, welches auf die zu kodierenden Signale zugeschnitten ist. 
 
 Compressive Sensing hat das Potential eine hohe Kompressionsrate zu erreichen. Die Feldlinien sind oft ähnlich und unterscheiden sich hauptsächlich in Rotation, Verschiebung und Skalierung. Mit einem auf Feldlinien angepasstes Dictionary kann eine Feldlinie durch wenige Funktionen approximiert werden.
 

@@ -4,6 +4,7 @@ Um die Feldlinien optimal mit der DCT zu approximieren, müssen Ringing Artefakt
 
 \subsubsection{Variante: DCT}\label{resultate:dct}
 Diese Variante verwendet die Diskrete Kosinus Transformation. Es wird erforscht welche Kompressionsrate ohne zusätzliche Transformationen möglich ist.
+
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/loesung1-0/loesung1_0.png}
@@ -11,6 +12,7 @@ Diese Variante verwendet die Diskrete Kosinus Transformation. Es wird erforscht 
 	\label{resultate:loesung1:dct:resultate}
 \end{figure}
 Die Abbildung \ref{resultate:loesung1:dct:resultate} zeigt den Vergleich der DCT Kompression mit dem Lösungsansatz des Adaptiven Subsamplings (siehe \ref{resultate:loesung0}). Die Standardabweichung steigt unerwartet schnell an. Der Grund kann im Diagramm der Abbildung \ref{resultate:loesung1:dct:artefakte} entnommen werden. 
+
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=8cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-0/loesung1_0_artefakte.png}
@@ -18,10 +20,11 @@ Die Abbildung \ref{resultate:loesung1:dct:resultate} zeigt den Vergleich der DCT
 	\label{resultate:loesung1:dct:artefakte}
 \end{figure}
 Der Start und Endpunkt der Feldlinie kann nicht richtig dargestellt werden. Dies ist ein typisches Problem der DCT: Ein Inputsignal wird in der DCT konzeptionell wiederholt. Bei der implemementierten Kosinus Transformation (siehe Abschnitt \ref{konzept:loesung1:kosinus}) wird das Signal jeweils in umgekehrter Reihenfolge wiederholt. Bei der Beispielfeldlinie aus Abbildung \ref{resultate:loesung1:dct:artefakte} führt die Wiederholung zu einer Diskontinuität im Signal. Die Diskontinuität wird in der DCT mit hochfrequenten Anteilen abgebildet, welche von der Quantisierung gelöscht werden. Das Ergebnis ist eine Verschiebung an den Stellen, wo die Diskontinuität auftritt. In diesem Fall ist es jeweils am Anfang und am Ende der Feldlinie.\\
-Das Problem kann entweder durch eine andere Darstellung der Feldlinie oder durch zusätzliche Punkte am Anfang und am Ende der Linie gelöst werden. Die Variante, welche die Feldlinie mit Punkten erweitert, wird im Abschnitt ref{resultate:loesung1:dct:randbeh+byte} behandelt. Eine andere Darstellung der Feldlinie wird in den folgenden Abschnitten behandelt.
+Das Problem kann entweder durch eine andere Darstellung der Feldlinie oder durch zusätzliche Punkte am Anfang und am Ende der Linie gelöst werden. Die Variante, welche die Feldlinie mit Punkten erweitert, wird im Abschnitt \ref{resultate:loesung1:dct:randbeh+byte} behandelt. Eine andere Darstellung der Feldlinie wird in den folgenden Abschnitten behandelt.
 
 \subsubsection{Variante: Ableitung+DCT}\label{resultate:dct:ableitung_dct}
-Vor der Diskreten Kosinus Transformation werden die Feldlinien abgeleitet. Durch diese Darstellung werden die Artefakte aus der Abbildung \ref{resultate:loesung1:dct:artefakte} behoben.\\
+Vor der Diskreten Kosinus Transformation werden die Feldlinien abgeleitet. Durch diese Darstellung werden die Artefakte aus der Abbildung \ref{resultate:loesung1:dct:artefakte} behoben.
+
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/loesung1-1/loesung1_1.png}
@@ -29,6 +32,7 @@ Vor der Diskreten Kosinus Transformation werden die Feldlinien abgeleitet. Durch
 	\label{resultate:loesung1:dct_ableitung:resultate}
 \end{figure}
 Das Diagramm der Abbildung \ref{resultate:loesung1:dct_ableitung:resultate} zeigt, dass die abgeleiteten Feldlinien besser approximiert werden können als die vorhergehende Variante. Bei einer vergleichbaren Genauigkeit wie der Ist-Zustand erreicht diese Variante eine Kompressionsrate von $14.3$. Eine Darstellung der Artefakte ist im Diagramm der Abbildung\ref{resultate:loesung1:dct:byte:artefakte} zu finden. Die Artefakte der Kompression äussern sich als Dämpfungen. Die Artefakte sind jedoch für das menschliche Auge nicht sichtbar. Die Dämpfung ist erst zu erkennen, wenn das Original zur Verfügung steht.
+
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=8cm,keepaspectratio]{./pictures/resultate/loesung1/loesung1-6/artefakte.png}
@@ -39,6 +43,7 @@ Das Diagramm der Abbildung \ref{resultate:loesung1:dct_ableitung:resultate} zeig
 \subsubsection{Variante: PCA+Ableitung+DCT}
 Die Feldlinien liegen im Allgemeinen in einer Ebene im dreidimensionalen Raum. Durch eine Principal Component Analysis (PCA)\cite{abdi2010principal} können die Feldlinien in ein lokales Koordinatensystem transformiert werden, in welchem der Z Kanal in den meisten Fällen nicht gebraucht wird.\\
 Für die Rücktransformation ins Sonnen-Koordinatensystem werden pro Feldlinie zusätzlich sech Parameter für die neuen Koordinatenachsen und drei Parameter für die Verschiebung abgespeichert.
+
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/loesung1-4/loesung1_4.png}
@@ -48,7 +53,8 @@ Für die Rücktransformation ins Sonnen-Koordinatensystem werden pro Feldlinie z
 Im Diagramm der Abbildung \ref{resultate:loesung1:dct:pca} sind die Resultate der Messung dargestellt. Die PCA konnte keine Verbesserung erbringen. Die zusätzlichen Parameter verbrauchen mehr Speicherplatz als durch die PCA gewonnen werden kann.
 
 \subsubsection{Variante: Ableitung+DCT+Byte Kodierung} \label{resultate:loesung1:ableitung_dct_kodierung}
-Die quantisierten Koeffizienten können im Allgemeinen mit 8 Bit Genauigkeit dargestellt werden. Nur wenige Ausnahmen benötigen die 16 Big Genauigkeit, mit der sie abgespeichert werden. Der Grossteil der DCT-Koeffizienten wird ebenfalls auf 0 Quantisiert. Mit einer Byte-Kodierung werden diese Eigenschaften ausgenutzt. Die Byte Kodierung ist im Abschnitt \ref{konzept:loesung1:kodierung} beschrieben.\\
+Die quantisierten Koeffizienten können im Allgemeinen mit 8 Bit Genauigkeit dargestellt werden. Nur wenige Ausnahmen benötigen die 16 Big Genauigkeit, mit der sie abgespeichert werden. Der Grossteil der DCT-Koeffizienten wird ebenfalls auf 0 Quantisiert. Mit einer Byte-Kodierung werden diese Eigenschaften ausgenutzt. Die Byte Kodierung ist im Abschnitt \ref{konzept:loesung1:kodierung} beschrieben.
+
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/loesung1-6/loesung1_6.png}
@@ -59,6 +65,7 @@ Das Diagramm der Abbildung \ref{resultate:loesung1:dct:kodierung} zeigt den Einf
 
 \subsubsection{Variante: Randbehandlung+DCT+Byte Kodierung} \label{resultate:loesung1:dct:randbeh+byte}
 Bei dieser Variante wird mit zusätzlichen Punkten am Anfang und am Ende der Feldlinie die Artefakte aus Abschnitt \ref{resultate:dct} behoben. Die Zusätzlichen Punkte lassen die Feldlinie abflachen. Es wird erforscht, ob diese Darstellung der Feldlinien eine bessere Kompressionsrate zur ähnlicher Abweichung erlaubt. 
+
 \begin{figure}[!htbp]
 	\center	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/loesung1-7/loesung1_7.png}
 	\caption{Vergleich des Einflusses der Randbehandlung}
@@ -69,6 +76,7 @@ Diese Variante führt Artefakte ein, welche in der Standardabweichung nicht ins 
 
 \subsubsection{Ringing Artefakte}\label{resultate:loesung1:ringing}
 Obwhol die Variante aus Abschnitt \ref{resultate:loesung1:dct:randbeh+byte} eine vergleichbare Genauigkeit aufweist, wie die Ist-Lösung, sind auf der JHelioviewer Visualisierung deutliche Artefakte zu sehen. Die Abbildung \ref{resultate:loesung1:dct:randbehandlung:jvhartefakte} vergleicht die originalen mit dekomprimierten Feldlinien. Die Artefakte äussern sich als Oszillationen in den dekomprimierten Feldlinien.
+
 \begin{figure}[!htbp]
 	\center
 	\frame{
@@ -79,7 +87,8 @@ Obwhol die Variante aus Abschnitt \ref{resultate:loesung1:dct:randbeh+byte} eine
 	\label{resultate:loesung1:dct:randbehandlung:jvhartefakte}
 \end{figure} 
 In diesem Fall scheint die Standardabweichung als Fehlermass zu versagen: Da die Oszillationen nahe an der originalen Feldlinie liegen, bleiben die Abstände klein. Jedoch sind die Artefakte für das menschliche Auge inakzeptabel.\\
-Interessant ist, dass die abgeleiteten Feldlinien aus Abschnitt \ref{resultate:loesung1:ableitung_dct_kodierung} ähnliche Artefakte aufweisen, jedoch sind sie weniger ausgeprägt. Die Ableitung scheint die Artefakte zu dämpfen. Die Abbildung \ref{resultate:loesung1:dct:randbehandlung:jvhartefakte_loesung6} zeigt die Artefakte der abgeleiteten Feldlinien.\\
+Interessant ist, dass die abgeleiteten Feldlinien aus Abschnitt \ref{resultate:loesung1:ableitung_dct_kodierung} ähnliche Artefakte aufweisen, jedoch sind sie weniger ausgeprägt. Die Ableitung scheint die Artefakte zu dämpfen. Die Abbildung \ref{resultate:loesung1:dct:randbehandlung:jvhartefakte_loesung6} zeigt die Artefakte der abgeleiteten Feldlinien.
+
 \begin{figure}[!htbp]
 	\center
 	\frame{
@@ -89,8 +98,9 @@ Interessant ist, dass die abgeleiteten Feldlinien aus Abschnitt \ref{resultate:l
 	\caption{Artefakte der Kompression, links sind die originalen Feldlinien, rechts die Dekomprimierten der Variante \ref{resultate:loesung1:ableitung_dct_kodierung}.}
 	\label{resultate:loesung1:dct:randbehandlung:jvhartefakte_loesung6}
 \end{figure}
-Die oszillierenden Artefakte sind typisch für eine Datenkompression mit einer Diskreten Kosinus Transformation als Ringing Artefakte \cite{wiki:ringing:artefacts} bekannt. Sie treten ebenfalls bei JPEG/JFIF oder MP3 Kompressionen auf: Abrupte Steigungen im Inputsignal werden in der DCT durch hochfrequente Anteile dargestellt. Durch die Quantisierung der hochfrequenten Anteile werden oszillierende Artefakte eingefügt.\\
+Die oszillierenden Artefakte sind typisch für eine Datenkompression mit einer Diskreten Kosinus Transformation und sind als Ringing Artefakte \cite{wiki:ringing:artefacts} bekannt. Sie treten ebenfalls bei JPEG/JFIF oder MP3 Kompressionen auf: Abrupte Steigungen im Inputsignal werden in der DCT durch hochfrequente Anteile dargestellt. Durch die Quantisierung der hochfrequenten Anteile werden oszillierende Artefakte eingefügt.\\
 Die Feldlinien, welche am stärksten von den Artefakten betroffen sind, sind die ''Weltall zur Sonne'' oder ''Sonne ins Weltall'' Feldlinien. Sie verhalten sich nicht wie harmonische Halbwellen sondern steigen oft monoton, mit teils abrupten Richtungswechseln in der Nähe der Sonnenoberfläche. Die Abbildung \ref{resultate:loesung1:dct:randbehandlung:harte_richtungswechsel} zeigt ein Beispiel solcher Feldlinien. Die abrupten Wechsel führen zu abrupten Steigungen in den einzelnen Kanälen.
+
 \begin{figure}[!htbp]
 \center
 \includegraphics[width=0.4\textwidth,height=6cm,keepaspectratio]{./pictures/resultate/loesung1/ringing/haar-like.png}
@@ -99,8 +109,9 @@ Die Feldlinien, welche am stärksten von den Artefakten betroffen sind, sind die
 \end{figure}
 
 \subsubsection{Behandlung der Ringing Artefakte} \label{resultate:loesung1:behandlung_ringing}
-Um eine optimale Kompression der Feldlinien zu erreichen, müssen die Ringing Artefakte behandelt werden. Abschnitt \ref{resultate:loesung1:ringing} wurde erwähnt, dass nicht alle Varianten gleich starke Artefakte verursachen. Es wurde ebenfalls besprochen, dass die Feldlinien, welche von der Sonnenoberfläche zur Oberfläche führen, weniger ausgeprägte Artefakte mit sich bringen. In diesem Abschnitt wird erforscht, welche Variante die ''Sonne zu Sonne'' und welche die ''Weltall zur Sonne'' oder ''Sonne ins Weltall'' Feldlinien optimal approximieren kann, ohne zusätzliche Ringing Artefakte hinzuzufügen. Für die Messung der Artefakte wird die PSNR-HVS-M Metrik aus Abschnitt \ref{testsetup:psnr} verwendet.\\
-Für den Test werden insgesamt vier Varianten verglichen. Die Variante der abgeleiteten Feldlinien aus Abschnitt \ref{resultate:loesung1:ableitung_dct_kodierung} und die Variante der Randbehandlung aus Abschnitt \ref{resultate:loesung1:dct:randbeh+byte}. Die Varianten werden jeweil mit und ohne einer PCA gemessen. Die PCA wird hier nochmals überprüft, da sie die Ringing Artefakte auf einen Kanal beschränken kann.\\
+Um eine optimale Kompression der Feldlinien zu erreichen, müssen die Ringing Artefakte behandelt werden. Im Abschnitt \ref{resultate:loesung1:ringing} wurde erwähnt, dass vermutlich nich alle Varianten gleich ausgeprägte Artefakte verursachen. Es wurde ebenfalls besprochen, dass die Feldlinien, welche von der Sonnenoberfläche zu Oberfläche führen, weniger ausgeprägte Artefakte mit sich bringen. In diesem Abschnitt wird erforscht, welche Variante die ''Sonne zu Sonne'' und welche die ''Weltall zur Sonne'' oder ''Sonne ins Weltall'' Feldlinien optimal approximieren kann, ohne zusätzliche Ringing Artefakte hinzuzufügen. Für die Messung der Artefakte wird die PSNR-HVS-M Metrik aus Abschnitt \ref{testsetup:psnr} verwendet.\\
+Für den Test werden insgesamt vier Varianten verglichen. Die Variante der abgeleiteten Feldlinien aus Abschnitt \ref{resultate:loesung1:ableitung_dct_kodierung} und die Variante der Randbehandlung aus Abschnitt \ref{resultate:loesung1:dct:randbeh+byte}. Die Varianten werden jeweil mit und ohne einer PCA gemessen. Die PCA wird hier nochmals überprüft, da sie die Ringing Artefakte auf einen Kanal beschränken kann.
+
 \begin{figure}[!htbp]
 	\center	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/ringing/sts.png}
 	\caption{Approximation der Feldlinien ''Sonnenoberfläche zu Sonnenoberfläche''. Je höher die PSNR-HVS-M, desto besser ist die Approximation. }	\label{resultate:loesung1:dct:behandlung_ringing:sts}
@@ -110,7 +121,7 @@ Für den Test werden insgesamt vier Varianten verglichen. Die Variante der abgel
 \includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/ringing/nosts.png}
 	\caption{Approximation der der Feldlinien ''Sonnenoberfläche ins Weltall'' oder ''Weltall zur Sonnenoberfläche''. Je höher die PSNR-HVS-M, desto besser ist die Approximation.}	\label{resultate:loesung1:dct:behandlung_ringing:nosts}
 \end{figure}
-Das Diagramm der Abbildung \ref{resultate:loesung1:dct:behandlung_ringing:sts} zeigt die Resultate der unterschiedlichen Varianten bei den Feldlinien ''Sonnenoberfläche zur Sonnenoberfläche''. Bei einer PSNR-HVS-M von $95$ dB sind die Artefakte so schwach ausgeprägt, dass das menschliche Auge sie nicht mehr entdecken kann. Interessant ist, dass drei Varianten ähnlich viel Speicherplatz benötigen, für eine artefaktfreie Approximation. Bei stärkerer Quantisierung treten bei den abgeleiteten Feldlinien deutlich weniger Artefakte auf. Dies deckt sich mit den Beobachtung aus dem Abschnitt \ref{resultate:loesung1:ringing}.\\
+Das Diagramm der Abbildung \ref{resultate:loesung1:dct:behandlung_ringing:sts} zeigt die Resultate der unterschiedlichen Varianten bei den Feldlinien ''Sonnenoberfläche zur Sonnenoberfläche''. Bei einer PSNR-HVS-M von über $95$ dB sind die Artefakte genügend schwach ausgeprägt, sodass das menschliche Auge sie nicht mehr erkennen kann. Interessant ist, dass drei Varianten ähnlich viel Speicherplatz benötigen, für eine artefaktfreie Approximation. Bei stärkerer Quantisierung treten bei den abgeleiteten Feldlinien deutlich weniger Artefakte auf. Dies deckt sich mit den Beobachtung aus dem Abschnitt \ref{resultate:loesung1:ringing}.\\
 Ebenfalls interessant ist die Variante der PCA Transformation zusammen mit der Ableitung: Diese benötigt für eine beinahe artefaktfreie Approximation am wenigsten Speicherplatz, führt aber bei stärkerer Quantisierung viele Artefakte ein.
 
 Das Diagramm der Abbildung  \ref{resultate:loesung1:dct:behandlung_ringing:nosts} zeigt, wie gut die Varianten die Feldlinien ''Sonne ins Weltall'' und ''Weltall zur Sonne'' approximieren können. Bei diesen Typen von Feldlinien ist ebenfalls die Ableitung der Feldlinie Artefaktfreier als die anderen Varianten. Jedoch weniger Deutlich als bei den ''Sonne zur Sonne'' Feldlinien. Die PCA konnte auch bei diesen Typen von Feldlinien keinen messbaren Vorteil erbringen. Die zusätzlichen Parameter der PCA verbrauchen mehr Speicherplatz als durch die Transformation gewonnen werden.\\
@@ -118,12 +129,14 @@ Die DCT Variante aus Abschnitt \ref{resultate:loesung1:dct:randbeh+byte} fällt 
 
 \subsubsection{Abschliessende Variante}
 Für den abschliessenden Tests wurde die Variante der abgeleiteten Feldlinien aus Abschnitt \ref{resultate:loesung1:ableitung_dct_kodierung} ausgewählt. Durch die Ableitung können die Ringing Artefakte gedämpft werden. Die Quantisierung wurde angepasst, sodass die Feldlinien vom Typ ''Sonne zu Sonne'' stärker quantisiert werden, als die anderen Feldlinien. Durch diese Massnahme wird eine hohe Kompressionsrate erreicht ohne starke Ringing Artefakte mit sich zu ziehen.
+
 \begin{figure}[!htbp]
 	\center	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/loesung1-12/resultate.png}
 	\caption{Standardabweichung der abschliessenden DCT Variante.}	\label{resultate:loesung1:dct:abschliessend:standardabweichung}
 \end{figure} 
-Das Diagramm der Abbildung \ref{resultate:loesung1:dct:abschliessend:standardabweichung} zeigt die Standardabweichung der abschliessenden DCT Variante. Sie erreicht eine bessere Kompression als der Lösungsansatz des adaptiven Subsamplings und kann die Punkte deutlich genauer approximieren. Es wurde eine durchschnittliche Kompressionsrate $14.1$ erreicht, obwohl eine höhere Anzahl an Punkte übertragen wird als beim Lösungsansatz des adaptiven Subsamplings. Die Problematik dieses Ansatzes liegt darin, dass die DCT Kompression Ringing Artefakte hinzufügt.\\
+Das Diagramm der Abbildung \ref{resultate:loesung1:dct:abschliessend:standardabweichung} zeigt die Standardabweichung der abschliessenden DCT Variante. Sie erreicht eine höhere Kompression als der Lösungsansatz des Adaptiven Subsamplings und kann die Feldlinie zu einer tieferen Standardabweichung approximieren. Es wurde eine durchschnittliche Kompressionsrate $14.1$ erreicht, obwohl eine höhere Anzahl an Punkte übertragen wird als beim Lösungsansatz des adaptiven Subsamplings. Die Problematik dieses Ansatzes liegt darin, dass die DCT Kompression Ringing Artefakte hinzufügt.\\
 Durch die unterschiedliche Quantisierungen konnten die Ringing Artefakte in Grenzen gehalten werden und erreichen einen PSNR-HVS-M  Wert von $94.0$. Die ''Sonne zu Sonne'' Feldlinien können deutlich besser approximiert werden als die anderen Feldlinien. Würde die Simulation nur aus diesen Feldlinien bestehen, könnte eine Kompressionsrate von $15-18$ erreicht werden zu einem ähnlichen PSNR-HVS-M Wert. Die Feldlinien ''Sonne ins Weltall und ''Weltall zur Sonne'' sind schwieriger mit einer DCT Artefaktfrei zu approximieren.  Durch das Zoom Feature vom JHelioviewer ist der Benutzer in der Lage die Ringing Artefakte zu finden, sobald sie existieren. Das Linke Bild der Abbildung \ref{resultate:loesung1:dct:final:artefakte} zeigt die Artefakte der Kompression. Die Artefakte sind aus der Simulation, welche die ausgeprägtesten Ringing Artefakte aufweist.
+
 \begin{figure}[!htbp]
 	\center
 	\frame{
@@ -133,9 +146,9 @@ Durch die unterschiedliche Quantisierungen konnten die Ringing Artefakte in Gren
 	\caption{Die am stärksten ausgeprägten Artefakte der abschliessenden Variante. Links ohne Glättung, rechts mit Glättung}
 	\label{resultate:loesung1:dct:final:artefakte}
 \end{figure}
-Durch eine Kurvenglättung kann der JHelioviewer die Artefakte verschleiern. Die komprimierten Daten enthalten mehr Punkte, als die JHelioviewer Visualisierung darstellen kann. Die zusätzlichen Punkte können für die Glättung der Feldlinie verwendet werden. Den Effekt der Glättung ist in der Abbildung \ref{resultate:loesung1:dct:final:artefakte} abgebildet.\\
-Im Abschnitt \ref{konzept:loesung1} wurde erwähnt, dass reduktion von Ringing Artefakte ein aktives Forschungsfeld der Bildverarbeitung ist. Es existieren Post-Processing Filter, welche Ringing Artefakte vermindern. Eine Möglichkeit die Kompression zu verbessern ist es, einen Post-Processing Filter für wissenschaftliche Daten zu entwickeln. Eine weitere Möglichkeit ist die Diskrete Kosinus Transformation durch eine Wavelet Transformation zu ersetzen, diese ist weniger anfällig auf Ringing Artefakte und hat das Potential eine ähnlich gute Kompression zu erreichen.
+Durch eine Kurvenglättung kann der JHelioviewer die Artefakte verschleiern. Die komprimierten Daten enthalten mehr Punkte, als die JHelioviewer Visualisierung darstellen kann. Die zusätzlichen Punkte werden zur die Glättung der Feldlinie verwendet. Den Effekt der Glättung ist in der Abbildung \ref{resultate:loesung1:dct:final:artefakte} abgebildet.\\
+Im Abschnitt \ref{konzept:loesung1} wurde erwähnt, dass reduktion von Ringing Artefakte ein aktives Forschungsfeld der Bildverarbeitung ist. Es existieren Post-Processing Filter, welche Ringing Artefakte von dekomprimierten Bildern vermindern. Eine Möglichkeit die Kompression zu verbessern ist es, einen Post-Processing Filter für wissenschaftliche Daten zu entwickeln. Eine weitere Möglichkeit ist die Diskrete Kosinus Transformation durch eine Wavelet Transformation zu ersetzen. Diese ist weniger anfällig auf Ringing Artefakte und hat das Potential eine ähnlich gute Kompression zu erreichen.
 
 Beim Caching von $1000$ Simulationen benötigt dieser Ansatz $70$ Megabyte Arbeitsspeicher, etwa $15$ Megabyte weniger als der Lösungsansatz des Adaptiven Subsamplings. Wenn von der selben $10$ Megabit Internenetverbindung ausgegangen wird, werden $56$ Sekunden benötigt um $1000$ Simulationen herunterzuladen. Pro Sekunde werden $17$ anstatt $14$ Simulationen übertragen. Die Simulationen können mit dieser Kompression zur gegebenen Internetverbindung on-the-fly heruntergeladen werden.
 
-Die bessere Kompressionsrate kommt auf Kosten der Komplexität der Dekompression. Die Laufzeit der Dekompression hängt im Wesentlichen von der Implementation der inversen DCT ab. Eine naive Implementation braucht für eine Dekompression etwa drei Sekunden. Die grösste Zeit wird in der Berechnung der Kosinus-Werte verbraucht. Bei der Implementation in dieser Arbeit werden die Kosinus-Werte über SoftReferences gecached. Der Cache passt sich somit an den Arbeitsspeicher an. Wie schnell die Dekompression ist, hängt im Wesentlichen vom verfügbaren Arbeitsspeicher ab. Im besten Fall ergibt das eine Laufzeit von $65$ Millisekunden und im schlechtesten Fall $350$, was zu einem Durchsatz zwischen $3$ und $15$ Simulationen pro Sekunde pro Thread führt.
+Die höhere Kompressionsrate führt zu einer höheren Komplexität der Dekompression. Die Laufzeit der Dekompression hängt im Wesentlichen von der Implementation der inversen DCT ab. Eine naive Implementation braucht für eine Dekompression etwa drei Sekunden (siehe Abschnitt \ref{anhang:performance}. Die grösste Zeit wird in der Berechnung der Kosinus-Werte verbraucht. Bei der Implementation in dieser Arbeit werden die Kosinus-Werte über SoftReferences gecached. Der Cache passt sich somit an den Arbeitsspeicher an. Wie schnell die Dekompression ist, hängt im Wesentlichen vom verfügbaren Arbeitsspeicher ab. Im besten Fall ergibt das eine Laufzeit von $65$ Millisekunden und im schlechtesten Fall $350$, was zu einem Durchsatz zwischen $3$ und $15$ Simulationen pro Sekunde pro Thread führt.

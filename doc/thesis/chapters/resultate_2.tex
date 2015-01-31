@@ -2,7 +2,7 @@
 In diesem Abschnitt wird der Lösungsansatz der Prädiktiven Kodierung besprochen. Es wurde der Einfluss von verschiedenen Prädiktoren getestet. Die Schwierigkeit dieses Lösungsansatzes liegt in der Quantisierung des Vorhersagefehleres. Die Quantisierung der Fehler von einfacher Prädiktoren führt zu hohen Abweichungen in der Dekompression. Der Rekursive Lineare Prädiktor unter Abschnitt \ref{resultate:loesung2:wavelet} löst das Problem.
 
 \subsubsection{Variante: einfaches Subsampling}
-Für die erste Variante wird das Subsampling des DCT-Lösungsansatzes verwendet. Es reduziert die Punktmenge auf die Anzahl des Ist-Zustands. Die Feldlinien werden mit einer PCA in ein lokales Koordinatensystem transformiert. Im lokalen System können die Koordinaten mit 16 Bit Genauigkeit dargestellt werden. 16 Bit im Koordinatensystem der Sonne reichen nicht aus und führen zu einem grösseren Fehler als der Ist-Zustand.\\
+Für die erste Variante wird das Subsampling des DCT-Lösungsansatzes verwendet. Es reduziert die Punktmenge auf die Anzahl des Ist-Zustands. Die Feldlinien werden mit einer PCA in ein lokales Koordinatensystem transformiert. Im lokalen System können die Koordinaten mit 16 Bit Genauigkeit dargestellt werden. 16 Bit im Koordinatensystem der Sonne reichen nicht aus und führen zu einer grösseren Abweichung als der Ist-Zustand.\\
 In dieser Variante wird der Einfluss von vier Prediktoren getestet ($x$ sind die Bekannten Punkte und $y$ die Vorhersage):
 \begin{itemize}
 \item Konstanter Prediktor: Nimmt an, dass der nächste Wert im Kanal gleich dem  letzten Wert ist ($x = y$).
@@ -18,8 +18,9 @@ In dieser Variante wird der Einfluss von vier Prediktoren getestet ($x$ sind die
 	\label{resultate:loesung2:simple:resultate}
 \end{figure}
 Im Diagramm der Abbildung \ref{resultate:loesung2:simple:resultate} sind die Kompressionsraten der jeweiligen Prediktoren dargestellt. Ein Diagramm mit der PSNR-HVS-M wurde nicht erstellt. Sie ist für alle Prediktoren gleich und liegt bei $140.7$ dB. Unerwartet ist, dass der Konstante Prediktor mit $255$ Bytes pro Feldlinie die beste Kompression erreichte, obwohl die Daten nicht zuverlässig vorhersagen kann. Im Vergleich mit dem Moving Average Prediktor sind die Fehler der Vorhersagen 
-bis zu $5$ Mal grösser, verbrauchen aber $40$ Bytes weniger um eine Feldlinie abzuspeichern. Der Fehler bleibt jedoch Konstant. Eine Möglichkeit ist, dass die Rar Kodierung sich wiederholende Muster findet.\\
-Eine mögliche Optimierung ist die Adaptive Byte Kodierung der DCT-Variante, beschrieben im Abschnitt \ref{konzept:loesung1:kodierung}. Das Diagramm der Abbildung \ref{resultate:loesung2:simple:resultate_byte} zeigt die Resultate mit der Byte Kodierung. Der Konstante Prediktor verbraucht mit der Adaptiven Kodierung mehr Speicherplatz. Die Kompressionsrate der anderen Prediktoren wird durch die Adaptive Kodierung deutlich verbessert. Der Lineare Prediktor erreicht mit $214$ Bytes pro Feldlinie die beste Kompression. Das bedeutet, dass die Fehler des Konstanten Prediktors grösser sind, als die der anderen Prediktoren. Es bestätigt die Vermutung, dass die anderen Prediktoren die Daten besser vorhersagen können. Die Kompressionsrate des Konstanten Prediktors ist auf die Rar Kodierung zurückzuführen, welche in den Prediktor-Fehler Muster erkennen und effizient kodieren kann.\\ 
+bis zu $5$ Mal grösser, verbrauchen aber $40$ Bytes weniger um eine Feldlinie abzuspeichern. Eine Erklärung ist, dass die RAR Kodierung sich wiederholende Muster findet.\\
+Eine mögliche Optimierung ist die Adaptive Byte Kodierung der DCT-Variante, beschrieben im Abschnitt \ref{konzept:loesung1:kodierung}. Das Diagramm der Abbildung \ref{resultate:loesung2:simple:resultate_byte} zeigt die Resultate mit der Byte Kodierung. Der Konstante Prediktor verbraucht mit der Adaptiven Kodierung mehr Speicherplatz. Die Kompressionsrate der anderen Prediktoren wird durch die Adaptive Kodierung deutlich verbessert. Der Lineare Prediktor erreicht mit $214$ Bytes pro Feldlinie die beste Kompression. Es bestätigt die Vermutung, dass der Konstante Prädiktor keine zuverlässige Vorherhsage erreichte. RAR konnte in diesen Daten Muster erkennen, welche sich stark komprimieren lassen.
+
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante0/resultate_byte.png}
@@ -29,14 +30,16 @@ Eine mögliche Optimierung ist die Adaptive Byte Kodierung der DCT-Variante, bes
 Der Linare Prediktor kann eine Feldinie mit etwa $214$ Bytes darstellen, was eine Kompressionsrate von $4$ ergibt.
 
 \subsubsection{Variante: Adaptives Subsampling}
-Um mit diesem Ansatz in die selbe Grössenordnung zu gelangen wie die Lösungsansätze Adaptives Subsampling und DCT müssen mehr Informationen gelöscht werden. Es werden andere Parameter verwendet und im Schnitt $50\%$ mehr Punkte übertragen als im Lösungsansatz des Adaptiven Subsampling.\\
+Um mit diesem Ansatz in die selbe Grössenordnung zu gelangen wie die Lösungsansätze Adaptives Subsampling und DCT müssen mehr Informationen gelöscht werden. Es werden andere Parameter verwendet und im Schnitt $50\%$ mehr Punkte übertragen als im Lösungsansatz des Adaptiven Subsampling.
+
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante1/resultate_euler.png}
 	\caption{Kompressionsraten der Prediktiven Kodierungen mit dem adaptiven Subsampling.}
 	\label{resultate:loesung2:adaptive:euler}
 \end{figure}
-Das Diagramm der Abbildung \ref{resultate:loesung2:adaptive:euler} zeigt die Kompressionsraten. Die Resultate liegen dicht beieinander und der Abstand zwischen Kodierung und der Kompression, welche ohne Kodierung erreicht wird wurde drastisch vermindert. Die Kodierungen erreichen eine PSNR-HVS-M von $139,2$. Das Angle Subsampling verändert die Eigenschaften der Daten. Die Diagramme der Abbildung \ref{resultate:loesung2:adaptive:channel} visualisiert die Veränderung. Monotone Steigungen sind nach dem Subsampling nicht mehr vorhanden. Die einfachen Prediktoren können die Daten nicht zuverlässig vorhersagen. 
+Das Diagramm der Abbildung \ref{resultate:loesung2:adaptive:euler} zeigt die Kompressionsraten. Die Resultate liegen dicht beieinander und der Abstand zwischen Kodierung und der Kompression, welche ohne Kodierung erreicht wird wurde drastisch vermindert. Die Kodierungen erreichen eine PSNR-HVS-M von $139,2$. Das Angle Subsampling verändert die Eigenschaften der Daten. Die Diagramme der Abbildung \ref{resultate:loesung2:adaptive:channel} visualisiert die Veränderung. Monotone Steigungen sind nach dem Subsampling nicht mehr vorhanden. Die einfachen Prediktoren können die Daten nicht zuverlässig vorhersagen.
+
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.49\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante1/channel_sub.png}
@@ -47,7 +50,7 @@ Das Diagramm der Abbildung \ref{resultate:loesung2:adaptive:euler} zeigt die Kom
 
 \subsubsection{Rekursive Lineare Kodierung} \label{resultate:loesung2:wavelet}
 Die Rekursive Lineare Kodierung ist in der Lage nicht-stetigen Kanälen eine sinnvolle Vorhersage zu berechnen. Das Verfahren ist im Abschnitt \ref{konzept:prediktiv} genauer erleutert. Die Punkte werden ins sphärische Koordinatensystem überführt. In diesem Koordinatensystem sind 16 Bit Genauigkeit pro Koordinatenachse ausreichend und die PCA muss nicht berechnet werden. Im Schnitt können dadurch $30$ Bytes pro Feldlinie eingespart werden. 
-Zusätzlich werden die Vorhersagefehler quantisiert. Bei den einfachen Prediktoren wurde keine Quantisierung des Fehlers vorgenommen. Jede Quantisierung führte zu einem markanten Anstieg der Abweichung.\\
+Zusätzlich werden die Vorhersagefehler quantisiert. Jede Quantisierung führte zu einem markanten Anstieg der Abweichung.\\
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante2/resultate.png}
@@ -61,7 +64,7 @@ Zusätzlich werden die Vorhersagefehler quantisiert. Bei den einfachen Prediktor
 \end{figure}
 Das Diagramm der Abbildung \ref{resultate:loesung2:adaptive:median} zeigt die Standardabweichung der Rekursiven Linearen Kodierung zu unterschiedlichen Quantisierungen. Das Diagramm der Abbildung \ref{resultate:loesung2:adaptive:median_psnr} zeigt die PSNR-HVS-M Werte der Variante. Die Resultate der einfachen Prediktoren wurden ebenfalls ohne PCA im sphärischen Koordinatensystem gemessen. Die Rekursive Lineare Kodierung kann eine bessere Kompressionsrate erreichen als die Lösung des Adaptiven Subsamplings. Bei Datenmenge von $64$ Bytes pro Feldlinie erreicht diese Variante eine tiefere Standardabweichung als das Adaptive Subsampling zu einem PSNR-HVS-M Wert von $94.7$. Dieser Ansatz besitzt weniger ausgeprägte Artefakte als die DCT Lösung, weist aber eine höhere Standardabweichung auf. Die Variante erreicht eine Kompressionsrate von $13.4$ und fällt somit zwischen den Lösungsansätzen DCT und Adaptives Subsampling.
 
-Die Artefakte der Dekompression äussern sich meist als Verschiebungen einzelner Punkte. Im Extremfall können Ringing ähnlichen Artefakte entstehen, welche in der Abbildung \ref{resultate:loesung2:adaptive:median:artefakte} dargestellt sind. Die Artefakte sind weniger stark ausgeprägt als die des DCT Lösungsansatzes. Der Grund für die Artefaktbildung liegt in der Rekursion: Wenn der Vorhersagefehler des ersten Wertes (siehe Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step1}) quantisiert wird, beeinflusst der Quantisierungsfehler den gesamten Kanal. Die Werte, welches als letztes Kodiert werden, erfahren die grösste Verschiebung bei der Dekompression. Diese Variante verwendet einen konstanten Faktor für die Quantisierung. Die Lösung ist eine angepasste Quantisierung, welche die ersten Vorhersagefehler mit höherer Genauigkeit abspeichert. 
+Die Artefakte der Dekompression äussern sich meist als Verschiebungen einzelner Punkte. Im Extremfall können Ringing ähnlichen Artefakte entstehen, welche in der Abbildung \ref{resultate:loesung2:adaptive:median:artefakte} dargestellt sind. Der Grund für die Artefaktbildung liegt in der Rekursion: Wenn der Vorhersagefehler des ersten Wertes (siehe Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step1}) quantisiert wird, beeinflusst der Quantisierungsfehler den gesamten Kanal. Die Werte, welches als letztes Kodiert werden, erfahren die grösste Verschiebung bei der Dekompression. Diese Variante verwendet einen konstanten Faktor für die Quantisierung. Die Lösung ist eine angepasste Quantisierung, welche die ersten Vorhersagefehler mit höherer Genauigkeit abspeichert. 
 
 \begin{figure}[!htbp]
 	\center
@@ -73,6 +76,7 @@ Die Artefakte der Dekompression äussern sich meist als Verschiebungen einzelner
 
 \subsubsection{Rekursive Lineare Kodierung mit angepasster Quantisierung}
 Um die Artefakte der Dekompression zu dämpfen werden die Vorhersagefehler der Rekursionsstufe angepasst quantisiert. Die ersten Rekursionsstufen werden mit höherer Genauigkeit abgelegt.
+
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante3/resultate.png}
@@ -86,8 +90,7 @@ Um die Artefakte der Dekompression zu dämpfen werden die Vorhersagefehler der R
 \end{figure}
 Die Angepasste Quantisierung bringt eine Verbesserung in der Standardabweichung mit sich. Die Diagramme der Abbildungen \ref{resultate:loesung2:adaptive:median:quant} und \ref{resultate:loesung2:adaptive:median:quant_psnr} visualisieren die Standardabweichung und PSNR-HVS-M zur jeweiligen Kompression. Mit der angepassten Quantisierung kann diese Variante eine ähnliche Kompression zu vergleichbaren PSNR-HVS-M erreichen, wie der DCT Lösungsansatz.Mit einer PSNR-HVS-M von $95.5$ verbraucht diese Variante $63$ Bytes pro Feldlinie, was zu einer Kompressionsrate von $13.6$ führt. Der Vorteil dieser Variante gegenüber der DCT Lösung ist, das wenige zusätzliche Bytes die Artefakten stark dämpfen können. 
 
-Die Artefakte haben sich im Vergleich zur vorhergehenden Variante verbessert: Die Abbildung \ref{resultate:loesung2:adaptive:median_extra:artefakte}
-Auch bei hohen Zoom sind die Artefakte schwer zu erkennen. Eine leichte Glättung der Feldlinien ist für die Visualisierung dennoch angebracht. Leichte Verschiebungen einzelner Punkte sind meist nicht zu erkennen. Bei hoher Dichte der Feldlinien werden die Verschiebungen sichtbar, da sie sich häufig kreuzen und eine unästhetische Visualisierung abgeben.
+Die Artefakte haben sich im Vergleich zur vorhergehenden Variante verbessert: Die Abbildung \ref{resultate:loesung2:adaptive:median_extra:artefakte} zeigt die Artefaktbildung dieser Variante. Die Ringing ähnlichen Artefakte sind verschwunden. In dieser Variante äussern sich Kompressionsartefakte als Verschiebung einzelner Punkte. Bei hoher Dichte der Feldlinien werden die Verschiebungen sichtbar, da sie sich häufig kreuzen und eine unästhetische Visualisierung ergeben. Eine leichte Glättung der Feldlinien versteckt die Artefakte und gestaltet eine ästhetische Visualisierung.
 
 \begin{figure}[!htbp]
 	\center
@@ -97,6 +100,6 @@ Auch bei hohen Zoom sind die Artefakte schwer zu erkennen. Eine leichte Glättun
 	\label{resultate:loesung2:adaptive:median_extra:artefakte}
 \end{figure}
 
-Das Caching von $1000$ Simulationen und die Übertragungszeit fallen zwischen die anderen Lösungsansätzen mit $72$ Megabyte an Arbeitsspeicher beziehungsweise $58$ Sekunden Übertragungszeit. Zum Vergleich: Die DCT Lösung verbraucht unter den selben Bedingungen $70$ und das Adaptive Subsampling $85$ Megabyte an Arbeitsspeicher. Bei einer Internetverbindung von $10$ Megabit ist bei diesem Lösungsansatz mit einer Übertragungsrate von $16$ Simulationen in der Sekunde zu rechnen. Die Laufzeit der Dekompression liegt mit $30.6$ Millisekunden ebenfalls zwischen den Lösungsansätzen Adaptives Subsampling und DCT. Mit dieser Laufzeit kann ein Thread durchschnittlich $32$ Simulationen pro Sekunde dekomprimieren.
+Das Caching von $1000$ Simulationen und die Übertragungszeit fallen zwischen die anderen Lösungsansätzen mit $72$ Megabyte an Arbeitsspeicher beziehungsweise $58$ Sekunden Übertragungszeit. Zum Vergleich: Die DCT Lösung verbraucht unter den selben Bedingungen $70$ und das Adaptive Subsampling $85$ Megabyte an Arbeitsspeicher. Bei einer Internetverbindung von $10$ Megabit ist bei diesem Lösungsansatz mit einer Übertragungsrate von $16$ Simulationen in der Sekunde zu rechnen. Die Laufzeit der Dekompression liegt mit $30.6$ Millisekunden ebenfalls zwischen den Lösungsansätzen Adaptives Subsampling und DCT (siehe Abschnitt \ref{anhang:performance}). Mit dieser Laufzeit kann ein Thread durchschnittlich $32$ Simulationen pro Sekunde dekomprimieren.
 
 Dieser Lösungsansatz ist ein Kompromiss zwischen Kompressionsrate und Qualität. Die Daten enthalten Kompressionsartefakte. Sie sind aber schwach ausgeprägt sodass auf eine Glättung gegebenenfalls verzichtet werden kann.
