@@ -13,7 +13,6 @@ namespace CompressedPFSSManager.CompressionAlgorithm
         public static const int factor2 = 10;
         public static const int factor3 = 16;
 
-
         public static void ForwardPrediction(PFSSData data)
         {
             foreach (PFSSLine l in data.lines)
