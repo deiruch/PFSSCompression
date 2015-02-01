@@ -57,7 +57,7 @@
 \DeclareCaptionFont{white}{\color{white}}
 \DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
 \captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
-\lstdefinestyle{JavaStyle}{
+\lstset{
  language=Java,
  basicstyle=\footnotesize\ttfamily, % Standardschrift
  numbers=left,               % Ort der Zeilennummern
@@ -70,7 +70,7 @@
  frame=b,         
  %commentstyle=\itshape\color{LightLime}, Was isch das? O_o
  %keywordstyle=\bfseries\color{DarkPurple}, und das O_o
- basicstyle=\footnotesize\ttfamily,
+ basicstyle=\small,
  stringstyle=\color[RGB]{42,0,255}\ttfamily, % Farbe der String
  keywordstyle=\color[RGB]{127,0,85}\ttfamily, % Farbe der Keywords
  commentstyle=\color[RGB]{63,127,95}\ttfamily, % Farbe des Kommentars
@@ -130,7 +130,7 @@
 %\bibliographystyle{natdin}
 \bibliographystyle{unsrt}
 % Titelbild
-%\input{./title.tex}
+\input{./chapters/title.tex}
 \newpage
 
 \pagestyle{abstract}

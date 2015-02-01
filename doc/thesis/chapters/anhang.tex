@@ -6,8 +6,8 @@
 \subsubsection*{Installation der Kompression}
 \pagebreak
 
-\subsection*{Dateiformat und Dekompression}
-This section describes the encoding and decompression algorithm used for compressing fieldline data. The data is written in the FITS Format \cite{website:fits} and compressed with Rar. The content of the FITS file is described in Table \ref{anhang:format:content}.\\
+\subsection*{File Format and Decompression}
+This section describes the decoding and decompression algorithm used for compressing fieldline data. The data is written in the FITS Format \cite{website:fits} and compressed with Rar. The content of the FITS file is described in Table \ref{anhang:format:content}.\\
 \begin{table}[!htbp]
 \center
 \begin{tabular}{|c|c|c|c|}
@@ -15,44 +15,30 @@ This section describes the encoding and decompression algorithm used for compres
 	Name  & Datatype & Encoding& Content Description	\\\hline
     B0 & Double & None & Latitude to Earth\\
     L0 & Double& None& Longitude to Earth\\
-    TYPE & Byte Array & None & Type of quantization used for each Fieldline\\
-    LINE\_LENGTH &Byte Array & Adaptive Precision Unsigned & Length of each Fieldline\\
-    StartPointR & Byte Array & Length + Adaptive Precision & Radius of the Startpoint for each Fieldline\\
-    StartPointPhi & Byte Array & Length + Adaptive Precision & Latitude of the Startpoint for each Fieldline\\
-    StartPointTheta & Byte Array & Length  + Adaptive Precision & Longitude of the Startpoint for each Fieldline\\
-    X & Byte Array & Length + Adaptive Precision & X Channel DCT Coefficients of each Fieldline\\
-    Y & Byte Array & Length + Adaptive Precision & Y Channel DCT Coefficients of each Fieldline\\
-    Z & Byte Array & Length + Adaptive Precision & Z Channel DCT Coefficients of each Fieldline\\\hline
+    LINE\_LENGTH &Byte Array & Adaptive Precision U. & Length of each line\\
+    START\_R & Byte Array & Adaptive Precision & Radius of start point for each line\\
+    END\_R & Byte Array & Adaptive Precision & Radius of end point for each line\\
+    START\_PHI & Byte Array & Adaptive Precision & Latitude of start point for each line\\
+    END\_PHI & Byte Array & Adaptive Precision & Latitude of end point for each line\\
+    START\_THETA & Byte Array & Adaptive Precision & Longitude of start point for each line\\
+    END\_THETA & Byte Array & Adaptive Precision & Longitude of end point for each line\\
+    CHANNEL\_R & Byte Array & Adaptive Precision & Radius Channel of prediction errors of each line\\
+    CHANNEL\_PHI & Byte Array & Adaptive Precision & Latitude Channel of prediction errors of each line\\
+    CHANNEL\_THETA & Byte Array & Adaptive Precision & Longitude Channel of prediction errors of each line\\\hline
 \end{tabular}
 \caption{Content of the FITS File}
 \label{anhang:format:content}
 \end{table}
-After decompressing the FITS file with Rar apply the decodings described in section \ref{anhang:format:encodings}. The next step is to split up the data for each fieldline. Each fieldline contains exactly one Type, one Length and one Startpoint. The length describes the number of DCT Coefficients of the fieldline. The first batch of coefficients belong to the first fieldline, and the second batch to the second line etc.\\
-After splitting the data there are four steps left to do: 
+The following steps have to be taken to decompress the fieldline data:
 \begin{enumerate}
-	\item Transform the Startpoint to Euler coordinates
-	\item Multiply the DCT Coefficients according to the Type
-	\item Apply the Inverse Cosine Transform (Formula \eqref{konzept:loesung1:kosinus:formula:idct} in section \ref{konzept:loesung1:kosinus})
-	\item Integrate the channels
+	\item Decode RAR
+	\item Split the fieldlines. Each line has 1 Length, 1 start point, 1 end point and the size of ''Length'' of prediction errors.
+	\item Do the Byte Decoding specified under section \ref{anhang:format:encodings}
+	\item reverse the predictive coding described under section \ref{anhang:format:prediction}
+	\item convert from spherical coordinate system to cartesian. Section \ref{anhang:format:euler} describes the process.
 \end{enumerate}
-How to Transform the Point to Euler coordinates is described in section \ref{anhang:format:euler}. The multiplication factors can be gathered from the JHelioviewer implementation. Take note that the decompression time will depend on your implementation of the Inverse Cosine Transform, and a naive implementation can take three seconds or more for one FITS file.\\
-The last step ''Integrate the channels'' needs further clarification: Each channel is derived before the Discrete Cosine Transform is applied. After the Inverse Transform, each channel contains the rises and not the actual points.
 
 \subsubsection*{Encodings} \label{anhang:format:encodings}
-
-\textbf{Length Encoding}\\
-\begin{table}[!htbp]
-	\center
-	\begin{tabular}{||c|c|c|c|c||c|c|c}
-		\hline
-		\multicolumn{8}{|c|}{Encoded Channel}\\\hline\hline
-		 \multicolumn{5}{||c||}{Block of Fieldline 0} & \multicolumn{3}{c}{\ldots} \\\hline
-		$n_0$ &$x_{0,0}$ &$x_{0,1}$ & \ldots & $x_{0,n-1}$ & $n_1$ & $x_{1,0}$ & \ldots\\\hline
-	\end{tabular}
-	\caption{Beispiel eines abgespeicherten Kanals mit der Längenkodierung.}
-	\label{anhang:format:encodings:laengenkodierung}
-\end{table}
-
 \textbf{Unsigned Adaptive Precision Encoding}\\
 \begin{table}[!htbp]
 	\center
@@ -61,9 +47,10 @@ The last step ''Integrate the channels'' needs further clarification: Each chann
 	\multicolumn{8}{|c|}{Byte}\\\hline
 	Continue Flag & X & X & X & X & X & X & X \\\hline
 	\end{tabular}
-	\caption{Aufteilung eines Bytes der adaptiven Genauigkeitskodierung. X sind Nutz-Bits.}
+	\caption{Unsigned Adaptive Byte Encoding. X are data bits.}
 	\label{anhang:format:encodings:adaptiveUnsigned}
 \end{table}
+The Data is stored using the byte encoding in table \ref{anhang:format:encodings:adaptiveUnsigned}.If the Continue Flag is set, then the next Byte also belongs to the value. The Bytes are Stored in Big-Endian\cite{wiki:endianess} convention. The next Byte contains the 7 lesser bits if the Continue Flag is set.
 
 \textbf{Adaptive Precision Encoding}\\
 \begin{table}[!htbp]
@@ -73,9 +60,11 @@ The last step ''Integrate the channels'' needs further clarification: Each chann
 	\multicolumn{8}{|c|}{Byte}\\\hline
 	Continue Flag & Sign Flag & X & X & X & X & X & X \\\hline
 	\end{tabular}
-	\caption{Aufteilung eines Bytes der adaptiven Genauigkeitskodierung. X sind Nutz-Bits.}
+	\caption{Signed Adaptive Byte Encoding of the First Byte.  X are data bits.}
 	\label{anhang:format:encodings:adaptive}
 \end{table}
+Same Principle as the Unsigned Adaptive Precision Encoding, but the First Byte of each value contains a Sign Flag as demonstrated in table \ref{anhang:format:encodings:adaptive}. Here is an example implementation:\\
+\lstinputlisting[language=Java]{./source/byteDecoding.txt}
 
 \subsubsection*{Transformation to cartesian Coordinates} \label{anhang:format:euler}
 The spherical coordinates can be transformed into the sun's cartesian coordinate system with a few simple calculations.
@@ -110,6 +99,19 @@ Step 4: Transform from spherical to cartesian.
 	Z &= R * sinus(Theta) * cosinus(Phi)
 	\end{split}
 \end{equation}
+
+\subsubsection*{Decode Prediction}\label{anhang:format:prediction}
+Step 1, multiply the prediction errors with:
+\begin{equation}
+\begin{split}
+	\mbox{ factor }6 & \mbox{ if index } < 5\\
+	\mbox{ factor }8 & \mbox{ if } 5 \leq \mbox{ index } < 16\\
+	\mbox{ factor }16 & \mbox{ if } 5 \leq \mbox{ index }
+\end{split}
+\end{equation}
+
+Step 2, Decode Prediction. Here is an example implementation in Java:
+\lstinputlisting[language=Java]{./source/prediction.txt}
 \pagebreak
 
 \subsection*{Performance Tests} \label{anhang:performance}
