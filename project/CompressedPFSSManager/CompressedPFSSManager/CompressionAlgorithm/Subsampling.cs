@@ -45,28 +45,5 @@ namespace CompressedPFSSManager
                 data.lines[i] = newLine;
             }
         }
-
-        public static void Subsample(PFSSData data, int factor)
-        {
-            for (int i = 0; i < data.lines.Count; i++)
-            {
-                PFSSLine line = data.lines[i];
-                List<PFSSPoint> newPoints = new List<PFSSPoint>();
-
-                for (int j = 0; j < line.points.Count; j+=factor)
-                {
-                    newPoints.Add(line.points[j]);
-                }
-                //add last point if it does not exist
-                if ((line.points.Count - 1) % factor > 0)
-                {
-                    newPoints.Add(line.points[line.points.Count - 1]);
-                }
-
-                //overwrite
-                PFSSLine newLine = new PFSSLine(line.Type, newPoints);
-                data.lines[i] = newLine;
-            }
-        }
     }
 }
