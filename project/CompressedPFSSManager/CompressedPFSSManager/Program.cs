@@ -53,7 +53,7 @@ namespace CompressedPFSSManager
                     return;
                 }
                 var fits = tmpDir.EnumerateFiles("*.fits").SingleOrDefault();
-                var output = Compression.Compress(fits, 0);
+                var output = Compression.Compress(fits);
 
                 //var output = tmpDir.EnumerateFiles("*.fits.rar").SingleOrDefault();
                 //---------------------------Modification by Jonas Schwammberger---------------------------------------------------

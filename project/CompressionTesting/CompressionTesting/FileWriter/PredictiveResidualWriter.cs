@@ -199,15 +199,15 @@ namespace CompressionTesting.FileWriter
             bhdu.SetColumnName(0, "B0", null);
             bhdu.SetColumnName(1, "L0", null);
             bhdu.SetColumnName(2, "LINE_LENGTH", null);
-            bhdu.SetColumnName(3, "StartPointsR", null);
-            bhdu.SetColumnName(4, "EndpointsR", null);
-            bhdu.SetColumnName(5, "StartPointsPhi", null);
-            bhdu.SetColumnName(6, "EndpointsPhi", null);
-            bhdu.SetColumnName(7, "StartPointsTheta", null);
-            bhdu.SetColumnName(8, "EndpointsTheta", null);
-            bhdu.SetColumnName(9, "R", null);
-            bhdu.SetColumnName(10, "PHI", null);
-            bhdu.SetColumnName(11, "THETA", null);
+            bhdu.SetColumnName(3, "START_R", null);
+            bhdu.SetColumnName(4, "END_R", null);
+            bhdu.SetColumnName(5, "START_PHI", null);
+            bhdu.SetColumnName(6, "END_PHI", null);
+            bhdu.SetColumnName(7, "START_THETA", null);
+            bhdu.SetColumnName(8, "END_THETA", null);
+            bhdu.SetColumnName(9, "CHANNEL_R", null);
+            bhdu.SetColumnName(10, "CHANNEL_PHI", null);
+            bhdu.SetColumnName(11, "CHANNEL_THETA", null);
 
             BufferedDataStream f = new BufferedDataStream(new FileStream(output.FullName, FileMode.Create));
             fits.Write(f);

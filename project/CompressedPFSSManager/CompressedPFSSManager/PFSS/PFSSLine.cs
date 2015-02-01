@@ -20,10 +20,9 @@ namespace CompressedPFSSManager.PFSS
         internal TYPE Type { get; private set; }
         internal List<PFSSPoint> points { get; private set; }
 
-        internal float[] extraX;
-        internal float[] extraY;
-        internal float[] extraZ;
-        internal ExtraPoints[] extra;
+        internal PFSSPoint startPoint { get; set; }
+        internal PFSSPoint endPoint { get; set; }
+        internal List<PFSSPoint> predictionErrors { get; set; }
 
         public PFSSLine(TYPE t, List<PFSSPoint> points)
         {

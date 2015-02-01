@@ -10,7 +10,6 @@ namespace CompressedPFSSManager.PFSS
     {
         public const double SunRadius = 6.957e8;
 
-        internal int testPointIndex {get; private set;}
         internal float x { get; set; }
         internal float y { get; set; }
         internal float z { get; set; }
@@ -37,7 +36,6 @@ namespace CompressedPFSSManager.PFSS
 
         public PFSSPoint(PFSSPoint p)
         {
-            this.testPointIndex = testPointIndex;
             this.rawPhi = p.rawPhi;
             this.rawR = p.rawR;
             this.rawTheta = p.rawTheta;
