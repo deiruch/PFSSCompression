@@ -9,9 +9,9 @@ namespace CompressedPFSSManager.CompressionAlgorithm
 {
     class RecursiveLinearPredictor
     {
-        public static const int factor = 6;
-        public static const int factor2 = 10;
-        public static const int factor3 = 16;
+        public const int factor = 6;
+        public const int factor2 = 10;
+        public const int factor3 = 16;
 
         public static void ForwardPrediction(PFSSData data)
         {
