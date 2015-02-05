@@ -1,13 +1,18 @@
 \section{Anhang}
-\subsection*{Installationsanleitung}
+\subsection{Installationsanleitung}
 \subsubsection*{Installation des JHelioviewers}
-
+Der JHelioviewer mit der eingebauten feldlinienkompression kann unter \url{http://github.com/Helldevastator/JHelioViewer}
+heruntergeladen werden. Alle benötigten Programmbibliotheken sind enthalten. Das Projekt kann in einer Java IDE wie Eclipse importiert und ausgeführt werden. Da der JHelioviewer noch in Entwicklung ist, wird kein executable jar ausgeliefert. 
 
 \subsubsection*{Installation der Kompression}
+Angepasster C\# server mit der Kompression. IDL Code muss angepasst sein, damit floats und keine zusätzlichen Quantisierungen vorgenommen werden. IDL Code + Run batch ist im Anhang.
+
+RAR im Pfad. Wegen Lizensgründen existieren nur Dekompressionen des RAR Verfahren. Die Kompression wird über die Kommandozeile aufgerufen. 
+
 \pagebreak
 
-\subsection*{File Format and Decompression}
-This section describes the decoding and decompression algorithm used for compressing fieldline data. The data is written in the FITS Format \cite{website:fits} and compressed with Rar. The content of the FITS file is described in Table \ref{anhang:format:content}.\\
+\subsection{File Format and Decompression}
+This section describes the decoding and decompression algorithm used for compressing fieldline data. The data is written in the FITS Format \cite{website:fits} and compressed with RAR. The content of the FITS file is described in Table \ref{anhang:format:content}.\\
 \begin{table}[!htbp]
 \center
 \begin{tabular}{|c|c|c|c|}
@@ -38,7 +43,7 @@ The following steps have to be taken to decompress the fieldline data:
 	\item convert from spherical coordinate system to cartesian. Section \ref{anhang:format:euler} describes the process.
 \end{enumerate}
 
-\subsubsection*{Encodings} \label{anhang:format:encodings}
+\subsubsection{Encodings} \label{anhang:format:encodings}
 \textbf{Unsigned Adaptive Precision Encoding}\\
 \begin{table}[!htbp]
 	\center
@@ -50,7 +55,7 @@ The following steps have to be taken to decompress the fieldline data:
 	\caption{Unsigned Adaptive Byte Encoding. X are data bits.}
 	\label{anhang:format:encodings:adaptiveUnsigned}
 \end{table}
-The Data is stored using the byte encoding in table \ref{anhang:format:encodings:adaptiveUnsigned}.If the Continue Flag is set, then the next Byte also belongs to the value. The Bytes are Stored in Big-Endian\cite{wiki:endianess} convention. The next Byte contains the 7 lesser bits if the Continue Flag is set.
+The Data is stored using the byte encoding in table \ref{anhang:format:encodings:adaptiveUnsigned}.If the Continue Flag is set, then the next Byte also belongs to the value. The Bytes are Stored in Big-Endian\cite{wiki:endianess} convention. The next Byte contains the seven lesser bits if the Continue Flag is set.
 
 \textbf{Adaptive Precision Encoding}\\
 \begin{table}[!htbp]
@@ -66,7 +71,7 @@ The Data is stored using the byte encoding in table \ref{anhang:format:encodings
 Same Principle as the Unsigned Adaptive Precision Encoding, but the First Byte of each value contains a Sign Flag as demonstrated in table \ref{anhang:format:encodings:adaptive}. Here is an example implementation:\\
 \lstinputlisting[language=Java]{./source/byteDecoding.txt}
 
-\subsubsection*{Transformation to cartesian Coordinates} \label{anhang:format:euler}
+\subsubsection{Transformation to cartesian Coordinates} \label{anhang:format:euler}
 The spherical coordinates can be transformed into the sun's cartesian coordinate system with a few simple calculations.
 Step 1: Add the displacement of the Compression. 
 \begin{equation}
@@ -100,7 +105,7 @@ Step 4: Transform from spherical to cartesian.
 	\end{split}
 \end{equation}
 
-\subsubsection*{Decode Prediction}\label{anhang:format:prediction}
+\subsubsection{Decode Prediction}\label{anhang:format:prediction}
 Step 1, multiply the prediction errors with:
 \begin{equation}
 \begin{split}
@@ -110,11 +115,38 @@ Step 1, multiply the prediction errors with:
 \end{split}
 \end{equation}
 
-Step 2, Decode Prediction. Here is an example implementation in Java:
+Step 2, Decode Prediction.\\
+It uses a recursive Algorithm which predicts the mid-value of the channel. The picture \ref{anhang:prediction:step1} shows the first recursive Step: The Prediction assumes that the mid-value of the channel is on the line between start- and end value. To decode a channel, calculate the prediction and subtract the prediction error from the value. Continue recursively as shown in picture \ref{anhang:prediction:step2}. The prediction errors are sorted in breadth-first order. Table \ref{anhang:prediction:breath} shows the ordering.
+
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/anhang/prediction0.png}
+	\caption{First recursive step.}
+	\label{anhang:prediction:step1}
+\end{figure}
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/anhang/prediction1.png}
+	\caption{Second recursive step.}
+	\label{anhang:prediction:step2}
+\end{figure}
+\begin{table}[!htbp]
+	\center
+	\begin{tabular}{|c||c|c||c|c|c|c||c}
+		\hline
+		\multicolumn{8}{|c|}{Prediction Errors of a Channel}\\\hline\hline
+		 Step 0& \multicolumn{2}{|c||}{Step 1} & \multicolumn{4}{|c||}{Step 2} &\ldots \\\hline
+		$Error_0$ & $Error_1$ &$Fehler_2$ &$Error_3$ & $Error_4$ & $Error_5$ & $Error_6$   & \ldots \\\hline
+	\end{tabular}
+	\caption{Breadth First ordering.}
+	\label{anhang:prediction:breath}
+\end{table}
+\pagebreak
+Here is an example implementation in Java:
 \lstinputlisting[language=Java]{./source/prediction.txt}
 \pagebreak
 
-\subsection*{Performance Tests} \label{anhang:performance}
+\subsection{Performance Tests} \label{anhang:performance}
 \begin{table}[!htbp]
 \center
 \begin{tabular}{c|c}
@@ -122,7 +154,7 @@ Step 2, Decode Prediction. Here is an example implementation in Java:
 	Adaptives Subsampling & $19$ ms \\
 	DCT - Naive Inverse DCT & $3100$ ms \\
 	DCT - Mit Kosinus Caching & $65-350$ ms\\
-	DCT- Mit JTransform Kosinus Caching & $100-135$ ms\\
+	DCT- Mit JTransform \& Kosinus Caching & $100-135$ ms\\
 	Prediktive Kodierung & $31$ ms\\
 \end{tabular}
 \end{table}

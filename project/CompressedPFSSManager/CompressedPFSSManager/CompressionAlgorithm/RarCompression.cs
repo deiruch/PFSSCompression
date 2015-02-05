@@ -14,11 +14,11 @@ namespace CompressedPFSSManager
         {
             Process pProcess = new Process();
             pProcess.StartInfo.FileName = "rar";
-            pProcess.StartInfo.Arguments = "a \""+archivePath.FullName+"\" \""+fitsPath.FullName+"\"";
+            pProcess.StartInfo.Arguments = "a \""+archivePath.Name+"\" \""+fitsPath.Name+"\"";
 
             pProcess.StartInfo.UseShellExecute = false;
             pProcess.StartInfo.RedirectStandardOutput = true;
-            pProcess.StartInfo.WorkingDirectory = archivePath.Directory.FullName;
+            pProcess.StartInfo.WorkingDirectory = fitsPath.Directory.FullName;
             pProcess.Start();
             string strOutput = pProcess.StandardOutput.ReadToEnd();
             pProcess.WaitForExit();

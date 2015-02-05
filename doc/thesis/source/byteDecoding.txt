@@ -1,3 +1,7 @@
+public static final int continueFlag = 128;
+public static final int signFlag = 64;
+public static final int dataBitCount = 7;
+
 public static int[] decodeAdaptive(byte[] data) {
 	int length = calcLength(data);
 	int[] output = new int[length];
@@ -12,7 +16,7 @@ public static int[] decodeAdaptive(byte[] data) {
 		//add encoded bytes as long as the continue flag is set.
 		boolean run = (current & continueFlag) != 0;
 		while (run) {
-			current = data[i++];
+			current = data[++i];
 			run = (current & continueFlag) != 0;
 			minus <<= dataBitCount;
 			value <<= dataBitCount;
