@@ -21,14 +21,14 @@ Das Ziel der Ist-Kompression ist es, die Datenmenge mit einfachen Mitteln zu red
 Als erstes werden die Längen aller Feldlinien abgelegt. Danach folgt der X, Y und der Z Kanal aller Punkte der Feldlinien. Diese Anordnung verbessert die Kompressionsrate der Entropie Kodierung. Je näher ähnliche Muster beieinander liegen, desto besser können sie Komprimiert werden. Für die eigentliche Entropie-Kodierung wird GZIP verwendet.\\
 Die Punktmenge ist für Low-End Grafikkarten zu gross. Um die Punktmenge für die Visualisierung zu verkleinern, führt der JHelioviewer ein weiteres Subsampling durch, welches im Abschnitt \ref{konzept:loesung0:subsampling} beschrieben ist.
 
-\subsection{Lösungsansatz: Adaptives Subsampling} \label{konzept:loesung0}
+\subsection{Kompressionsvervahren: Adaptives Subsampling} \label{konzept:loesung0}
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution0/aufbau.png}
 	\caption{Aufbau des Lösungsansatzes: Adaptives Subsampling.}
 	\label{konzept:loesung0:aufbau:diagramm}
 \end{figure} 
-Dieser Lösungsansatz verwendet einen ähnlichen Aufbau wie die Ist-Kompression. Der Unterschied ist, dass das Subsampling Verfahren gewählt wurde, welches der JHelioviewer auf dem Client durchführt. Die Abbildung \ref{konzept:loesung0:aufbau:diagramm} zeigt den neuen Ablauf.\\
+Diesem Verfahren verwendet einen ähnlichen Aufbau wie die Ist-Kompression. Der Unterschied ist, dass das Subsampling Verfahren gewählt wurde, welches der JHelioviewer auf dem Client durchführt. Die Abbildung \ref{konzept:loesung0:aufbau:diagramm} zeigt den neuen Ablauf.\\
 Es ist möglich dass die Visualisierung zu einem späteren Zeitpunkt mehr Punkte darstellen soll. In diesem Fall müssten entweder mehr Punkte übertragen werden, was eine schlechtere Kompressionsrate zur Folge hat, oder der JHelioviewer muss eine Interpolation durchführen. 
 
 \subsubsection{Adaptives Subsampling}\label{konzept:loesung0:subsampling}
@@ -47,14 +47,14 @@ $P_1$ wurde bereits ausgewählt. Es wird nun ein Punkt $P_x$ gesucht, der als En
 Die Anordnung der Daten wurde aus der Ist-Kompression übernommen, jedoch wird RAR anstatt GZIP verwendet. GZIP konnte bei den Ist-Komprimierten Daten eine Kompressionsrate von $1.2$ erreichen, während RAR bei selben Daten eine Rate von $3.7$ erreicht.
 \pagebreak
 
-\subsection{Lösungsantz: Diskrete Kosinus Transformation}\label{konzept:loesung1}
+\subsection{Kompressionsvervahren: Diskrete Kosinus Transformation}\label{konzept:loesung1}
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution1/aufbau.png}
 	\caption{Aufbau des Lösungsansatzes: Adaptives Subsampling.}
 	\label{konzept:loesung1:aufbau}
 \end{figure} 
-Die Kompression dieses Lösungsansatzes ist Dargestellt im Diagramm der Abbildung \ref{konzept:loesung1:aufbau}. Konzeptionell ähnelt dieser Ansatz der JPEG/JFIF Kompression (dargestellt in der Abbildung \ref{state:jpeg:abb}). Im Vergleich zum JPEG/JFIF Standard ist der grösste Unterschied, dass das Eingangssignal vor der Kosinus Transformation abgeleitet wird.
+Die Kompression dieses Verfahrens ist Dargestellt im Diagramm der Abbildung \ref{konzept:loesung1:aufbau}. Konzeptionell ähnelt der Algorithmus der JPEG/JFIF Kompression (dargestellt in der Abbildung \ref{state:jpeg:abb}). Im Vergleich zum JPEG/JFIF Standard ist der grösste Unterschied, dass das Eingangssignal vor der Kosinus Transformation abgeleitet wird.
 
 Die Feldlinien ähneln oft harmonischen Halbwellen, welche sich durch wenige Kosinusfunktionen approximieren lassen. Um eine optimale Kompression mit diesem Verfahren zu erreichen, müssen Ringing Artefakte \cite{wiki:ringing:artefacts} behandelt werden. Sie äussern sich als Oszillationen im dekomprimierten Signal, was das menschliche Auge als störend empfindet. Beispiele für die Ringing Artefakten von Feldlinien sind im Abschnitt \ref{resultate:loesung1:ringing} zu finden.\\
 Es existieren Ansätze die Ringing Artefakte mit Post-Processing Schritten zu dämpfen: Die simpelste Variante ist, das dekomprimierte Signal zu glätten. Die Glättung kann das Signal verfälschen und ist deshalb nicht die optimale Lösung. In der Bild- und Audioverarbeitung wird nach Post-Processing Filter geforscht, welche die Ringing Artefakte in der Dekompression vermindern \cite{kaup1998reduction} \cite{park1999postprocessing}. Ein angepasstes Postprocessing wurde im Rahmen dieser Arbeit nicht implementiert.
@@ -120,7 +120,7 @@ Im Allgemeinen reichen sieben Bit Genauigkeit um die quantisierten DCT Koeffizie
 \end{table}
 \pagebreak
 
-\subsection{Lösungsansatz: Prediktive Kodierung} \label{konzept:prediktiv}
+\subsection{Kompressionsvervahren: Prediktive Kodierung} \label{konzept:prediktiv}
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution2/aufbau.png}

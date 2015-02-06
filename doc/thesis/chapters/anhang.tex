@@ -1,14 +1,11 @@
 \section{Anhang}
 \subsection{Installationsanleitung}
 \subsubsection*{Installation des JHelioviewers}
-Der JHelioviewer mit der eingebauten feldlinienkompression kann unter \url{http://github.com/Helldevastator/JHelioViewer}
-heruntergeladen werden. Alle benötigten Programmbibliotheken sind enthalten. Das Projekt kann in einer Java IDE wie Eclipse importiert und ausgeführt werden. Da der JHelioviewer noch in Entwicklung ist, wird kein executable jar ausgeliefert. 
+JHelioviewer ist zum Zeitpunkt der Arbeit noch in Entwicklung.
+Der JHelioviewer mit der umgesetzten Feldlinienkompression kann unter \url{http://github.com/Helldevastator/JHelioViewer} heruntergeladen werden. Alle verwendeten Programmbibliotheken und Abhängigkeiten sind Plattformunabhängig umgesetzt. Das Projekt kann in einer Java IDE wie Eclipse oder Netbeans importiert werden. Die Arbeit beschränkt sich auf das Paket \url{org.helioviewer.gl3d.plugins.pfssplugin}. Für die Ausführung kann die Klasse \textit{PfssPluginLauncher}.
 
 \subsubsection*{Installation der Kompression}
-Angepasster C\# server mit der Kompression. IDL Code muss angepasst sein, damit floats und keine zusätzlichen Quantisierungen vorgenommen werden. IDL Code + Run batch ist im Anhang.
-
-RAR im Pfad. Wegen Lizensgründen existieren nur Dekompressionen des RAR Verfahren. Die Kompression wird über die Kommandozeile aufgerufen. 
-
+Die Feldlinienkompression des Servers besteht aus der IDL Simulation und der C\# Kompression. Beide Dateien inklusive Run Batch sind auf der CD? zu finden. Aus Lizensgründen muss der C\# Code RAR über die Kommandozeile aufrufen. Der RAR Archivierer muss in der \textit{PATH} Umgebungsvariable enthalten sein. Ein Teil der Kompression war vor dem Projekt in IDL umgesetzt. Diese wurden entfernt.
 \pagebreak
 
 \subsection{File Format and Decompression}
@@ -161,10 +158,10 @@ Here is an example implementation in Java:
 
 \textbf{Testmaschine}
 \begin{table}[!htbp]
-\center
+
 \begin{tabular}{c|c}
-	Prozessor & Intel i7-4600 \\\hline
-	Arbeitsspeicher & 16GB \\
+	Prozessor & Intel i7-4600 \\
+	Arbeitsspeicher & 16 GB \\
 	OS & Windows 8.1 Enterprise 64bit \\
 \end{tabular}
 \end{table}

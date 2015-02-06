@@ -23,13 +23,13 @@ namespace CompressionTesting.Solutions
 
         public string GetName()
         {
-            return "Solution1_Seven";
+            return "Solution1_Twelve";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return Seven(data, qualityLevel, folder);
+            return Twelve(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)

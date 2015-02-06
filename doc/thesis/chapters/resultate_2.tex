@@ -1,4 +1,4 @@
-\subsection{Lösungsansatz: Prediktive Kodierung}  \label{resultate:loesung2}
+\subsection{Kompressionsvervahren: Prädiktive Kodierung}  \label{resultate:loesung2}
 In diesem Abschnitt wird der Lösungsansatz der Prädiktiven Kodierung besprochen. Es wurde der Einfluss von verschiedenen Prädiktoren getestet. Die Schwierigkeit dieses Lösungsansatzes liegt in der Quantisierung des Vorhersagefehlers. Die Quantisierung der Fehler von einfacher Prädiktoren führt zu hohen Abweichungen in der Dekompression. Der Rekursive Lineare Prädiktor unter Abschnitt \ref{resultate:loesung2:wavelet} löst das Problem.
 
 \subsubsection{Variante: einfaches Subsampling}
@@ -20,7 +20,7 @@ In dieser Variante wird der Einfluss von vier Prädiktoren getestet ($x$ sind di
 Im Diagramm der Abbildung \ref{resultate:loesung2:simple:resultate} sind die Kompressionsraten der jeweiligen Prädiktoren dargestellt. Ein Diagramm mit der PSNR-HVS-M wurde nicht erstellt. Sie ist für alle Prädiktoren gleich und liegt bei $140.7$ dB. Unerwartet ist, dass der Konstante Prädiktor mit $255$ Bytes pro Feldlinie die beste Kompression erreichte, obwohl die Daten nicht zuverlässig vorhersagen kann. Im Vergleich mit dem Moving Average Prädiktor sind die Fehler der Vorhersagen 
 bis zu $5$ Mal grösser, verbrauchen aber $40$ Bytes weniger um eine Feldlinie abzuspeichern. Eine Erklärung ist, dass die RAR Kodierung sich wiederholende Muster findet.
 
-Eine mögliche Optimierung ist die Adaptive Byte Kodierung der DCT-Variante, beschrieben im Abschnitt \ref{konzept:loesung1:kodierung}. Das Diagramm der Abbildung \ref{resultate:loesung2:simple:resultate_byte} zeigt die Resultate mit der Byte Kodierung. Der Konstante Prädiktor verbraucht mit der Adaptiven Kodierung mehr Speicherplatz. Die Kompressionsrate der anderen Prädiktoren wird durch die Adaptive Kodierung deutlich verbessert. Der Lineare Prädiktor erreicht mit $214$ Bytes pro Feldlinie die beste Kompression. Es bestätigt die Vermutung, dass der Konstante Prädiktor keine zuverlässige Vorhersage erreichte. RAR konnte in diesen Daten Muster erkennen, welche sich stark komprimieren lassen.
+Eine mögliche Optimierung ist die Adaptive Byte Kodierung der DCT-Variante, beschrieben im Abschnitt \ref{konzept:loesung1:kodierung}. Das Diagramm der Abbildung \ref{resultate:loesung2:simple:resultate_byte} zeigt die Resultate mit der Byte Kodierung. Der Konstante Prädiktor verbraucht mit der Adaptiven Kodierung mehr Speicherplatz. Die Kompressionsrate der anderen Prädiktoren wird durch die Adaptive Kodierung deutlich verbessert. Der Lineare Prädiktor erreicht mit $214$ Bytes pro Feldlinie die beste Kompression. Es bestätigt die Vermutung, dass der Konstante Prädiktor keine zuverlässige Vorhersage erreichte. RAR konnte in diesen Daten Muster erkennen, welche sich komprimieren lassen.
 
 \begin{figure}[!htbp]
 	\center
