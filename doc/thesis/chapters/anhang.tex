@@ -1,12 +1,6 @@
 \section{Anhang}
 \subsection{Installationsanleitung}
-\subsubsection*{Installation des JHelioviewers}
-JHelioviewer ist zum Zeitpunkt der Arbeit noch in Entwicklung.
-Der JHelioviewer mit der umgesetzten Feldlinienkompression kann unter \url{http://github.com/Helldevastator/JHelioViewer} heruntergeladen werden. Alle verwendeten Programmbibliotheken und Abhängigkeiten sind Plattformunabhängig umgesetzt. Das Projekt kann in einer Java IDE wie Eclipse oder Netbeans importiert werden. Die Arbeit beschränkt sich auf das Paket \url{org.helioviewer.gl3d.plugins.pfssplugin}. Für die Ausführung kann die Klasse \textit{PfssPluginLauncher}.
-
-\subsubsection*{Installation der Kompression}
-Die Feldlinienkompression des Servers besteht aus der IDL Simulation und der C\# Kompression. Beide Dateien inklusive Run Batch sind auf der CD? zu finden. Aus Lizensgründen muss der C\# Code RAR über die Kommandozeile aufrufen. Der RAR Archivierer muss in der \textit{PATH} Umgebungsvariable enthalten sein. Ein Teil der Kompression war vor dem Projekt in IDL umgesetzt. Diese wurden entfernt.
-\pagebreak
+JHelioviewer ist zum Zeitpunkt der Arbeit noch in Entwicklung. Eine Version des JHelioviewers mit der umgesetzten Dekompression kann unter \url{http://github.com/Helldevastator/JHelioViewer} heruntergeladen werden. Alle verwendeten Programmbibliotheken und Abhängigkeiten sind im Projekt enthalten. Das Projekt kann in einer Java IDE wie Eclipse oder Netbeans importiert werden. Die Arbeit beschränkt sich auf das Paket \url{org.helioviewer.gl3d.plugins.pfssplugin}. Für die Ausführung kann die Klasse \textit{PfssPluginLauncher}.
 
 \subsection{File Format and Decompression}
 This section describes the decoding and decompression algorithm used for compressing fieldline data. The data is written in the FITS Format \cite{website:fits} and compressed with RAR. The content of the FITS file is described in Table \ref{anhang:format:content}.\\
@@ -158,7 +152,6 @@ Here is an example implementation in Java:
 
 \textbf{Testmaschine}
 \begin{table}[!htbp]
-
 \begin{tabular}{c|c}
 	Prozessor & Intel i7-4600 \\
 	Arbeitsspeicher & 16 GB \\

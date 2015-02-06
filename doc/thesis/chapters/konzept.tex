@@ -1,7 +1,7 @@
 \section{Umgesetzte Kompressionsverfahren} \label{konzept}
-In diesem Abschnitt werden die einzelnen Verfahren zu den Lösungsansätzen vorgestellt. Im ersten Abschnitt \ref{konzept:ist-komprimierung} wird die Ist-Kompression analysiert. In den nächsten Abschnitten \ref{konzept:loesung0} bis \ref{konzept:prediktiv} werden die Lösungsansätze und ihre Teilschritte vorgestellt.
+In diesem Abschnitt werden die einzelnen Verfahren vorgestellt. Im ersten Abschnitt \ref{konzept:ist-komprimierung} wird die Ist-Kompression analysiert. In den nächsten Abschnitten \ref{konzept:loesung0} bis \ref{konzept:prediktiv} werden die Lösungsansätze und ihre Teilschritte vorgestellt.
 
-\subsection{Ist-Komprimierung} \label{konzept:ist-komprimierung}
+\subsection{Ist-Kompression} \label{konzept:ist-komprimierung}
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/ist/aufbau.png}
@@ -25,7 +25,7 @@ Die Punktmenge ist für Low-End Grafikkarten zu gross. Um die Punktmenge für di
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution0/aufbau.png}
-	\caption{Aufbau des Lösungsansatzes: Adaptives Subsampling.}
+	\caption{Aufbau des Kompressionsvervahrens: Adaptives Subsampling.}
 	\label{konzept:loesung0:aufbau:diagramm}
 \end{figure} 
 Diesem Verfahren verwendet einen ähnlichen Aufbau wie die Ist-Kompression. Der Unterschied ist, dass das Subsampling Verfahren gewählt wurde, welches der JHelioviewer auf dem Client durchführt. Die Abbildung \ref{konzept:loesung0:aufbau:diagramm} zeigt den neuen Ablauf.\\
@@ -51,7 +51,7 @@ Die Anordnung der Daten wurde aus der Ist-Kompression übernommen, jedoch wird R
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution1/aufbau.png}
-	\caption{Aufbau des Lösungsansatzes: Adaptives Subsampling.}
+	\caption{Aufbau der Kompression Adaptives Subsampling.}
 	\label{konzept:loesung1:aufbau}
 \end{figure} 
 Die Kompression dieses Verfahrens ist Dargestellt im Diagramm der Abbildung \ref{konzept:loesung1:aufbau}. Konzeptionell ähnelt der Algorithmus der JPEG/JFIF Kompression (dargestellt in der Abbildung \ref{state:jpeg:abb}). Im Vergleich zum JPEG/JFIF Standard ist der grösste Unterschied, dass das Eingangssignal vor der Kosinus Transformation abgeleitet wird.
@@ -120,21 +120,21 @@ Im Allgemeinen reichen sieben Bit Genauigkeit um die quantisierten DCT Koeffizie
 \end{table}
 \pagebreak
 
-\subsection{Kompressionsvervahren: Prediktive Kodierung} \label{konzept:prediktiv}
+\subsection{Kompressionsvervahren: Prädiktive Kodierung} \label{konzept:prediktiv}
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution2/aufbau.png}
-	\caption{Aufbau des Lösungsansatzes: Adaptives Subsampling.}
+	\caption{Aufbau der Kompressionsverfahren Prädiktive Kodierung.}
 	\label{konzept:loesung2:aufbau}
 \end{figure}
 Die Prädiktive Kodierung ist ein Verfahren, welches in der verlustfreien Kompressionen Anwendung findet. Mittels eines Prädiktors und den bereits kodierten Daten wird eine Vorhersage erstellt für die folgenden Daten erstellt. Die Prädiktive Kodierung speichert ausschliesslich den Vorhersagefehler.
 
-Der Aufbau dieser Lösung ist im Diagramm der Abbildung \ref{konzept:loesung2:aufbau} dargestellt. Im ersten Schritt wird ein Subsampling und eine Quantisierung der Daten durchgeführt. Darauf folgend werden die quantisierten Daten mit einer Prädiktiven Kodierung versehen. Der zweite Quantisierungsschritt löscht unwichtige Vorhersagefehler. 
+Der Aufbau dieser Kompression ist im Diagramm der Abbildung \ref{konzept:loesung2:aufbau} dargestellt. Im ersten Schritt wird ein Subsampling und eine Quantisierung der Daten durchgeführt. Darauf folgend werden die quantisierten Daten mit einer Prädiktiven Kodierung versehen. Der zweite Quantisierungsschritt löscht unwichtige Vorhersagefehler. 
 
 Das Adaptive Subsampling reduziert die Anzahl Punkte und verändert die Eigenschaften der Kanäle der einzelnen Feldlinien. Stetige Steigungen werden zerstört, ein Beispiel ist im Diagramm der Abbildung \ref{resultate:loesung2:adaptive:channel} im Abschnitt \ref{resultate:loesung2:adaptive}. Einfache Prädiktoren wie zum Beispiel ein linearer Prädiktor kann auf solche Daten keine zuverlässige Vorhersage treffen und verbessert die Kompressionsrate nicht. Es wurde deshalb der Rekursiver Linearer Prädiktor entwickelt, welche auf der Idee der Point Cloud Kompression aus Abschnitt \ref{state:pointcloud} basiert. Die Daten werden in unterschiedlich genauen Approximationen dargestellt. Der Prädiktor benutzt die ungenaue Approximation um eine Vorhersage für die nächst genauere Approximation zu erstellen.
 
 \subsubsection{Angle Subsampling und Quantisierung}
-Das Angle-Subsampling vom Lösungsansatz aus Abschnitt \ref{konzept:loesung0} wurde mit angepassten Parametern übernommen. In diesem Ansatz werden $50\%$ mehr Daten übertragen. Die Quantisierung überführt die Punkte in ein diskretes, sphärisches Koordinatensystem. In diesem Koordinatensystem können die Koordinatenachse mit 16 Bit Genauigkeit abgebildet werden, ohne hohe Abweichungen vom Originalpunkt in Kauf zu nehmen.
+Das Angle-Subsampling der Kompression aus Abschnitt \ref{konzept:loesung0} wurde mit angepassten Parametern übernommen. In dieser Kompression werden $50\%$ mehr Daten übertragen. Die Quantisierung überführt die Punkte in ein diskretes, sphärisches Koordinatensystem. In diesem Koordinatensystem können die Koordinatenachse mit 16 Bit Genauigkeit abgebildet werden, ohne hohe Abweichungen vom Originalpunkt in Kauf zu nehmen.
 
 \subsubsection{Rekursiver Linearer Kodierung}
 Der Algorithmus der Rekursiven Linearen Kodierung versucht aus einer ungenauen Approximation die nächst genauere vorherzusagen. Im Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step1} ist der Kodierungsschritt des Algorithmus dargestellt. Es wird angenommen, dass der mittlere Wert des Kanals auf der Strecke zwischen Start- und Endwert liegt. Der Algorithmus wird rekursiv für die zwei Teilstücke des Kanals wiederholt, bis alle Werte zwischen Start- und Endwert des Kanals kodiert wurden. Start und Endwert des Kanals werden unkodiert abgespeichert. Die Kodierung der nächsten Rekursionsstufe ist im Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step2} dargestellt.
