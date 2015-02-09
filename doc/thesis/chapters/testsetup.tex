@@ -1,24 +1,25 @@
 \section{Qualitätsmessung der dekomprimierten Daten}
 Bei verlustbehafteten Kompressionen muss die Qualität der dekomprimierten Daten sichergestellt werden. Im Verlauf der Arbeit wurden zwei Metriken verwendet: Die Standardabweichung und eine angepasste PSNR-HVS-M. Die Standardabweichung wird unabhängig von der Abtastrate berechnet und kann Subsampling Artefakte entdecken. Wie die Standardabweichung berechnet wird, ist im Abschnitt \ref{testsetup:ablauf} beschrieben.\\
-Die PSNR-HVS-M wird für die Aufdeckung von Ringing Artefakten\cite{wiki:ringing:artefacts} berechnet. Ein Beispiel für Ringing Artefakte ist in der Abbildung \ref{resultate:loesung1:dct:randbehandlung:jvhartefakte} im Abschnitt \ref{resultate:loesung1:ringing} zu sehen. Die PSNR-HVS-M stammt aus der Bildverarbeitung. Das Ziel des Fehlermasses ist es, eine hohe Korrelation zwischen der Metrik und dem menschlichen Augenmass zu erreichen. Wie die PSNR-HVS-M Metrik angepasst und umgesetzt wurde, ist im Abschnitt \ref{testsetup:psnr} beschrieben.\\
+Die PSNR-HVS-M wird für die Aufdeckung von Ringing Artefakten \cite{wiki:ringing:artefacts} berechnet. Ein Beispiel für Ringing Artefakte ist in der Abbildung \ref{resultate:loesung1:dct:randbehandlung:jvhartefakte} im Abschnitt \ref{resultate:loesung1:ringing} zu sehen. Die PSNR-HVS-M stammt aus der Bildverarbeitung. Das Ziel des Fehlermasses ist es, eine hohe Korrelation zwischen der Metrik und dem menschlichen Augenmass zu erreichen. Wie die PSNR-HVS-M Metrik angepasst und umgesetzt wurde, ist im Abschnitt \ref{testsetup:psnr} beschrieben.\\
 Für die Messungen wurden spezielle Aufnahmen der Feldlinien gewählt. Wie die Aufnahmen ausgewählt wurden, ist im Abschnitt \ref{testsetup:auswahl_erhebung} beschrieben.
 
 \subsection{Auswahl und Erhebung der Testdaten}\label{testsetup:auswahl_erhebung}
-Die Testdaten sollen zu einem alle Randfälle abdecken, als auch durchschnittliche Fälle enthalten. Aus diesem Grund wurden insgesamt zehn Datensätze ausgewählt: Vier Datensätze mit hoher Sonnenaktivität, zwei mit wenig und vier zufällig. Für die vier Datensätzen mit hoher Aktivität wurde in den Jahren 2014 und 2013 nach den grössten Solare Flares gesucht. Für die Datensätze mit wenig Aktivität wurde nach Zeiträumen mit möglichst kleinen Solar Flares gesucht.\\
-Die Feldlinien werdenalle sechs Stunden berechnet und Solar Flares sind spontane Ereignisse. Für die Solar Flares wurde deshalb beachtet, dass die Datensätze vor dem Ereignis verwendet wurden. Grosse Solar Flares entladen das Magnetfeld der Sonne. Vor dem Ereignis ist das Magnetfeld komplex.\\
-[\baselineskip]
-Wie im Abschnitt \ref{konzept:ist-komprimierung} beschrieben, wird bereits eine einfache verlustbehaftete Kompression Simulation. Für die Testdaten wurde diese entfernt, was die rohe Datenmenge entsprechend anwachsen liess auf etwa 10 MiBytes pro Aufnahme.
+Die Testdaten sollen zu einem alle Randfälle abdecken, als auch durchschnittliche Fälle enthalten. Aus diesem Grund wurden insgesamt zehn Datensätze ausgewählt: Vier Datensätze mit hoher Sonnenaktivität, zwei mit wenig und vier zufällig. Für die vier Datensätzen mit hoher Aktivität wurde in den Jahren 2014 und 2013 nach den grössten Solare Flares gesucht. Für die Datensätze mit wenig Aktivität wurde nach Zeiträumen mit möglichst kleinen Solar Flares gesucht.
+Die Feldlinien werden alle sechs Stunden berechnet und Solar Flares sind spontane Ereignisse. Für die Solar Flares wurde deshalb beachtet, dass die Datensätze vor dem Ereignis verwendet wurden. Grosse Solar Flares entladen das Magnetfeld der Sonne. Vor dem Ereignis ist das Magnetfeld komplex.
+
+Wie im Abschnitt \ref{konzept:ist-komprimierung} beschrieben, wird bereits eine einfache verlustbehaftete Kompression Simulation. Für die Testdaten wurde diese entfernt, was die rohe Datenmenge entsprechend anwachsen liess auf durchschnittlich 10 Megabyte pro Simulation.
 
 \subsection{Berechnung der Standardabweichung}\label{testsetup:ablauf}
-Die dekomprimierte Linie ähnelt dem Original, wenn die Abweichungen konstant bleiben. Für diesen Fall wurde Die Standardabweichung ausgewählt. Die originale und dekomprimierte Feldlinie können unterschiedliche Abtastraten aufweisen. Die Standardabweichung muss deshalb unabhängig von der Abtastrate berechnet werden.\\
+Die dekomprimierte Linie ähnelt dem Original, wenn die Abweichungen konstant bleiben. Für diesen Fall wurde Die Standardabweichung ausgewählt. Die originale und dekomprimierte Feldlinie können unterschiedliche Abtastraten aufweisen. Die Standardabweichung muss deshalb unabhängig von der Abtastrate berechnet werden.
+
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.9\textwidth,height=7cm,keepaspectratio]{./pictures/testsetup/errorcalc.png}
 	\caption{Darstellung der Fehlerberechnung. Die Punkte sind die Originaldaten, die Quadrate sind die Punkte nach der Kompression.}
 	\label{testsetup:ablauf:fehlerberechnung:diagramm}
 \end{figure} 
-Um die Abweichung zu berechnen wird konzeptionell zwischen die dekomprimierten Punkte eine Linie gezogen und den Abstand zwischen dieser Linie und den Originalpunkte berechnet. Der Vorgang ist dargestellt im Diagramm der Abbildung \ref{testsetup:ablauf:fehlerberechnung:diagramm}. Für jeden Punkt $P_i'$ aus den dekomprimierten Punkten $D$, nehme $P_i'$, $P_{i-1}'$,$P_{i+1}'$ und $P_{i+2}'$. Ziehe drei Strecken, von $P_{i-1}'P_i'$, $P_{i}'P_{i+1}'$ und $P_{i+1}'P_{i+2}'$. Suche von $P_i'$ den Originalpunkt $P_i$ aus allen Originalpunkten $O$, berechne den minimalen Abstand zu den drei Strecken. Führe das für alle folgenden Originalpunkte durch, bis $P_{i+1}$ erreicht wurde.\\
-[\baselineskip]
+Um die Abweichung zu berechnen wird konzeptionell zwischen die dekomprimierten Punkte eine Linie gezogen und den Abstand zwischen dieser Linie und den Originalpunkte berechnet. Der Vorgang ist dargestellt im Diagramm der Abbildung \ref{testsetup:ablauf:fehlerberechnung:diagramm}. Für jeden Punkt $P_i'$ aus den dekomprimierten Punkten $D$, nehme $P_i'$, $P_{i-1}'$,$P_{i+1}'$ und $P_{i+2}'$. Ziehe drei Strecken, von $P_{i-1}'P_i'$, $P_{i}'P_{i+1}'$ und $P_{i+1}'P_{i+2}'$. Suche von $P_i'$ den Originalpunkt $P_i$ aus allen Originalpunkten $O$, berechne den minimalen Abstand zu den drei Strecken. Führe das für alle folgenden Originalpunkte durch, bis $P_{i+1}$ erreicht wurde.
+
 Die Abstandsberechnung von Strecke $s$ zu einem Punkt $P$ erfolgt in zwei Schritten: Zuerst wird mit der Formel \eqref{testsetup:ablauf:formula:on_line} überprüft, ob eine Senkrechte durch $P$ auf der Strecke $s$ zu liegen kommt. Falls das der Fall ist, wird der Abstand von $P$ zu $s$ berechnet \eqref{testsetup:ablauf:formula:distance}. Falls nicht, wird die kürzeste Distanz der Eckpunkte der Strecke zu $P$ berechnet.\\
 \begin{equation} \label{testsetup:ablauf:formula:on_line}
  t = \frac{\vec{AB}*\vec{AP}}{\lvert \vec{AB}\rvert ^2} \quad 0 \leq t \leq 1
@@ -33,7 +34,7 @@ Wenn das nicht möglich ist, wird der kürzere Distanz von $P$ zu einem der Eckp
 \begin{equation} \label{testsetup:ablauf:formula:deviation}
 	\begin{split}
 		\sigma(X)& = \sqrt{variance(X)}\\
-		variance(X) & = \sum{(x_i - E(x_i))^2}
+		variance(X) & = \sum_{i=0}^{N-1}{(x_i - E(x_i))^2}
 	\end{split}
 \end{equation}
 Die Standardabweichung $\sigma$ einer Beobachtungsreihe $X$ $(x_1,x_2,x_3,\ldots, x_n-1)$ ergibt sich aus der Wurzel der Varianz von $X$. Die Varianz von $X$ kann errechnet werden, wenn man den Distanz jeder Beobachtung $x_i$ mit dem Erwartungswert $E(x_i)$ berechnet und quadriert. Die Beobachtung ist im diesen Fall ein Punkt der dekomprimierten Linie, während der Erwartungswert der Originalpunkt ist. Die Distanz wird mit dem besprochnen Verfahren \ref{testsetup:ablauf} berechnet. Die Summe der quadratischen Abstände ergibt die Varianz. Die Varianz wird über alle Testdaten berechnet, somit erhält man für einen Test einen Wert für die Standardabweichung.
@@ -46,7 +47,7 @@ PSNR & = 20 * log_{10}(MAX_I) - 10*log_{10}(MSE) \\
 MSE & = \frac{1}{n}\sum_{i=0}^{N-1}[E(i)-D(i)]^2
 \end{split}
 \end{equation}
-Die PSNR \eqref{testsetup:psnr:formula:psnr} besteht aus dem maximal möglichen Wert $MAX_I$ und dem ''Mean Squared Error´´ ($MSE$). Wobei $E()$ die Originaldaten und $D()$ die verzerrten Daten darstellen. Das Problem der PSNR ist, dass sie nicht mit der menschlichen Wahrnehmung übereinstimmt. Ponomarenko et al.  \cite{ponomarenko2007between:psnr} haben eine modifizierte PSNR entwickelt; die PSNR Human Visual System Masking (HVS-M). In ihren Messungen erreichten sie eine hohe Korrelation zwischen menschlicher Wahrnehmung von verzerrten Bildern und dem neuen Fehlermass.
+Die PSNR \eqref{testsetup:psnr:formula:psnr} besteht aus dem maximal möglichen Wert $MAX_I$ und dem ''Mean Squared Error'' ($MSE$). Wobei $E()$ die Originaldaten und $D()$ die verzerrten Daten darstellen. Das Problem der PSNR ist, dass sie nicht mit der menschlichen Wahrnehmung übereinstimmt. Ponomarenko et al.  \cite{ponomarenko2007between:psnr} haben eine modifizierte PSNR entwickelt; die PSNR Human Visual System Masking (HVS-M). In ihren Messungen erreichten sie eine hohe Korrelation zwischen menschlicher Wahrnehmung von verzerrten Bildern und dem neuen Fehlermass.
 
 Der Unterschied zwischen der PSNR und der PSNR-HVS-M liegt in der Berechnung des durchschnittlichen quadratischen Fehlers. Das Diagramm der Abbildung \ref{testsetup:ablauf:psnr:flowchart} zeigt den Ablauf der neuen Berechnung.\\
 \begin{figure}[!htbp]
@@ -65,7 +66,7 @@ Um das Contrast Masking zu berechnen, führt Ponomarenko et al. die gewichtete E
 \begin{equation} \label{testsetup:psnr:formula:masking_effect}
 	E_m(X)  = \frac{1}{f_m}E_w(X)
 \end{equation}
-Wobei $X$ die Kosinus-Koeffizienten eines $8*8$ Bildblocks sind und $C$ die Gewichtungen der Frequenzen. Der Normalisierungsfaktor $f_m$ wurde experimentell ermittelt und auf $16$ festgelegt. Ponomarenko et al. argumentiert, dass der Unterschied zwischen einem Block $X_e$ und einem verrauschten Block $X_d$ unsichtbar sind, wenn die Formel \eqref{testsetup:psnr:formula:masking} erfüllt ist.
+Wobei $X$ die Kosinus-Koeffizienten eines $8*8$ Bildblocks sind und $C$ die Gewichtungen der Frequenzen. Der Normalisierungsfaktor $f_m$ wurde experimentell ermittelt und auf $16$ festgelegt. Ponomarenko et al. argumentiert, dass der Unterschied zwischen einem Block $X_e$ und einem verrauschten Block $X_d$ unsichtbar sind, wenn die Ungleichung \eqref{testsetup:psnr:formula:masking} erfüllt ist.
 \begin{equation} \label{testsetup:psnr:formula:masking}
 	E_w(X_e-X_d) < max[E_m(X_e),E_m(X_d)]
 \end{equation}
@@ -75,11 +76,10 @@ Die Eigenschaft der Ungleichung \eqref{testsetup:psnr:formula:masking} fliesst m
 \end{equation}
 Wobei $E_{norm} = \sqrt{max[E_m(X_e),E_m(X_d)] / 64}$. $X_{eij}$ ist der DCT Koeffizient des Originalblockes und $X_{dij}$ der Koeffizient des verrauschten Blockes. Dabei ist es irrelevant ob die DCT Koeffizienten subtrahiert oder wie in der Abbildung \ref{testsetup:ablauf:psnr:flowchart} angedeutet, zuerst die Differenz der Pixelwerte berechnet und diese DC transformiert werden.
 
-Wie gut die PSNR-HVS-M Metrik mit dem menschlichen Auge übereinstimmt, hängt vom Normalisierungsfaktor $f_m$ und von der Wahl der Gewichtungen $C$ ab. Ponomarenko et al. verwendeten die normalisierten ($\frac{10}{x}$) und quadrierten Werte der JPEG/JFIF Quantisierungsmatrix \cite{wallace1992jpeg}. Es ist zu beachten, dass der DC-Koeffizient\cite{wiki:dccoeff} nicht im Contrast Masking berücksichtigt wird, für den Wert wird die normale PSNR berechnet. Der DC-Koeffizient stellt die durchschnittliche Helligkeit in einem Block dar. Das menschliche Auge kann auch kleine Unterschiede in dieser Frequenz erkennen.
+Wie gut die PSNR-HVS-M Metrik mit dem menschlichen Auge übereinstimmt, hängt vom Normalisierungsfaktor $f_m$ und von der Wahl der Gewichtungen $C$ ab. Ponomarenko et al. verwendeten die normalisierten ($\frac{10}{x}$) und quadrierten Werte der JPEG/JFIF Quantisierungsmatrix \cite{wallace1992jpeg}. Es ist zu beachten, dass der DC-Koeffizient \cite{wiki:dccoeff} nicht im Contrast Masking berücksichtigt wird, für den Wert wird die normale PSNR berechnet. Der DC-Koeffizient stellt die durchschnittliche Helligkeit in einem Block dar. Das menschliche Auge kann auch kleine Unterschiede in dieser Frequenz erkennen.
 
 \subsubsection{Umsetzung und Anpassung der PSNR-HVS-M für diese Arbeit}
-Der grösste Unterschied zur Arbeit von Ponomarenko et. al. ist der Einbezug des DC-Koeffizienten ins Contrast-Masking. Der DC-Koeffizient repräsentiert bei den Feldlinien eine Verschiebung. Das menschliche Auge kann leichte Verschiebungen der Feldlinien kaum unterscheiden. Des Weiteren musste für die Feldlinie eine eigene Quantisierungsmatrix gefunden werden, aus denen die Gewichtungen berechnet werden. Es wurde eine DCT-Kompression entwickelt, welche keine sichtbaren Artefakte aufweist. Die Quantisierungsmatrix wurde übernommen und auf dieselbe Weise normalisiert.\\
-Für die PSNR wird der maximale Wert $MAX_I$ benötigt. Hier wurde der maximal mögliche Wert der PFSS Simulation verwendet, den vierfachen Sonnenradius.
+Der grösste Unterschied zur Arbeit von Ponomarenko et. al. ist der Einbezug des DC-Koeffizienten ins Contrast-Masking. Der DC-Koeffizient repräsentiert bei den Feldlinien eine Verschiebung. Das menschliche Auge kann leichte Verschiebungen der Feldlinien kaum unterscheiden. Des Weiteren musste für die Feldlinie eine eigene Quantisierungsmatrix gefunden werden, aus denen die Gewichtungen berechnet werden. Es wurde eine DCT-Kompression entwickelt, welche keine sichtbaren Artefakte aufweist. Die Quantisierungsmatrix wurde übernommen und auf dieselbe Weise normalisiert. Für die PSNR wird der maximale Wert $MAX_I$ benötigt. Hier wurde der maximal mögliche Wert der PFSS Simulation verwendet, den vierfachen Sonnenradius.
 
 Der letzte Wert, den es zu setzen gibt, ist der Normalisierungsfaktor $f_m$. Ponomarenko et. al. schrieb keine zusätzliche Information oder Begründung zu diesem Wert. Dieser Wert stellt ein, wie stark das Contrast-Masking einfliessen soll. Je höher der Wert ist, desto ähnlicher ist die PSNR-HVS-M Metrik der normalen PSNR.\\
 Die Tabelle \ref{testsetup:psnr:umsetzung:tabelle:f_m} erforscht den Einfluss des $f_m$ Faktors. Dazu wurde die PSNR-HVS-M zu drei dekomprimierten Simulationen berechnet, welche eine unterschiedliche Qualität aufweisen.

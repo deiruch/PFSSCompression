@@ -71,12 +71,12 @@ namespace CompressedPFSSManager.CompressionAlgorithm
             Object[][] data = new Object[1][];
             Object[] dataRow = new Object[] { b0a, l0a, 
                 ByteEncoder.EncodeAdaptiveUnsigned(ptr_nz_len), 
-                ByteEncoder.EncodeStartPointChannel(startPointsR),
-                ByteEncoder.EncodeStartPointChannel(endpointsR),
-                ByteEncoder.EncodeStartPointChannel(startPointsPhi),
-                ByteEncoder.EncodeStartPointChannel(endpointsPhi),
-                ByteEncoder.EncodeStartPointChannel(startPointsTheta),
-                ByteEncoder.EncodeStartPointChannel(endpointsTheta), 
+                ByteEncoder.EncodeAdaptive(startPointsR),
+                ByteEncoder.EncodeAdaptive(endpointsR),
+                ByteEncoder.EncodeAdaptive(startPointsPhi),
+                ByteEncoder.EncodeAdaptive(endpointsPhi),
+                ByteEncoder.EncodeAdaptive(startPointsTheta),
+                ByteEncoder.EncodeAdaptive(endpointsTheta), 
                 ByteEncoder.EncodeAdaptive(ptr), ByteEncoder.EncodeAdaptive(ptph), ByteEncoder.EncodeAdaptive(ptth) };
             data[0] = dataRow;
             //means, pca, startPoints,

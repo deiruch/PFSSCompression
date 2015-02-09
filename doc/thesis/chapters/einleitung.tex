@@ -11,10 +11,10 @@ Im Rahmen dieses Projekts werden Daten von Magnetfeldlinien der Sonne komprimier
 \end{figure}
 Auf der Visualisierung sind Feldlinien in drei unterschiedlichen Farben zu erkennen, welche drei unterschiedle Typen darstellen: Linien, die auf der Sonne starten und wieder auf der Sonne landen, auf der Sonne starten und ins Weltall führen oder vom Weltall auf der Sonne landen. Die weissen Feldlinien repräsentieren ''Sonne zu Sonne'', die Grünen ''Sonne ins Weltall'' und die Violetten ''Weltall zur Sonne''.
 
-Der JHelioviewer ist in der Lage eine Abfolge von Mess- und Simulationsdaten als Animation zu visualisieren. Die Daten der Animation werden entweder mit einem Streaming kontinuierlich heruntergelaen oder zuvor im Arbeitsspeicher abgelegt. Im Extremfall werden $1000$ komprimierte Simulationen im Arbeitsspeicher zusammen mit anderen Mess- und Simulationsdaten abgelegt. Im Vorfeld wurde bereits eine verlustbehaftete Kompression entwickelt, welche die Datenmenge auf durchschnittlich 1 Megabyte pro Simulation reduziert. Das Caching von $1000$ Feldlinien-Simulationen benötigt im Ist-Zustand durchschnittlich ein Gigabyte an Arbeitsspeicher. Das Ziel der Arbeit ist eine verlustbehaftete Kompression zu entwickeln, welche für das Caching der Simulationen um den Faktor $8$ bis $10$ weniger Arbeitsspeicher benötigt.\\
+Der JHelioviewer ist in der Lage eine Abfolge von Mess- und Simulationsdaten als Animation zu visualisieren. Die Daten der Animation werden entweder mit einem Streaming kontinuierlich heruntergeladen oder zuvor im Arbeitsspeicher abgelegt. Im Extremfall werden $1000$ komprimierte Simulationen im Arbeitsspeicher zusammen mit anderen Mess- und Simulationsdaten abgelegt. Im Vorfeld wurde bereits eine verlustbehaftete Kompression entwickelt, welche die Datenmenge auf durchschnittlich 1 Megabyte pro Simulation reduziert. Das Caching von $1000$ Feldlinien-Simulationen benötigt im Ist-Zustand durchschnittlich ein Gigabyte an Arbeitsspeicher. Das Ziel der Arbeit ist eine verlustbehaftete Kompression zu entwickeln, welche für das Caching der Simulationen um den Faktor $8$ bis $10$ weniger Arbeitsspeicher benötigt.\\
 Zusätzlich soll erforscht werden unter welchen Bedingungen und Kompromisse das Streaming von Simulationen möglich ist. Für die Animation der Feldlinien werden im Allgemeinen 1 bis maximal 10 Simulationen in der Sekunde benötigt. Ein Fernziel des JHelioviewers ist die kontinuierliche Animation der Feldlinien. Im Ist-Zustand ist jeder Wechsel der Simulation markant. Eine Möglichkeit das Ziel zu erreichen ist die Kadenz zu erhöhen und 10-30 Simulationen in der Sekunde zu animieren. In Zukunft besteht die Möglichkeit, dass eine höhere Kompressionsrate benötigt wird.
 
-Im Laufe des Projekts wurden drei Kompressionen entwickelt. Die Kompressionsraten sind der Tabelle \ref{einleitung:tabelle} ersichtlich. Die Visualisierung der komprimierten Daten kann in den Abbildungen \ref{bla} gesehen werden.
+Im Laufe des Projekts wurden drei Kompressionen entwickelt. Die Kompressionsraten sind der Tabelle \ref{einleitung:tabelle} ersichtlich. Die Visualisierung der komprimierten Feldlinien kann in den Abbildungen \ref{einleitung:artefakte} verglichen werden. In dieser Arbeit wurde darauf geachtet, dass die Artefakte sich minimal ausprägen und sich die Feldlinien kaum von den Originaldaten unterscheiden.
 \begin{table}[!htbp]
 	\center
 	\begin{tabular}{r|l}
@@ -22,9 +22,17 @@ Im Laufe des Projekts wurden drei Kompressionen entwickelt. Die Kompressionsrate
 		Ist-Zustand & 1\\
 		Adaptives Subsampling & 11.6 \\
 		Diskrete Kosinus Transformation & 14.1 \\
-		Prediktive Kodierung & 13.6\\
+		Prädiktive Kodierung & 13.6\\
 	\end{tabular}
 	\caption{Kompressionsraten der Lösungsansätze.}
 	\label{einleitung:tabelle}
 \end{table}
-
+\begin{figure}[!htbp]
+\center
+\frame{\includegraphics[width=0.49\textwidth,keepaspectratio]{./pictures/einleitung/orig_lines.png}
+\includegraphics[width=0.49\textwidth,keepaspectratio]{./pictures/einleitung/sol0_lines.png}}
+\frame{\includegraphics[width=0.49\textwidth,keepaspectratio]{./pictures/einleitung/sol1_lines.png}
+\includegraphics[width=0.49\textwidth,keepaspectratio]{./pictures/einleitung/sol2_lines.png}}
+\caption{Dekomprimierte Feldliniendaten. Oben links ist das Original, rechts die Feldlinien des Adaptiven Subsamplings. Unten sind die Feldlinien der Kompressionen mit der Diskrete Kosinus Transformation und der Prädiktiven Kodierung zu sehen.}
+\label{einleitung:artefakte}
+\end{figure}

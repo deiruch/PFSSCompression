@@ -182,12 +182,12 @@ namespace CompressionTesting.FileWriter
             Object[][] data = new Object[1][];
             Object[] dataRow = new Object[] { b0a, l0a, 
                 DCTCoder.EncodeAdaptiveUnsigned(ptr_nz_len), 
-                DCTCoder.EncodeStartPointChannel(startPointsR),
-                DCTCoder.EncodeStartPointChannel(endpointsR),
-                DCTCoder.EncodeStartPointChannel(startPointsPhi),
-                DCTCoder.EncodeStartPointChannel(endpointsPhi),
-                DCTCoder.EncodeStartPointChannel(startPointsTheta),
-                DCTCoder.EncodeStartPointChannel(endpointsTheta), 
+                DCTCoder.EncodeAdaptive(startPointsR),
+                DCTCoder.EncodeAdaptive(endpointsR),
+                DCTCoder.EncodeAdaptive(startPointsPhi),
+                DCTCoder.EncodeAdaptive(endpointsPhi),
+                DCTCoder.EncodeAdaptive(startPointsTheta),
+                DCTCoder.EncodeAdaptive(endpointsTheta), 
                 DCTCoder.EncodeAdaptive(ptr), DCTCoder.EncodeAdaptive(ptph), DCTCoder.EncodeAdaptive(ptth) };
             data[0] = dataRow;
             //means, pca, startPoints,

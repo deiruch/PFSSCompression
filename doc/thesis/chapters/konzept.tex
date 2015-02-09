@@ -21,7 +21,7 @@ Das Ziel der Ist-Kompression ist es, die Datenmenge mit einfachen Mitteln zu red
 Als erstes werden die Längen aller Feldlinien abgelegt. Danach folgt der X, Y und der Z Kanal aller Punkte der Feldlinien. Diese Anordnung verbessert die Kompressionsrate der Entropie Kodierung. Je näher ähnliche Muster beieinander liegen, desto besser können sie Komprimiert werden. Für die eigentliche Entropie-Kodierung wird GZIP verwendet.\\
 Die Punktmenge ist für Low-End Grafikkarten zu gross. Um die Punktmenge für die Visualisierung zu verkleinern, führt der JHelioviewer ein weiteres Subsampling durch, welches im Abschnitt \ref{konzept:loesung0:subsampling} beschrieben ist.
 
-\subsection{Kompressionsvervahren: Adaptives Subsampling} \label{konzept:loesung0}
+\subsection{Kompressionsverfahren: Adaptives Subsampling} \label{konzept:loesung0}
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution0/aufbau.png}
@@ -47,7 +47,7 @@ $P_1$ wurde bereits ausgewählt. Es wird nun ein Punkt $P_x$ gesucht, der als En
 Die Anordnung der Daten wurde aus der Ist-Kompression übernommen, jedoch wird RAR anstatt GZIP verwendet. GZIP konnte bei den Ist-Komprimierten Daten eine Kompressionsrate von $1.2$ erreichen, während RAR bei selben Daten eine Rate von $3.7$ erreicht.
 \pagebreak
 
-\subsection{Kompressionsvervahren: Diskrete Kosinus Transformation}\label{konzept:loesung1}
+\subsection{Kompressionsverfahren: Diskrete Kosinus Transformation}\label{konzept:loesung1}
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution1/aufbau.png}
@@ -85,7 +85,7 @@ In der Visualisierung werden die Feldlinien in drei Typen unterschieden: ''Sonne
 Die anderen Feldlinien benötigen mehr Koeffizienten für die Dämpfung der Ringing Artefakte. Bei ihnen liegt das Maximum bei $50$ Koeffizienten.
 
 \subsubsection{Entropie Kodierung}\label{konzept:loesung1:kodierung}
-Um die Entropie Kodierung zu verbessern wurden zwei Byte-Kodierungen hinzugefügt. Die Längenkodierung reduziert 0-Einträge der Kanäle und die adaptive Genauigkeits-Kodierung reduziert die benötigten Bytes pro Wert eines Kanals.
+Um die Entropie Kodierung zu verbessern wurden zwei Byte-Kodierungen hinzugefügt. Die Längenkodierung reduziert Null-Einträge der Kanäle und die adaptive Genauigkeits-Kodierung reduziert die benötigten Bytes pro Wert eines Kanals.
 
 \textbf{Längenkodierung}\\
 Die Quantisierung erlaubt eine maximale Anzahl an Koeffizienten. Ab dem $50$ Koeffizient, sind die Werte Null. Die Längenkodierung schneidet den Block von Null-Koeffizienten ab und fügt die Länge des Nicht-Null Blockes hinzu. Alle Längen und alle Blöcke werden zusammen abgespeichert, die Tabelle \ref{konzept:loesung1:entropie:laengenkodierung} verdeutlicht das Konzept. $n_i$ ist die Länge des Nicht-Null-Blocks der Feldlinie $i$ und $x_{i,j}$ ist der $j$ DCT-Koeffizient der Feldlinie $i$.
@@ -120,7 +120,7 @@ Im Allgemeinen reichen sieben Bit Genauigkeit um die quantisierten DCT Koeffizie
 \end{table}
 \pagebreak
 
-\subsection{Kompressionsvervahren: Prädiktive Kodierung} \label{konzept:prediktiv}
+\subsection{Kompressionsverfahren: Prädiktive Kodierung} \label{konzept:prediktiv}
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.8\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution2/aufbau.png}
@@ -140,13 +140,13 @@ Das Angle-Subsampling der Kompression aus Abschnitt \ref{konzept:loesung0} wurde
 Der Algorithmus der Rekursiven Linearen Kodierung versucht aus einer ungenauen Approximation die nächst genauere vorherzusagen. Im Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step1} ist der Kodierungsschritt des Algorithmus dargestellt. Es wird angenommen, dass der mittlere Wert des Kanals auf der Strecke zwischen Start- und Endwert liegt. Der Algorithmus wird rekursiv für die zwei Teilstücke des Kanals wiederholt, bis alle Werte zwischen Start- und Endwert des Kanals kodiert wurden. Start und Endwert des Kanals werden unkodiert abgespeichert. Die Kodierung der nächsten Rekursionsstufe ist im Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step2} dargestellt.
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=1\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution2/algorithm_step1.png}
+	\includegraphics[width=1\textwidth,height=8cm,keepaspectratio]{./pictures/konzept/solution2/algorithm_step1.png}
 	\caption{Erster Schritt der Rekursiver Linearer Kodierung. Zu sehen sind das zu kodierende Signal, die Vorhersage und den Fehler der Vorhersage.}
 	\label{konzept:loesung2:algorithm:step1}
 \end{figure} 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=1\textwidth,height=6cm,keepaspectratio]{./pictures/konzept/solution2/algorithm_step2.png}
+	\includegraphics[width=1\textwidth,height=8cm,keepaspectratio]{./pictures/konzept/solution2/algorithm_step2.png}
 	\caption{Zweiter Schritt der Rekursiver Linearer Kodierung. Die Vorhersage beinhaltet nun zwei Strecken.}
 	\label{konzept:loesung2:algorithm:step2}
 \end{figure} 
