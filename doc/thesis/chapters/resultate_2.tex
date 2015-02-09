@@ -62,12 +62,12 @@ Die Rekursive Lineare Kodierung ist in der Lage nicht-stetigen Kanälen eine sin
 \begin{figure}[!htbp]
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante2/resultate_psnr.png}
 	
-	\caption{Kompressionsraten der Rekursive Lineare Kodierung mit dem adaptiven Subsampling.}
+	\caption{Kompressionsraten der Rekursiven Linearen Kodierung mit dem adaptiven Subsampling.}
 	\label{resultate:loesung2:adaptive:median_psnr}
 \end{figure}
 Das Diagramm der Abbildung \ref{resultate:loesung2:adaptive:median} zeigt die Standardabweichung der Rekursiven Linearen Kodierung zu unterschiedlichen Quantisierungen. Das Diagramm der Abbildung \ref{resultate:loesung2:adaptive:median_psnr} zeigt die PSNR-HVS-M Werte der Variante. Die Resultate der einfachen Prädiktoren wurden ebenfalls ohne PCA im sphärischen Koordinatensystem gemessen. Die Rekursive Lineare Kodierung kann eine bessere Kompressionsrate erreichen als die Kompression mit Adaptiven Subsampling. Bei Datenmenge von $64$ Bytes pro Feldlinie erreicht diese Variante eine tiefere Standardabweichung als das Adaptive Subsampling zu einem PSNR-HVS-M Wert von $94.7$. Diese Variante besitzt weniger ausgeprägte Artefakte als das DCT Verfahren, weist aber eine höhere Standardabweichung auf. Die Variante erreicht eine Kompressionsrate von $13.4$ und fällt somit zwischen den Kompressionen mittels DCT und Adaptives Subsampling.
 
-Die Artefakte der Dekompression äussern sich meist als Verschiebungen einzelner Punkte. Im Extremfall können Ringing ähnlichen Artefakte entstehen, welche in der Abbildung \ref{resultate:loesung2:adaptive:median:artefakte} dargestellt sind. Der Grund für die Artefaktbildung liegt in der Rekursion: Wenn der Vorhersagefehler des ersten Wertes (siehe Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step1}) quantisiert wird, beeinflusst der Quantisierungsfehler den gesamten Kanal. Die Werte, welches als letztes Kodiert werden, erfahren die grösste Verschiebung bei der Dekompression. Diese Variante verwendet einen konstanten Faktor für die Quantisierung. Die Lösung ist eine angepasste Quantisierung, welche die ersten Vorhersagefehler der ersten Rekursionsstufe mit höherer Genauigkeit abspeichert.
+Die Artefakte der Dekompression äussern sich meist als Verschiebungen einzelner Punkte. Im Extremfall können Ringing ähnlichen Artefakte entstehen, welche in der Abbildung \ref{resultate:loesung2:adaptive:median:artefakte} dargestellt sind. Der Grund für die Artefaktbildung liegt in der Rekursion: Wenn der Vorhersagefehler des ersten Wertes (siehe Diagramm der Abbildung \ref{konzept:loesung2:algorithm:step1}) quantisiert wird, beeinflusst der Quantisierungsfehler den gesamten Kanal. Die Werte, welches als letztes kodiert werden, erfahren die grösste Verschiebung bei der Dekompression. Diese Variante verwendet einen konstanten Faktor für die Quantisierung. Die Lösung ist eine angepasste Quantisierung, welche die ersten Vorhersagefehler der ersten Rekursionsstufe mit höherer Genauigkeit abspeichert.
 
 \begin{figure}[!htbp]
 	\center
@@ -84,7 +84,7 @@ Um die Artefakte der Dekompression zu dämpfen werden die Vorhersagefehler der R
 	\center
 	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante3/resultate.png}
 		
-		\caption{Standardabweichung der Rekursive Lineare Kodierung mit angepasster Quantisierung.}
+		\caption{Standardabweichung der Rekursiven Linearen Kodierung mit angepasster Quantisierung.}
 		\label{resultate:loesung2:adaptive:median:quant}
 \end{figure}
 \begin{figure}[!htbp]
@@ -106,6 +106,6 @@ Die Artefakte haben sich im Vergleich zur vorhergehenden Variante verbessert: Di
 	\label{resultate:loesung2:adaptive:median_extra:artefakte}
 \end{figure}
 
-Das Caching von $1000$ Simulationen und die Übertragungszeit fallen zwischen die anderen Kompressionsverfahren mit $72$ Megabyte an Arbeitsspeicher beziehungsweise $58$ Sekunden Übertragungszeit. Zum Vergleich: Die DCT Variante verbraucht unter denselben Bedingungen $70$ und das Adaptive Subsampling $85$ Megabyte an Arbeitsspeicher. Bei einer Internetverbindung von $10$ Megabit ist bei diesem Verfahren mit einer Übertragungsrate von $16$ Simulationen in der Sekunde zu rechnen. Die Laufzeit der Dekompression liegt mit $30.6$ Millisekunden ebenfalls zwischen den Kompressionsvervahren Adaptives Subsampling und DCT (siehe Abschnitt \ref{anhang:performance}). Mit dieser Laufzeit kann ein Thread durchschnittlich $32$ Simulationen pro Sekunde dekomprimieren.
+Das Caching von $1000$ Simulationen und die Übertragungszeit fallen zwischen die anderen Kompressionsverfahren mit $72$ Megabyte an Arbeitsspeicher beziehungsweise $58$ Sekunden Übertragungszeit. Zum Vergleich: Die DCT Variante verbraucht unter denselben Bedingungen $70$ und das Adaptive Subsampling $85$ Megabyte an Arbeitsspeicher. Bei einer Internetverbindung von $10$ Megabit ist bei diesem Verfahren mit einer Übertragungsrate von $16$ Simulationen in der Sekunde zu rechnen. Die Laufzeit der Dekompression liegt mit $30.6$ Millisekunden ebenfalls zwischen den Kompressionsverfahren Adaptives Subsampling und DCT (siehe Abschnitt \ref{anhang:performance}). Mit dieser Laufzeit kann ein Thread durchschnittlich $32$ Simulationen pro Sekunde dekomprimieren.
 
-Diesers Verfahren ist ein Kompromiss zwischen Kompressionsrate und Qualität. Die Daten enthalten Kompressionsartefakte. Sie sind aber schwach ausgeprägt sodass auf eine Glättung gegebenenfalls verzichtet werden kann.
+Dieses Verfahren ist ein Kompromiss zwischen Kompressionsrate und Qualität. Die Daten enthalten Kompressionsartefakte. Sie sind aber schwach ausgeprägt sodass auf eine Glättung gegebenenfalls verzichtet werden kann.

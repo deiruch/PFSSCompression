@@ -30,8 +30,8 @@ The following steps have to be taken to decompress the fieldline data:
 	\item Decode RAR
 	\item Split the fieldlines. Each line has 1 Length, 1 start point, 1 end point and the size of ''Length'' of prediction errors.
 	\item Do the Byte Decoding specified under section \ref{anhang:format:encodings}
-	\item reverse the predictive coding described under section \ref{anhang:format:prediction}
-	\item convert from spherical coordinate system to cartesian. Section \ref{anhang:format:euler} describes the process.
+	\item Reverse the predictive coding described under section \ref{anhang:format:prediction}
+	\item Convert from spherical coordinate system to cartesian. Section \ref{anhang:format:euler} describes the process.
 \end{enumerate}
 
 \subsubsection{Encodings} \label{anhang:format:encodings}
@@ -146,7 +146,7 @@ Here is an example implementation in Java:
 	DCT - Naive Inverse DCT & $3100$ ms \\
 	DCT - Mit Kosinus Caching & $65-350$ ms\\
 	DCT- Mit JTransform \& Kosinus Caching & $100-135$ ms\\
-	Prediktive Kodierung & $31$ ms\\
+	Prädiktive Kodierung & $31$ ms\\
 \end{tabular}
 \end{table}
 
