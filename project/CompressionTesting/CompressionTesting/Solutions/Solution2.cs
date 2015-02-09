@@ -352,13 +352,7 @@ namespace CompressionTesting.Solutions
                 }
             }
             qualityLevel += 5;
-            Residuals.factor = qualityLevel+1;
-            Residuals.factor2 = qualityLevel + 5;
-            Residuals.factor3 = qualityLevel + 11;
 
-            DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_OUTSIDE, new FileInfo(Path.Combine(folder, this.GetName() + "_sto_curve_disk.csv")));
-            DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.SUN_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_sts_curve_disk.csv")));
-            DebugOutput.MedianWriter.AnalyzeFirstCurveType(data, TYPE.OUTSIDE_TO_SUN, new FileInfo(Path.Combine(folder, this.GetName() + "_ots_curve_disk.csv")));
             Residuals.ForwardPrediction(data);
 
             //PredictiveResidualWriter.WritePureShortFits(data, offset, fits);
@@ -490,8 +484,7 @@ namespace CompressionTesting.Solutions
             Discretizer.ToInt(data, 0);
 
             //qualityLevel += 3;
-            Residuals.factor = 100000;
-            Residuals.factor2 = 64;
+
 
             Residuals.ForwardPrediction(data);
 

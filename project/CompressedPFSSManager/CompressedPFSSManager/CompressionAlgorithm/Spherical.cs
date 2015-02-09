@@ -34,25 +34,5 @@ namespace CompressedPFSSManager.CompressionAlgorithm
             
         }
 
-        public static void ForwardToSpherical(PFSSPoint p)
-        {
-            p.x = p.rawR;
-            p.y = p.rawPhi;
-            p.z = p.rawTheta;
-        }
-
-        /// <summary>
-        /// Set data from cartesian to spherical coordinates
-        /// </summary>
-        /// <param name="data"></param>
-        public static void ForwardToSpherical(PFSSData data)
-        {
-            foreach (PFSSLine l in data.lines)
-            {
-                foreach (PFSSPoint p in l.points)
-                    ForwardToSpherical(p);
-            }
-        }
-
     }
 }

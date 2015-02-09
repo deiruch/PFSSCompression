@@ -25,7 +25,7 @@ namespace CompressedPFSSManager.CompressionAlgorithm
             int[] ptth;
             int[] ptr_nz_len = new int[input.lines.Count];
 
-            List<PFSSLine> lines = new List<PFSSLine>(input.lines);
+            List<PFSSLine> lines = input.lines;
 
             int totalCount = 0;
             for (int i = 0; i < ptr_nz_len.Length; i++)
@@ -45,7 +45,6 @@ namespace CompressedPFSSManager.CompressionAlgorithm
 
             foreach (PFSSLine l in lines)
             {
-
                 startPointsR[startPointIndex] = (int)l.startPoint.x;
                 startPointsPhi[startPointIndex] = (int)l.startPoint.y;
                 startPointsTheta[startPointIndex] = (int)l.startPoint.z;

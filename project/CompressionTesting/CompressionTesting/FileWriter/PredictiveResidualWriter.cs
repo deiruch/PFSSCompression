@@ -27,7 +27,7 @@ namespace CompressionTesting.FileWriter
             int totalCount = 0;
             for (int i = 0; i < ptr_nz_len.Length; i++)
             {
-                Residuals res = input.lines[i].residuals;
+                Residuals res = input.lines[i].residuals_old;
                 int count = res.predictionErrors.Count;
 
                 totalCount += count;
@@ -49,12 +49,12 @@ namespace CompressionTesting.FileWriter
                 //write start points
                 for (int i = 0; i < offset; i++)
                 {
-                    startPoints[startPointIndex++] = (short)l.residuals.startPoint.x;
-                    startPoints[startPointIndex++] = (short)l.residuals.startPoint.y;
-                    startPoints[startPointIndex++] = (short)l.residuals.startPoint.z;
-                    startPoints[startPointIndex++] = (short)l.residuals.endPoint.x;
-                    startPoints[startPointIndex++] = (short)l.residuals.endPoint.y;
-                    startPoints[startPointIndex++] = (short)l.residuals.endPoint.z;
+                    startPoints[startPointIndex++] = (short)l.residuals_old.startPoint.x;
+                    startPoints[startPointIndex++] = (short)l.residuals_old.startPoint.y;
+                    startPoints[startPointIndex++] = (short)l.residuals_old.startPoint.z;
+                    startPoints[startPointIndex++] = (short)l.residuals_old.endPoint.x;
+                    startPoints[startPointIndex++] = (short)l.residuals_old.endPoint.y;
+                    startPoints[startPointIndex++] = (short)l.residuals_old.endPoint.z;
                 }
 
                 //write coefficients
@@ -71,7 +71,7 @@ namespace CompressionTesting.FileWriter
                     means[meansIndex++] = l.means[i];
                 }
 
-                Residuals res = l.residuals;
+                Residuals res = l.residuals_old;
                 short extraPoint = 0;
    
                 for (int i = 0; i < res.predictionErrors.Count; i++)
@@ -134,8 +134,8 @@ namespace CompressionTesting.FileWriter
             int totalCount = 0;
             for (int i = 0; i < ptr_nz_len.Length; i++)
             {
-                Residuals res = lines[i].residuals;
-                int count = res.predictionErrors.Count;
+                Residuals res = lines[i].residuals_old;
+                int count = lines[i].predictionErrors.Count;
 
                 totalCount += count;
                 ptr_nz_len[i] = (int)count;
@@ -154,20 +154,20 @@ namespace CompressionTesting.FileWriter
                 //write start points
                 for (int i = 0; i < offset; i++)
                 {
-                    startPointsR[startPointIndex] = (int)l.residuals.startPoint.x;
-                    startPointsPhi[startPointIndex] = (int)l.residuals.startPoint.y;
-                    startPointsTheta[startPointIndex] = (int)l.residuals.startPoint.z;
-                    endpointsR[startPointIndex] = (int)l.residuals.endPoint.x;
-                    endpointsPhi[startPointIndex] = (int)l.residuals.endPoint.y;
-                    endpointsTheta[startPointIndex] = (int)l.residuals.endPoint.z;
+                    startPointsR[startPointIndex] = (int)l.startPoint.x;
+                    startPointsPhi[startPointIndex] = (int)l.startPoint.y;
+                    startPointsTheta[startPointIndex] = (int)l.startPoint.z;
+                    endpointsR[startPointIndex] = (int)l.endPoint.x;
+                    endpointsPhi[startPointIndex] = (int)l.endPoint.y;
+                    endpointsTheta[startPointIndex] = (int)l.endPoint.z;
                     startPointIndex++;
                 }
 
-                Residuals res = l.residuals;
+                Residuals res = l.residuals_old;
 
-                for (int i = 0; i < res.predictionErrors.Count; i++)
+                for (int i = 0; i < l.predictionErrors.Count; i++)
                 {
-                    PFSSPoint p = res.predictionErrors[i];
+                    PFSSPoint p = l.predictionErrors[i];
                     ptr[index] = (int)p.x;
                     ptph[index] = (int)p.y;
                     ptth[index] = (int)p.z;

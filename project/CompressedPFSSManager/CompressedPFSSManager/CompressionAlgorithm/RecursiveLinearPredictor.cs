@@ -21,53 +21,39 @@ namespace CompressedPFSSManager.CompressionAlgorithm
                 l.startPoint = l.points[0];
                 l.endPoint = l.points[l.points.Count - 1];
 
-                Queue<Tuple<int, int, PFSSPoint>> bfs = new Queue<Tuple<int, int, PFSSPoint>>();
+                Queue<Tuple<int, int>> bfs = new Queue<Tuple<int, int>>();
                 if (l.points.Count > 2)
                 {
-                    bfs.Enqueue(new Tuple<int, int, PFSSPoint>(0, l.points.Count - 1,new PFSSPoint(0,0,0)));
+                    bfs.Enqueue(new Tuple<int, int>(0, l.points.Count - 1));
                     while (bfs.Count >= 1)
                     {
-                        Tuple<int, int, PFSSPoint> i = bfs.Dequeue();
-                        PredictLinearBF(l, bfs, i.Item1, i.Item2, i.Item3);
+                        Tuple<int, int> i = bfs.Dequeue();
+                        PredictLinearBF(l, bfs, i.Item1, i.Item2);
                     }
                 }
                 quantize(l);
             }
         }
 
-        private static void PredictLinearBF(PFSSLine l, Queue<Tuple<int, int, PFSSPoint>> callQueue, int startIndex, int endIndex, PFSSPoint currentError)
+        private static void PredictLinearBF(PFSSLine l, Queue<Tuple<int, int>> callQueue, int startIndex, int endIndex)
         {
             PFSSPoint start = l.points[startIndex];
             PFSSPoint end = l.points[endIndex];
 
             int toPredictIndex = (endIndex - startIndex) / 2+startIndex;
             PFSSPoint toPredict = l.points[toPredictIndex];
-            /*toPredict.x -= currentError.x;
-            toPredict.y -= currentError.y;
-            toPredict.z -= currentError.z;*/
-            PFSSPoint error = Predict(start, end, toPredict,startIndex,endIndex,toPredictIndex);
-            toPredict = new PFSSPoint(toPredict);
-            toPredict.x = error.x;
-            toPredict.y = error.y;
-            toPredict.z = error.z;
-            //Strip(toPredict);
-            l.predictionErrors.Add(toPredict);
 
-            toPredict = new PFSSPoint(toPredict);
-            //Push(toPredict);
-            PFSSPoint actual = Predict(start, end, toPredict, startIndex, endIndex, toPredictIndex);
-            PFSSPoint nextError = new PFSSPoint(-l.points[toPredictIndex].x + actual.x, -l.points[toPredictIndex].y + actual.y, -l.points[toPredictIndex].z + actual.z);
-            /*l.points[toPredictIndex].x = actual.x;
-            l.points[toPredictIndex].y = actual.y;
-            l.points[toPredictIndex].z = actual.z;*/
+            PFSSPoint error = Predict(start, end, toPredict,startIndex,endIndex,toPredictIndex);
+            l.predictionErrors.Add(error);
+
             if (startIndex + 1 != toPredictIndex)
             {
-                Tuple<int, int, PFSSPoint> t0 = new Tuple<int, int, PFSSPoint>(startIndex, toPredictIndex,nextError);
+                Tuple<int, int> t0 = new Tuple<int, int>(startIndex, toPredictIndex);
                 callQueue.Enqueue(t0);
             }
             if (endIndex - 1 != toPredictIndex)
             {
-                Tuple<int, int, PFSSPoint> t1 = new Tuple<int, int, PFSSPoint>(toPredictIndex, endIndex, nextError);
+                Tuple<int, int> t1 = new Tuple<int, int>(toPredictIndex, endIndex);
                 callQueue.Enqueue(t1);
             }
             

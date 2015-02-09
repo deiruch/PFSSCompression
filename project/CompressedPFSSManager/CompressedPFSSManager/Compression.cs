@@ -17,9 +17,7 @@ namespace CompressedPFSSManager
             FileInfo rarFits = new FileInfo(fits.FullName + ".rar");
             Subsampling.AngleSubsample(data, 3);
 
-            Spherical.ForwardToSpherical(data);
             Spherical.ForwardMoveSpherical(data);
-
             RecursiveLinearPredictor.ForwardPrediction(data);
 
             PredictionFitsWriter.WriteFits(data, fits);

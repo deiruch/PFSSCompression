@@ -14,10 +14,6 @@ namespace CompressedPFSSManager.PFSS
         internal float y { get; set; }
         internal float z { get; set; }
 
-        internal short rawR { get; private set; }
-        internal short rawPhi { get; private set; }
-        internal short rawTheta { get; private set; }
-
 
         public PFSSPoint(float rawR, float rawPhi, float rawTheta, double l0, double b0)
         {
@@ -25,23 +21,14 @@ namespace CompressedPFSSManager.PFSS
             double phi = rawPhi * 2 * Math.PI;
             double theta = rawTheta * 2 * Math.PI;
 
-            //current point
-            phi -= l0 / 180.0 * Math.PI;
-            theta += b0 / 180.0 * Math.PI;
-            z = (float)(r * Math.Sin(theta) * Math.Cos(phi));
-            x = (float)(r * Math.Sin(theta) * Math.Sin(phi));
-            y = (float)(r * Math.Cos(theta));
-        }
+            short discR = (short)Math.Round(rawR * 8192);
+            short discP = (short)Math.Round(rawPhi * 32768.0);
+            short discT = (short)Math.Round(rawTheta * 32768.0);
 
 
-        public PFSSPoint(PFSSPoint p)
-        {
-            this.rawPhi = p.rawPhi;
-            this.rawR = p.rawR;
-            this.rawTheta = p.rawTheta;
-            this.x = p.x;
-            this.y = p.y;
-            this.z = p.z;
+            this.x = discR;
+            this.y = discP;
+            this.z = discT;
         }
 
 
@@ -52,19 +39,6 @@ namespace CompressedPFSSManager.PFSS
             this.z = z;
         }
 
-        public void Reset(double l0, double b0)
-        {
-            double r = rawR / 8192.0 * SunRadius;
-            double phi = rawPhi / 32768.0 * 2 * Math.PI;
-            double theta = rawTheta / 32768.0 * 2 * Math.PI;
-
-            //current point
-            phi -= l0 / 180.0 * Math.PI;
-            theta += b0 / 180.0 * Math.PI;
-            z = (float)(r * Math.Sin(theta) * Math.Cos(phi));
-            x = (float)(r * Math.Sin(theta) * Math.Sin(phi));
-            y = (float)(r * Math.Cos(theta));
-        }
 
         public double AngleTo(PFSSPoint next,PFSSPoint before)
         {
