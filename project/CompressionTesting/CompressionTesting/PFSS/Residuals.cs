@@ -9,8 +9,8 @@ namespace CompressionTesting.PFSS
     class Residuals
     {
         public const int factor = 6;
-        public const int factor2 = 10;
-        public const int factor3 = 16;
+        public const int factor2 = 8;
+        public const int factor3 = 12;
 
         public static void ForwardPrediction(PFSSData data)
         {
@@ -70,21 +70,21 @@ namespace CompressionTesting.PFSS
 
         private static void quantize(PFSSLine line)
         {
-            for (int i = 0; i < 5 && i < line.predictionErrors.Count; i++)
+            for (int i = 0; i < 8 && i < line.predictionErrors.Count; i++)
             {
                 line.predictionErrors[i].x = (int)Math.Truncate(line.predictionErrors[i].x / factor);
                 line.predictionErrors[i].y = (int)Math.Truncate(line.predictionErrors[i].y / factor);
                 line.predictionErrors[i].z = (int)Math.Truncate(line.predictionErrors[i].z / factor);
             }
 
-            for (int i = 5; i < 16 && i < line.predictionErrors.Count; i++)
+            for (int i = 8; i < 24 && i < line.predictionErrors.Count; i++)
             {
                 line.predictionErrors[i].x = (int)Math.Truncate(line.predictionErrors[i].x / factor2);
                 line.predictionErrors[i].y = (int)Math.Truncate(line.predictionErrors[i].y / factor2);
                 line.predictionErrors[i].z = (int)Math.Truncate(line.predictionErrors[i].z / factor2);
             }
 
-            for (int i = 16; i < line.predictionErrors.Count; i++)
+            for (int i = 24; i < line.predictionErrors.Count; i++)
             {
                 line.predictionErrors[i].x = (int)Math.Truncate(line.predictionErrors[i].x / factor3);
                 line.predictionErrors[i].y = (int)Math.Truncate(line.predictionErrors[i].y / factor3);
@@ -178,14 +178,14 @@ namespace CompressionTesting.PFSS
                 res.predictionErrors[i].z = (int)Math.Truncate(res.predictionErrors[i].z / factor);
             }
 
-            for (int i = 8; i < 16 && i < res.predictionErrors.Count; i++)
+            for (int i = 8; i < 24 && i < res.predictionErrors.Count; i++)
             {
                 res.predictionErrors[i].x = (int)Math.Truncate(res.predictionErrors[i].x / factor2);
                 res.predictionErrors[i].y = (int)Math.Truncate(res.predictionErrors[i].y / factor2);
                 res.predictionErrors[i].z = (int)Math.Truncate(res.predictionErrors[i].z / factor2);
             }
 
-            for (int i = 16; i < res.predictionErrors.Count; i++)
+            for (int i = 24; i < res.predictionErrors.Count; i++)
             {
                 res.predictionErrors[i].x = (int)Math.Truncate(res.predictionErrors[i].x / factor3);
                 res.predictionErrors[i].y = (int)Math.Truncate(res.predictionErrors[i].y / factor3);
@@ -202,14 +202,14 @@ namespace CompressionTesting.PFSS
                 res.predictionErrors[i].z = res.predictionErrors[i].z * factor;
             }
 
-            for (int i = 8; i < 16 && i < res.predictionErrors.Count; i++)
+            for (int i = 8; i < 24 && i < res.predictionErrors.Count; i++)
             {
                 res.predictionErrors[i].x = res.predictionErrors[i].x * factor2;
                 res.predictionErrors[i].y = res.predictionErrors[i].y * factor2;
                 res.predictionErrors[i].z = res.predictionErrors[i].z * factor2;
             }
 
-            for (int i = 16; i < res.predictionErrors.Count; i++)
+            for (int i = 24; i < res.predictionErrors.Count; i++)
             {
                 res.predictionErrors[i].x = res.predictionErrors[i].x * factor3;
                 res.predictionErrors[i].y = res.predictionErrors[i].y * factor3;
