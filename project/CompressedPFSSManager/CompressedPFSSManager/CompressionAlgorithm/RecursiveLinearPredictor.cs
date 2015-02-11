@@ -10,7 +10,7 @@ namespace CompressedPFSSManager.CompressionAlgorithm
     class RecursiveLinearPredictor
     {
         public const int factor = 6;
-        public const int factor2 = 10;
+        public const int factor2 = 8;
         public const int factor3 = 16;
 
         public static void ForwardPrediction(PFSSData data)
@@ -71,14 +71,14 @@ namespace CompressedPFSSManager.CompressionAlgorithm
 
         private static void quantize(PFSSLine line)
         {
-            for (int i = 0; i < 8 && i < line.predictionErrors.Count; i++)
+            for (int i = 0; i < 5 && i < line.predictionErrors.Count; i++)
             {
                 line.predictionErrors[i].Radius = (int)Math.Truncate(line.predictionErrors[i].Radius / factor);
                 line.predictionErrors[i].Phi = (int)Math.Truncate(line.predictionErrors[i].Phi / factor);
                 line.predictionErrors[i].Theta = (int)Math.Truncate(line.predictionErrors[i].Theta / factor);
             }
 
-            for (int i = 8; i < 16 && i < line.predictionErrors.Count; i++)
+            for (int i = 5; i < 16 && i < line.predictionErrors.Count; i++)
             {
                 line.predictionErrors[i].Radius = (int)Math.Truncate(line.predictionErrors[i].Radius / factor2);
                 line.predictionErrors[i].Phi = (int)Math.Truncate(line.predictionErrors[i].Phi / factor2);
