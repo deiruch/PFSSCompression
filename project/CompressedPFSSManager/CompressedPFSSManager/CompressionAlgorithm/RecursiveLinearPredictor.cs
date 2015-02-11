@@ -31,7 +31,7 @@ namespace CompressedPFSSManager.CompressionAlgorithm
                         PredictLinearBF(l, bfs, i.Item1, i.Item2);
                     }
                 }
-                quantize(l);
+                Quantize(l);
             }
         }
 
@@ -69,7 +69,7 @@ namespace CompressedPFSSManager.CompressionAlgorithm
             return new PFSSPoint(prediction.Radius - actual.Radius, prediction.Phi - actual.Phi, prediction.Theta - actual.Theta);
         }
 
-        private static void quantize(PFSSLine line)
+        private static void Quantize(PFSSLine line)
         {
             for (int i = 0; i < 5 && i < line.predictionErrors.Count; i++)
             {

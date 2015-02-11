@@ -65,7 +65,7 @@ namespace CompressedPFSSManager.PFSS
                 int index = 0;
                 for (; vertexIndex < maxSize; vertexIndex++)
                 {
-                    PFSSPoint current = new PFSSPoint(ptr[vertexIndex], ptph[vertexIndex], ptth[vertexIndex], l0, b0);
+                    PFSSPoint current = new PFSSPoint(ptr[vertexIndex], ptph[vertexIndex], ptth[vertexIndex]);
                     line.Add(current);
                     index++;
                 }

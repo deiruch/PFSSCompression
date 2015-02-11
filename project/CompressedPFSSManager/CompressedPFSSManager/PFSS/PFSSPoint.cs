@@ -14,14 +14,6 @@ namespace CompressedPFSSManager.PFSS
         internal float Phi { get; set; }
         internal float Theta { get; set; }
 
-        public PFSSPoint(float rawR, float rawPhi, float rawTheta, double l0, double b0)
-        {
-            this.Radius = rawR;
-            this.Phi = rawPhi;
-            this.Theta = rawTheta;
-        }
-
-
         public PFSSPoint(float x, float y, float z)
         {
             this.Radius = x;

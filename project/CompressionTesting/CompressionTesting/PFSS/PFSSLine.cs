@@ -24,10 +24,7 @@ namespace CompressionTesting.PFSS
         internal float[] extraY;
         internal float[] extraZ;
         internal ExtraPoints[] extra;
-        internal Residuals residuals_old;
-        internal List<PFSSPoint> predictionErrors;
-        internal PFSSPoint startPoint;
-        internal PFSSPoint endPoint;
+        internal Residuals residuals;
         internal Matrix<float> pcaTransform;
         internal float[] means;
         internal int minus = 0;
