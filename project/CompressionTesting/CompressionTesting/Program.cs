@@ -83,7 +83,7 @@ namespace CompressionTesting
         
         private static void run()
         {
-            ISolution solution = new Solution1();
+            ISolution solution = new Solution2();
             bool testOneFile = true;
             //DCT.DiscreteCosineTransform(400);
 

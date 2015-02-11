@@ -171,14 +171,14 @@ namespace CompressionTesting.PFSS
 
         private static void quantize(Residuals res)
         {
-            for (int i = 0; i < 5 && i < res.predictionErrors.Count; i++)
+            for (int i = 0; i < 8 && i < res.predictionErrors.Count; i++)
             {
                 res.predictionErrors[i].x = (int)Math.Truncate(res.predictionErrors[i].x / factor);
                 res.predictionErrors[i].y = (int)Math.Truncate(res.predictionErrors[i].y / factor);
                 res.predictionErrors[i].z = (int)Math.Truncate(res.predictionErrors[i].z / factor);
             }
 
-            for (int i = 5; i < 16 && i < res.predictionErrors.Count; i++)
+            for (int i = 8; i < 16 && i < res.predictionErrors.Count; i++)
             {
                 res.predictionErrors[i].x = (int)Math.Truncate(res.predictionErrors[i].x / factor2);
                 res.predictionErrors[i].y = (int)Math.Truncate(res.predictionErrors[i].y / factor2);
@@ -193,16 +193,16 @@ namespace CompressionTesting.PFSS
             }
         }
 
-        private static void dequantize(Residuals res)
+        private static void dequantize(PFSSLine res)
         {
-            for (int i = 0; i < 5 && i < res.predictionErrors.Count; i++)
+            for (int i = 0; i < 8 && i < res.predictionErrors.Count; i++)
             {
                 res.predictionErrors[i].x = res.predictionErrors[i].x * factor;
                 res.predictionErrors[i].y = res.predictionErrors[i].y * factor;
                 res.predictionErrors[i].z = res.predictionErrors[i].z * factor;
             }
 
-            for (int i = 5; i < 16 && i < res.predictionErrors.Count; i++)
+            for (int i = 8; i < 16 && i < res.predictionErrors.Count; i++)
             {
                 res.predictionErrors[i].x = res.predictionErrors[i].x * factor2;
                 res.predictionErrors[i].y = res.predictionErrors[i].y * factor2;
@@ -235,17 +235,17 @@ namespace CompressionTesting.PFSS
         {
             foreach (PFSSLine l in data.lines)
             {
-                dequantize(l.residuals_old);
-                Queue<PFSSPoint> bfs = new Queue<PFSSPoint>(l.residuals_old.predictionErrors);
+                dequantize(l);
+                Queue<PFSSPoint> bfs = new Queue<PFSSPoint>(l.predictionErrors);
                 Queue<Tuple<int, int>> bfsIndices = new Queue<Tuple<int, int>>();
                 bfsIndices.Enqueue(new Tuple<int, int>(0, l.points.Count - 1));
 
-                l.points[0].x = l.residuals_old.startPoint.x;
-                l.points[0].y = l.residuals_old.startPoint.y;
-                l.points[0].z = l.residuals_old.startPoint.z;
-                l.points[l.points.Count - 1].x = l.residuals_old.endPoint.x;
-                l.points[l.points.Count - 1].y = l.residuals_old.endPoint.y;
-                l.points[l.points.Count - 1].z = l.residuals_old.endPoint.z;
+                l.points[0].x = l.startPoint.x;
+                l.points[0].y = l.startPoint.y;
+                l.points[0].z = l.startPoint.z;
+                l.points[l.points.Count - 1].x = l.endPoint.x;
+                l.points[l.points.Count - 1].y = l.endPoint.y;
+                l.points[l.points.Count - 1].z = l.endPoint.z;
                 if (l.points.Count > 2)
                 {
                     while (bfs.Count >= 1)

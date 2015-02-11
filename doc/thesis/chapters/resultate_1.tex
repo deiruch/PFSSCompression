@@ -47,7 +47,7 @@ Das Diagramm der Abbildung \ref{resultate:loesung1:dct_ableitung:resultate} zeig
 \end{figure} 
 
 \subsubsection{Variante: PCA+Ableitung+DCT}
-Wenn die Feldlinien  Durch eine Principal Component Analysis (PCA)\cite{abdi2010principal} können die Feldlinien in ein lokales Koordinatensystem transformiert werden, in welchem die Kanäle unterschiedlich stark quantisiert werden können. Für die Rücktransformation ins Sonnen-Koordinatensystem werden pro Feldlinie zusätzlich sechs Parameter für die neuen Koordinatenachsen und drei Parameter für die Verschiebung abgespeichert.
+Die Feldlinien dehnen sich nicht in alle Richtungen gleich stark aus: Es existieren Feldlinien, welche beinahe in einer Ebene liegen im dreidimensionalen Raum. Die Abweichung Durch eine Principal Component Analysis (PCA)\cite{abdi2010principal} können die Feldlinien in ein lokales Koordinatensystem transformiert werden, in welchem die Kanäle unterschiedlich stark quantisiert werden können. Für die Rücktransformation ins Sonnen-Koordinatensystem werden pro Feldlinie zusätzlich sechs Parameter für die neuen Koordinatenachsen und drei Parameter für die Verschiebung abgespeichert.
 
 \begin{figure}[!htbp]
 	\center
@@ -55,7 +55,7 @@ Wenn die Feldlinien  Durch eine Principal Component Analysis (PCA)\cite{abdi2010
 	\caption{Vergleich der PCA DCT Kompression der Ableitung mit der DCT Kompression der Ableitung}
 	\label{resultate:loesung1:dct:pca}
 \end{figure}
-Im Diagramm der Abbildung \ref{resultate:loesung1:dct:pca} sind die Resultate der Messung dargestellt. Die PCA konnte keine Verbesserung erbringen. Für die Übermittlung der zusätzlichen Parameter wird mehr Speicherplatz benötigt.  als dank der PCA gewonnen werden kann.
+Im Diagramm der Abbildung \ref{resultate:loesung1:dct:pca} sind die Resultate der Messung dargestellt. Die PCA konnte keine Verbesserung erbringen. Für die Übermittlung der zusätzlichen Parameter wird mehr Speicherplatz benötigt, als dank der PCA gewonnen werden kann.
 
 \subsubsection{Variante: Ableitung+DCT+Kodierung} \label{resultate:loesung1:ableitung_dct_kodierung}
 Im Diagramm der Abbildung \ref{resultate:loesung1:dct:histogramm} ist zu sehen, dass der Grossteil der quantisierten DCT-Koeffizienten mit 8 Bit Genauigkeit dargestellt werden können. Um die Kompressionsrate durch diese Eigenschaft zu verbessern, wurde die Längenkodierung und die adaptive Kodierung entwickelt, welche im Abschnitt \ref{konzept:loesung1:kodierung} beschrieben sind.
