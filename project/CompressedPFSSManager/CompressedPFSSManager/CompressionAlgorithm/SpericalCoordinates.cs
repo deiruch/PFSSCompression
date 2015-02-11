@@ -33,7 +33,6 @@ namespace CompressedPFSSManager.CompressionAlgorithm
             {
                 foreach (PFSSPoint p in l.points)
                 {
-
                     ShiftToCenter(p);
                 }
             }
