@@ -28,10 +28,10 @@ namespace CompressedPFSSManager.PFSS
 
             double b0 = ((double[])bhdu.GetColumn("B0"))[0];
             double l0 = ((double[])bhdu.GetColumn("L0"))[0];
-            float[] ptr = ((float[])((Array[])bhdu.GetColumn("PTR"))[0]);
+            short[] ptr = ((short[])((Array[])bhdu.GetColumn("PTR"))[0]);
             short[] ptr_nz_len = ((short[])((Array[])bhdu.GetColumn("PTR_NZ_LEN"))[0]);
-            float[] ptph = ((float[])((Array[])bhdu.GetColumn("PTPH"))[0]);
-            float[] ptth = ((float[])((Array[])bhdu.GetColumn("PTTH"))[0]);
+            short[] ptph = ((short[])((Array[])bhdu.GetColumn("PTPH"))[0]);
+            short[] ptth = ((short[])((Array[])bhdu.GetColumn("PTTH"))[0]);
 
             SphericalDataCreator constructor = new SphericalDataCreator(l0, b0, ptr, ptr_nz_len, ptph, ptth);
 

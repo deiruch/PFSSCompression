@@ -36,7 +36,7 @@ namespace CompressedPFSSManager
                 {
                 }
                 //---------------------------Modification by Jonas Schwammberger---------------------------------------------------
-                Process.Start(args[1], Path.Combine(Environment.CurrentDirectory, "pfss_run_batch_flt.pro") + " > idllog.txt").WaitForExit();
+                Process.Start(args[1], Path.Combine(Environment.CurrentDirectory, "pfss_run_batch.pro") + " > idllog.txt").WaitForExit();
                 
                 
                 if (tmpDir.EnumerateFiles("*.fits").Count() == 0)

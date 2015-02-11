@@ -14,12 +14,12 @@ namespace CompressedPFSSManager.PFSS
         public static readonly double ANGLE_OF_LOD = Math.Cos(5.0 / 180 * Math.PI);
         protected double l0 { get; private set; }
         protected double b0 { get; private set; }
-        protected float[] ptr { get; private set; }
+        protected short[] ptr { get; private set; }
         protected short[] ptr_nz_len { get; private set; }
-        protected float[] ptph { get; private set; }
-        protected float[] ptth { get; private set; }
+        protected short[] ptph { get; private set; }
+        protected short[] ptth { get; private set; }
 
-        public SphericalDataCreator(double l0, double b0, float[] ptr, short[] ptr_nz_len, float[] ptph, float[] ptth)
+        public SphericalDataCreator(double l0, double b0, short[] ptr, short[] ptr_nz_len, short[] ptph, short[] ptth)
         {
             this.l0 = l0;
             this.b0 = b0;

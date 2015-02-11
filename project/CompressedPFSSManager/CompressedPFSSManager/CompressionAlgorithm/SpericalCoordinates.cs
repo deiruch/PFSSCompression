@@ -24,22 +24,15 @@ namespace CompressedPFSSManager.CompressionAlgorithm
 
 
         /// <summary>
-        /// Convert 32Bit floating point data to 16 Bit.
+        /// Shifts discretized data to center
         /// </summary>
         /// <param name="data"></param>
-        public static void To16BitSpherical(PFSSData data)
+        public static void ShiftToCenter(PFSSData data)
         {
             foreach (PFSSLine l in data.lines)
             {
                 foreach (PFSSPoint p in l.points)
                 {
-                    double r = p.Radius;
-                    double phi = p.Phi ;
-                    double theta = p.Theta;
-
-                    p.Radius = (short)Math.Round(r * 8192);
-                    p.Phi = (short)Math.Round(phi * 32768.0);
-                    p.Theta = (short)Math.Round(theta * 32768.0);
 
                     ShiftToCenter(p);
                 }

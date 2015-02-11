@@ -22,7 +22,7 @@ namespace CompressedPFSSManager
             FileInfo rarFits = new FileInfo(fits.FullName + ".rar");
             Subsampling.AdaptiveSubsampling(data, 3);
 
-            SphericalCoordinates.To16BitSpherical(data);
+            SphericalCoordinates.ShiftToCenter(data);
             RecursiveLinearPredictor.ForwardPrediction(data);
 
             OutputWriter.WriteFits(data, fits);
