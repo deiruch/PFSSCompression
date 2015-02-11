@@ -11,17 +11,22 @@ namespace CompressedPFSSManager
 {
     class Compression
     {
-        public static FileInfo Compress(FileInfo fits)
+        /// <summary>
+        /// Compresses a FITS file
+        /// </summary>
+        /// <param name="fits"></param>
+        /// <returns>FileInfo of compressed RAR file</returns>
+        public static FileInfo CompressLossy(FileInfo fits)
         {
             PFSSData data = FitsReader.ReadFloatFits(fits);
             FileInfo rarFits = new FileInfo(fits.FullName + ".rar");
-            Subsampling.AngleSubsample(data, 3);
+            Subsampling.AdaptiveSubsampling(data, 3);
 
-            Spherical.ForwardMoveSpherical(data);
+            SphericalCoordinates.To16BitSpherical(data);
             RecursiveLinearPredictor.ForwardPrediction(data);
 
-            PredictionFitsWriter.WriteFits(data, fits);
-            RarCompression.DoRar(rarFits, fits);
+            OutputWriter.WriteFits(data, fits);
+            OutputWriter.EncodeRAR(rarFits, fits);
             fits.Delete();
 
             return rarFits;

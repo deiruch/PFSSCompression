@@ -17,8 +17,6 @@ Wie im Diagramm der Abbildung \ref{resultate:loesung0:loesung0_0} erkennbar ist,
 \end{figure}
 Das Diagramm Abbildung \ref{resultate:loesung0:artefakte} zeigt die Artefakte der Kompression. Sie sind identisch mit den Artefakten der Visualisierung im Ist-Zustand. Die Artefakte sind in der JHelioviewer Visualisierung erst bei höheren Zoom-Stufen erkennbar.
 
-Der JHelioviewer muss in der Lage sein $1000$ komprimierte Simulationen im Arbeitsspeicher abzulegen. Mit dieser Kompression werden durchschnittlich $85$ Megabyte an Arbeitsspeicher benötigt. Wenn von einer $10$ Megabit Internetverbindung ausgegangen wird, werden für das Herunterladen von $1000$ Simulationen $70$ Sekunden benötigt. Der Ist Zustand benötigt bei denselben Bedingungen $790$ Sekunden ($13$ Minuten) für die Übertragung. Mit dieser Kompression können etwa $14$ komprimierte Simulationen pro Sekunde übertragen werden. 
+Der JHelioviewer muss in der Lage sein $1000$ komprimierte Simulationen im Arbeitsspeicher abzulegen. Mit dieser Kompression werden durchschnittlich $85$ Megabyte an Arbeitsspeicher benötigt. Wenn von einer $5$ Megabit Internetverbindung ausgegangen wird, werden für das Herunterladen von $1000$ Simulationen $140$ Sekunden benötigt. Der Ist Zustand benötigt bei denselben Bedingungen $1580$ Sekunden ($26$ Minuten) für die Übertragung. Mit dieser Kompression können etwa $7$ komprimierte Simulationen pro Sekunde übertragen werden. 
 
 Ein Vorteil dieses Verfahrens ist die Laufzeit Dekompression: Da keine rechenaufwändige Transformationen verwendet werden $19$ Millisekunden für eine Dekompression (Siehe Abschnitt \ref{anhang:performance}) benötigt. Mit einem Thread ist die Testmaschine in der Lage $50$ Simulationen pro Sekunde zu dekomprimieren.
-
-In Zukunft ist es möglich, dass im JHelioviewer deutlich mehr Punkte dargestellt werden sollen. In diesem Fall müssen entweder mehr Daten übertragen werden oder der JHelioviewer mit einer Interpolation erweitert werden.

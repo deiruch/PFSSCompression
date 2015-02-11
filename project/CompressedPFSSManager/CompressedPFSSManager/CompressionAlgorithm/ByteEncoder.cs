@@ -98,20 +98,6 @@ namespace CompressedPFSSManager
             return output;
         }
 
-        /// <summary>
-        /// Encode Start Points
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public static byte[] EncodeStartPointChannel(int[] data)
-        {
-            int[] copy = EcodeLength(data);
-            //remove size, not needed in this situation
-            int[] copy2 = new int[copy.Length - 1];
-            Array.Copy(copy, 1, copy2, 0, copy2.Length);
-
-            return EncodeAdaptive(copy2);
-        }
 
         #region helper methods
         private static int FindLastValue(int[] data)
@@ -134,8 +120,6 @@ namespace CompressedPFSSManager
         private static int CountExtraBytes(int value)
         {
             int counter = 0;
-            int maxV = maxValue;
-            int minV = minValue;
             while (value > maxValue || value < minValue)
             {
                 value = value >> dataBitCount;

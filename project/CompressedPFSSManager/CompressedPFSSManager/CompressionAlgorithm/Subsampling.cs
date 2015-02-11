@@ -9,7 +9,12 @@ namespace CompressedPFSSManager
 {
     internal class Subsampling
     {
-        public static void AngleSubsample(PFSSData data, double angle)
+        /// <summary>
+        /// Use the adaptive subsampling algorithm.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="angle"> </param>
+        public static void AdaptiveSubsampling(PFSSData data, double angle)
         {
             double ANGLE_OF_LOD = Math.Cos(angle / 180d * Math.PI);
 
@@ -20,10 +25,10 @@ namespace CompressedPFSSManager
                 List<PFSSPoint> newPoints = new List<PFSSPoint>();
                 bool lineStarted = false;
                 PFSSPoint lastPoint = new PFSSPoint(0, 0, 0);
-                for(int j = 0; j < line.points.Count;j++)
+                for (int j = 0; j < line.points.Count; j++)
                 {
                     bool colinear = false;
-                    //last point is always colinear == false
+                    //last point is always never colinear
                     if (lineStarted && (j + 1) < line.points.Count)
                     {
                         colinear = line.points[j].AngleTo(line.points[j + 1], lastPoint) > ANGLE_OF_LOD;

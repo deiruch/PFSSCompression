@@ -46,15 +46,14 @@
   <ItemGroup>
     <Compile Include="Compression.cs" />
     <Compile Include="CompressionAlgorithm\ByteEncoder.cs" />
-    <Compile Include="CompressionAlgorithm\PredictiveResidualWriter.cs" />
-    <Compile Include="CompressionAlgorithm\RarCompression.cs" />
+    <Compile Include="CompressionAlgorithm\OutputWriter.cs" />
     <Compile Include="CompressionAlgorithm\RecursiveLinearPredictor.cs" />
-    <Compile Include="CompressionAlgorithm\Spherical.cs" />
+    <Compile Include="CompressionAlgorithm\SpericalCoordinates.cs" />
     <Compile Include="PFSS\FitsReader.cs" />
     <Compile Include="PFSS\PFSSData.cs" />
     <Compile Include="PFSS\PFSSLine.cs" />
     <Compile Include="PFSS\PFSSPoint.cs" />
-    <Compile Include="PFSS\PFSSDataCreator.cs" />
+    <Compile Include="PFSS\SphericalDataCreator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CompressionAlgorithm\Subsampling.cs" />

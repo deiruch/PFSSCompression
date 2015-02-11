@@ -10,7 +10,11 @@ namespace CompressedPFSSManager.PFSS
 {
     class FitsReader
     {
-
+        /// <summary>
+        /// Reads a fits file and puts them in the PFSSData structure for compression
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static PFSSData ReadFloatFits(FileInfo input)
         {
             bool compressed = input.Extension == ".gz";
@@ -29,7 +33,7 @@ namespace CompressedPFSSManager.PFSS
             float[] ptph = ((float[])((Array[])bhdu.GetColumn("PTPH"))[0]);
             float[] ptth = ((float[])((Array[])bhdu.GetColumn("PTTH"))[0]);
 
-            PFSSDataCreator constructor = new PFSSDataCreator(l0, b0, ptr, ptr_nz_len, ptph, ptth);
+            SphericalDataCreator constructor = new SphericalDataCreator(l0, b0, ptr, ptr_nz_len, ptph, ptth);
 
             PFSSData data = constructor.Create();
             return data;

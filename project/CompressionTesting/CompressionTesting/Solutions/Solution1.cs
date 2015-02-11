@@ -23,13 +23,13 @@ namespace CompressionTesting.Solutions
 
         public string GetName()
         {
-            return "Solution1_Twelve";
+            return "Solution1_One";
         }
 
         public TestResult DoTestRun(PFSS.PFSSData data, int qualityLevel, string folder)
         {
             
-            return Twelve(data, qualityLevel, folder);
+            return One(data, qualityLevel, folder);
         }
 
         private int GetZeroCount(PFSS.PFSSData data, int qualityLevel)
@@ -89,10 +89,9 @@ namespace CompressionTesting.Solutions
 
             Subsampling.Subsample(data, 4);
             //Residualizer.DoResiduals(data, 1);
-            DCTransformer.Forward(data, 0);
+            /*DCTransformer.Forward(data, 0);
 
-            //int zeroCount = GetZeroCount(data, qualityLevel + 16);
-            //DCTQuantization.SetToZero(data, zeroCount);
+
             Discretizer.Divide(data, 1000, 0);
             Discretizer.DivideLinear(data, 2 * (qualityLevel*10 +40), 0);
             Discretizer.ToInt(data, 0);
@@ -104,7 +103,7 @@ namespace CompressionTesting.Solutions
 
             Discretizer.MultiplyLinear(data, 2 * (qualityLevel * 10 + 40), 0);
             Discretizer.Multiply(data, 1000, 0);
-            DCTransformer.Backward(data, 0);
+            DCTransformer.Backward(data, 0);*/
             //Residualizer.UndoResiduals(data, 1);
 
             return result;
@@ -127,9 +126,28 @@ namespace CompressionTesting.Solutions
             Discretizer.Divide(data, 1000, 1);
             Discretizer.DivideLinear(data, 2*(qualityLevel+5), 1);
             Discretizer.ToShorts(data, 1);
+            int[] histo = new int[65536];
+            foreach (PFSSLine l in data.lines)
+            {
+                foreach(PFSSPoint p in l.points)
+                {
+                    int bla = (int)Math.Abs(p.x);
+                    histo[bla]++;
+                    bla = (int)Math.Abs(p.y);
+                    histo[bla]++;
+                    bla = (int)Math.Abs(p.z);
+                    histo[bla]++;
+                }
 
+            }
+            StreamWriter w = new StreamWriter(new FileStream(rarFits.FullName + "_histo.csv", FileMode.Create));
 
-            InterleavedWriter.WriteShortFits(data, fits);
+            for (int i = 0; i < histo.Length; i++)
+            {
+                w.WriteLine(histo[i]);
+            }
+            w.Close();
+             InterleavedWriter.WriteShortFits(data, fits);
             long size = RarCompression.DoRar(rarFits, fits);
             result.fileSize = size;
             result.lineCount = data.lines.Count;
@@ -190,6 +208,7 @@ namespace CompressionTesting.Solutions
 
             //int zeroCount = GetZeroCount(data, qualityLevel + 16);
             //DCTQuantization.SetToZero(data, zeroCount);
+
             Discretizer.Divide(data, 1000, 0);
             Discretizer.DivideLinear(data, 2 * (qualityLevel + 10), 0);
             Discretizer.ToInt(data, 0);

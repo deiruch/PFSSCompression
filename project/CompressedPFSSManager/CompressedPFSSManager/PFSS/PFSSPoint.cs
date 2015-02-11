@@ -10,41 +10,31 @@ namespace CompressedPFSSManager.PFSS
     {
         public const double SunRadius = 6.957e8;
 
-        internal float x { get; set; }
-        internal float y { get; set; }
-        internal float z { get; set; }
-
+        internal float Radius { get; set; }
+        internal float Phi { get; set; }
+        internal float Theta { get; set; }
 
         public PFSSPoint(float rawR, float rawPhi, float rawTheta, double l0, double b0)
         {
-            double r = rawR * SunRadius;
-            double phi = rawPhi * 2 * Math.PI;
-            double theta = rawTheta * 2 * Math.PI;
-
-            short discR = (short)Math.Round(rawR * 8192);
-            short discP = (short)Math.Round(rawPhi * 32768.0);
-            short discT = (short)Math.Round(rawTheta * 32768.0);
-
-
-            this.x = discR;
-            this.y = discP;
-            this.z = discT;
+            this.Radius = rawR;
+            this.Phi = rawPhi;
+            this.Theta = rawTheta;
         }
 
 
         public PFSSPoint(float x, float y, float z)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            this.Radius = x;
+            this.Phi = y;
+            this.Theta = z;
         }
 
 
         public double AngleTo(PFSSPoint next,PFSSPoint before)
         {
-            return calculateAngleBetween2Vecotrs(next.x - x,
-                                                    next.y - y, next.z - z, x - before.x, y - before.y, z
-                                                                                 - before.z);
+            return calculateAngleBetween2Vecotrs(next.Radius - Radius,
+                                                    next.Phi - Phi, next.Theta - Theta, Radius - before.Radius, Phi - before.Phi, Theta
+                                                                                 - before.Theta);
         }
 
 

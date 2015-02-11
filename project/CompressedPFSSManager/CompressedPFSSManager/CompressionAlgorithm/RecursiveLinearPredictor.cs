@@ -64,32 +64,32 @@ namespace CompressedPFSSManager.CompressionAlgorithm
             int len = endIndex - startIndex;
             float fac0 = (actualIndex-startIndex) / ((float)len);
             float fac1 = (endIndex-actualIndex) / ((float)len);
-            PFSSPoint prediction = new PFSSPoint((int)(fac0 * start.x + fac1 * end.x), (int)(fac0 * start.y + fac1 * end.y), (int)(fac0*start.z + fac1 * end.z) );
+            PFSSPoint prediction = new PFSSPoint((int)(fac0 * start.Radius + fac1 * end.Radius), (int)(fac0 * start.Phi + fac1 * end.Phi), (int)(fac0*start.Theta + fac1 * end.Theta) );
 
-            return new PFSSPoint(prediction.x - actual.x, prediction.y - actual.y, prediction.z - actual.z);
+            return new PFSSPoint(prediction.Radius - actual.Radius, prediction.Phi - actual.Phi, prediction.Theta - actual.Theta);
         }
 
         private static void quantize(PFSSLine line)
         {
-            for (int i = 0; i < 5 && i < line.predictionErrors.Count; i++)
+            for (int i = 0; i < 8 && i < line.predictionErrors.Count; i++)
             {
-                line.predictionErrors[i].x = (int)Math.Truncate(line.predictionErrors[i].x / factor);
-                line.predictionErrors[i].y = (int)Math.Truncate(line.predictionErrors[i].y / factor);
-                line.predictionErrors[i].z = (int)Math.Truncate(line.predictionErrors[i].z / factor);
+                line.predictionErrors[i].Radius = (int)Math.Truncate(line.predictionErrors[i].Radius / factor);
+                line.predictionErrors[i].Phi = (int)Math.Truncate(line.predictionErrors[i].Phi / factor);
+                line.predictionErrors[i].Theta = (int)Math.Truncate(line.predictionErrors[i].Theta / factor);
             }
 
-            for (int i = 5; i < 16 && i < line.predictionErrors.Count; i++)
+            for (int i = 8; i < 16 && i < line.predictionErrors.Count; i++)
             {
-                line.predictionErrors[i].x = (int)Math.Truncate(line.predictionErrors[i].x / factor2);
-                line.predictionErrors[i].y = (int)Math.Truncate(line.predictionErrors[i].y / factor2);
-                line.predictionErrors[i].z = (int)Math.Truncate(line.predictionErrors[i].z / factor2);
+                line.predictionErrors[i].Radius = (int)Math.Truncate(line.predictionErrors[i].Radius / factor2);
+                line.predictionErrors[i].Phi = (int)Math.Truncate(line.predictionErrors[i].Phi / factor2);
+                line.predictionErrors[i].Theta = (int)Math.Truncate(line.predictionErrors[i].Theta / factor2);
             }
 
             for (int i = 16; i < line.predictionErrors.Count; i++)
             {
-                line.predictionErrors[i].x = (int)Math.Truncate(line.predictionErrors[i].x / factor3);
-                line.predictionErrors[i].y = (int)Math.Truncate(line.predictionErrors[i].y / factor3);
-                line.predictionErrors[i].z = (int)Math.Truncate(line.predictionErrors[i].z / factor3);
+                line.predictionErrors[i].Radius = (int)Math.Truncate(line.predictionErrors[i].Radius / factor3);
+                line.predictionErrors[i].Phi = (int)Math.Truncate(line.predictionErrors[i].Phi / factor3);
+                line.predictionErrors[i].Theta = (int)Math.Truncate(line.predictionErrors[i].Theta / factor3);
             }
         }
     }
