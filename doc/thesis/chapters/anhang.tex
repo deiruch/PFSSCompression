@@ -84,14 +84,14 @@ Step 3: Rotate the coordinates so they are centered around the viewpoint of Eart
 \begin{equation}
 \begin{split}
 	Phi &= Phi - l0 /180 * \pi\\
-	Theta &= Theta + b0 /180 * \pi
+	Theta &= -Theta + b0 /180 * \pi
 	\end{split}
 \end{equation}
 Step 4: Transform from spherical to cartesian.
 \begin{equation}
 \begin{split}
-	X &= R * sinus(Theta) * sinus(Phi)\\
-	Y &= R * cosinus(Theta)\\
+	X &= -(R * sinus(Theta) * sinus(Phi))\\
+	Y &= -(R * cosinus(Theta))\\
 	Z &= R * sinus(Theta) * cosinus(Phi)
 	\end{split}
 \end{equation}
@@ -159,5 +159,5 @@ Here is an example implementation in Java:
 \end{tabular}
 \end{table}
 
-\textbf{Messverfahren}
+\textbf{Messverfahren}\\
 Die Messung der Dekompression wird mit der Java-Implementation der jeweiligen Verfahren gemessen. Für die Messung wurden die selben Simulationen verwendet wie die der Qualitätsmessung von Abschnitt \ref{testsetup}. Vor der Messung sind die komprimierten Daten bereits im Arbeitsspeicher abgelegt. Vor der Messung wird ein ''Warm-up'' des Hotspot Compilers von Java durchgeführt. Es werden die hälfte der Simulationen dekomprimiert und die Resultate wieder verworfen.
