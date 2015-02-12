@@ -13,7 +13,7 @@ In dieser Variante wird der Einfluss von vier Prädiktoren getestet ($x$ sind di
 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante0/resultate.png}
+	\includegraphics[trim = 1.8cm 11cm 1.8cm 12.5cm, clip=true,width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante0/resultate.pdf}
 	\caption{Kompressionsraten der vier Prediktoren im Vergleich zum Ist-Zustand.}
 	\label{resultate:loesung2:simple:resultate}
 \end{figure}
@@ -24,7 +24,7 @@ Eine mögliche Optimierung ist die adaptive Genauigkeits-Kodierung des DCT Kompr
 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante0/resultate_byte.png}
+	\includegraphics[trim = 1.8cm 11cm 1.8cm 12.5cm, clip=true,width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante0/resultate_byte.pdf}
 	\caption{Kompressionsraten der Prediktoren mit adaptiver Genauigkeits-Kodierung.}
 	\label{resultate:loesung2:simple:resultate_byte}
 \end{figure}
@@ -34,7 +34,8 @@ Um die Kompressionsrate der Prädiktiven Kodierung in dieselbe Grössenordnung z
 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante1/resultate_euler.png}
+	\includegraphics[trim = 1.8cm 11cm 1.8cm 12.5cm, clip=true,
+width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante1/resultate_euler.pdf}
 	\caption{Kompressionsraten der Prediktiven Kodierungen mit dem Adaptiven Subsampling.}
 	\label{resultate:loesung2:adaptive:euler}
 \end{figure}
@@ -42,8 +43,10 @@ Das Diagramm der Abbildung \ref{resultate:loesung2:adaptive:euler} zeigt die Kom
 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=0.49\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante1/channel_sub.png}
-	\includegraphics[width=0.49\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante1/channel_angle.png}
+	\includegraphics[trim = 1.8cm 9.5cm 1.8cm 11cm, clip=true,
+width=0.49\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante1/channel_euler.pdf}
+	\includegraphics[trim = 1.8cm 9.5cm 1.8cm 11cm, clip=true,
+width=0.49\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/variante1/channel_angle.pdf}
 	\caption{Änderung der Eigenschaften der Daten durch das Angle Subsampling. Links der Kanal einer Feldlinie vor, rechts der Kanal nach dem Angle Subsampling.}
 	\label{resultate:loesung2:adaptive:channel}
 \end{figure}
@@ -53,13 +56,13 @@ Die Rekursive Lineare Kodierung ist in der Lage nicht-stetigen Kanälen eine sin
 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante2/resultate.png}
+	\includegraphics[trim = 1.8cm 11cm 1.8cm 12.6cm, clip=true,width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante2/resultate_median.pdf}
 	
 	\caption{Kompressionsraten der Rekursiven Linearen Kodierung mit dem Adaptiven Subsampling.}
 	\label{resultate:loesung2:adaptive:median}
 \end{figure}
 \begin{figure}[!htbp]
-	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante2/resultate_psnr.png}
+	\includegraphics[trim = 1.8cm 11cm 1.8cm 12.6cm, clip=true,width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante2/resultate_psnr.pdf}
 	
 	\caption{Kompressionsraten der Rekursiven Linearen Kodierung mit dem Adaptiven Subsampling.}
 	\label{resultate:loesung2:adaptive:median_psnr}
@@ -81,15 +84,13 @@ Um die Artefakte der Dekompression zu dämpfen, werden die Vorhersagefehler der 
 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante3/resultate.png}
-		
+	\includegraphics[trim = 1.8cm 11cm 1.8cm 12.5cm, clip=true,width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante3/resultate.pdf}
 		\caption{Standardabweichung der Rekursiven Linearen Kodierung mit angepasster Quantisierung.}
 		\label{resultate:loesung2:adaptive:median:quant}
 \end{figure}
 \begin{figure}[!htbp]
 \center
-	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante3/resultate_psnr.png}
-	
+	\includegraphics[trim = 1.8cm 11cm 1.8cm 12.5cm, clip=true,width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante3/resultate_psnr.pdf}
 	\caption{PSNR-HVS-M der Rekursiven Linearen Kodierung mit angepasster Quantisierung.}
 	\label{resultate:loesung2:adaptive:median:quant_psnr}
 \end{figure}

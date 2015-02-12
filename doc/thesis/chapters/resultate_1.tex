@@ -124,12 +124,12 @@ Um eine optimale Kompression der Feldlinien zu erreichen, müssen die Ringing-Ar
 Für den Test werden insgesamt vier Varianten verglichen. Die Variante der abgeleiteten Feldlinien aus Abschnitt \ref{resultate:loesung1:ableitung_dct_kodierung} und die Variante der Randbehandlung aus Abschnitt \ref{resultate:loesung1:dct:randbeh+byte}. Die Varianten werden jeweils mit und ohne PCA gemessen. Die PCA wird hier nochmals überprüft, da sie die Ringing-Artefakte auf einen Kanal beschränken kann.
 
 \begin{figure}[!htbp]
-	\center	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/ringing/sts.png}
+	\center	\includegraphics[trim = 1.8cm 11cm 1.8cm 12.5cm, clip=true,width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/ringing/sts.pdf}
 	\caption{Approximation der Feldlinien ''Sonnenoberfläche zu Sonnenoberfläche''. Je höher die PSNR-HVS-M, desto besser ist die Approximation. }	\label{resultate:loesung1:dct:behandlung_ringing:sts}
 \end{figure} 
 \begin{figure}[!htbp]
 	\center
-\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/ringing/nosts.png}
+\includegraphics[trim = 1.8cm 11cm 1.8cm 12.4cm, clip=true,width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/ringing/nosts.pdf}
 	\caption{Approximation der der Feldlinien ''Sonnenoberfläche ins Weltall'' oder ''Weltall zur Sonnenoberfläche''. Je höher die PSNR-HVS-M, desto besser ist die Approximation.}	\label{resultate:loesung1:dct:behandlung_ringing:nosts}
 \end{figure}
 Das Diagramm der Abbildung \ref{resultate:loesung1:dct:behandlung_ringing:sts} zeigt die Resultate der unterschiedlichen Varianten bei den Feldlinien ''Sonnenoberfläche zur Sonnenoberfläche''. Bei einer PSNR-HVS-M von über 95 dB sind die Artefakte genügend schwach ausgeprägt, sodass das menschliche Auge sie nicht mehr erkennen kann. Interessant ist, dass drei Varianten ähnlich viel Speicherplatz benötigen, für eine artefaktfreie Approximation. Bei stärkerer Quantisierung treten bei den abgeleiteten Feldlinien deutlich weniger Artefakte auf. Dies deckt sich mit der Beobachtung aus dem Abschnitt \ref{resultate:loesung1:ringing}.\\
@@ -142,7 +142,7 @@ Die DCT Variante aus Abschnitt \ref{resultate:loesung1:dct:randbeh+byte} fällt 
 Für den abschliessenden Test wurde die Variante der abgeleiteten Feldlinien aus Abschnitt \ref{resultate:loesung1:ableitung_dct_kodierung} ausgewählt. Durch die Ableitung können die Ringing-Artefakte gedämpft werden. Die Quantisierung wurde angepasst, sodass die Feldlinien vom Typ ''Sonne zu Sonne'' stärker quantisiert werden, als die anderen Feldlinien. Durch diese Massnahme wird eine hohe Kompressionsrate erreicht ohne starke Ringing-Artefakte mit sich zu ziehen.
 
 \begin{figure}[!htbp]
-	\center	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/loesung1-12/resultate.png}
+	\center	\includegraphics[trim = 1.8cm 11cm 1.8cm 12.5cm, clip=true,width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung1/loesung1-12/resultate.pdf}
 	\caption{Standardabweichung der abschliessenden DCT Variante.}	\label{resultate:loesung1:dct:abschliessend:standardabweichung}
 \end{figure} 
 Das Diagramm der Abbildung \ref{resultate:loesung1:dct:abschliessend:standardabweichung} zeigt die Standardabweichung der abschliessenden DCT Variante. Sie erreicht eine höhere Kompression als das Verfahren des Adaptiven Subsamplings und kann die Feldlinie zu einer tieferen Standardabweichung approximieren. Es wurde eine durchschnittliche Kompressionsrate von 14.1 erreicht, obwohl eine höhere Anzahl an Werte übertragen wird. Die Problematik dieses Verfahrens liegt darin, dass die DCT Kompression Ringing-Artefakte hinzufügt.\\
