@@ -1,0 +1,1 @@
+WARNING: This project is a sandbox for the research and development of compression algorithms. It is not well-structured, may contain unused, hard to read or inefficient code. Use with caution.

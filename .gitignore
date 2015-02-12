@@ -1,5 +1,9 @@
 #ignore testdata folder
-test/testdata
+test/testdata/performancedata
+test/testdata/performancedata_sol0
+test/testdata/performancedata_sol2
+test/testdata/subsampled
+test/testdata/compressed
 test/temp
 
 bin/
