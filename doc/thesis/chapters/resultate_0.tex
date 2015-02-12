@@ -1,22 +1,23 @@
 \subsection{Kompressionsverfahren: Adaptives Subsampling} \label{resultate:loesung0}
-Im Ist-Zustand führt der JHelioviewer nach der Dekompression ein Adaptives Subsampling durch. Dieses Verfahren führt das Adaptive Subsampling vor der Datenübertragung durch und Kodiert die Daten mit Rar anstatt mit GZIP. Eine genauere Beschreibung der Kompression ist im Abschnitt \ref{konzept:loesung0} zu finden.
+Im Ist-Zustand führt der JHelioviewer nach der Dekompression ein Adaptives Subsampling durch. Dieses Verfahren führt das Adaptive Subsampling vor der Datenübertragung durch und kodiert die Daten mit RAR anstatt mit GZIP. Eine genauere Beschreibung der Kompression ist im Abschnitt \ref{konzept:loesung0} zu finden.
 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung0/loesung0_0.png}
+	\includegraphics[trim = 1.8cm 10.8cm 1.8cm 12.2cm, clip=true, width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung0/loesung0_0.pdf}
 	\caption{Vergleich des Lösungsansatzes: Adaptives Subsampling zur Ist-Kompression.}
 	\label{resultate:loesung0:loesung0_0}
 \end{figure}
-Wie im Diagramm der Abbildung \ref{resultate:loesung0:loesung0_0} erkennbar ist, braucht dieser Lösungsansatz deutlich weniger Speicher als die Ist-Kompression zur selben Genauigkeit. Der Lösungsansatz des Adaptiven Subsamplings erreicht eine Kompressionsrate von $11.6$ gegenüber dem Ist-Zustand, indem nur Daten übertragen werden, welche in der Visualisierung darstellt werden.
+Wie im Diagramm der Abbildung \ref{resultate:loesung0:loesung0_0} erkennbar ist, braucht dieser Lösungsansatz deutlich weniger Speicher als die Ist-Kompression zur selben Genauigkeit. Der Lösungsansatz des Adaptiven Subsamplings erreicht eine Kompressionsrate von 11.6 gegenüber dem Ist-Zustand, indem nur Daten übertragen werden, welche in der Visualisierung darstellt werden.
+
+Das Diagramm Abbildung \ref{resultate:loesung0:artefakte} zeigt die Artefakte der Kompression. Sie sind identisch mit den Artefakten der Visualisierung im Ist-Zustand. Die Artefakte sind in der JHelioviewer Visualisierung erst bei höheren Zoom-Stufen erkennbar.
+
+Der JHelioviewer muss in der Lage sein 1000 komprimierte Simulationen im Arbeitsspeicher abzulegen. Mit dieser Kompression werden durchschnittlich 85 Megabyte an Arbeitsspeicher benötigt. Wenn von einer 5 Megabit Internetverbindung ausgegangen wird, werden für das Herunterladen von 1000 Simulationen 140 Sekunden benötigt. Der Ist-Zustand benötigt bei denselben Bedingungen 1580 Sekunden (26 Minuten) für die Übertragung. Mit dieser Kompression können etwa 7 komprimierte Simulationen pro Sekunde übertragen werden. 
+
+Ein Vorteil dieses Verfahrens ist die Laufzeit Dekompression: Da keine rechenaufwändige Transformationen verwendet werden, sind 19 Millisekunden für eine Dekompression (Siehe Abschnitt \ref{anhang:performance}) nötig. Mit einem Thread ist die Testmaschine in der Lage 50 Simulationen pro Sekunde zu dekomprimieren.
 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=1\textwidth,height=8cm,keepaspectratio]{./pictures/resultate/loesung0/loesung0_artefakte.png}
+	\includegraphics[trim = 1.8cm 9.8cm 1.8cm 11.2cm, clip=true, width=1\textwidth,height=8cm,keepaspectratio]{./pictures/resultate/loesung0/loesung0_artefakte.pdf}
 	\caption{Artefakte des Verfahrens Adaptives Subsampling.}
 	\label{resultate:loesung0:artefakte}
 \end{figure}
-Das Diagramm Abbildung \ref{resultate:loesung0:artefakte} zeigt die Artefakte der Kompression. Sie sind identisch mit den Artefakten der Visualisierung im Ist-Zustand. Die Artefakte sind in der JHelioviewer Visualisierung erst bei höheren Zoom-Stufen erkennbar.
-
-Der JHelioviewer muss in der Lage sein $1000$ komprimierte Simulationen im Arbeitsspeicher abzulegen. Mit dieser Kompression werden durchschnittlich $85$ Megabyte an Arbeitsspeicher benötigt. Wenn von einer $5$ Megabit Internetverbindung ausgegangen wird, werden für das Herunterladen von $1000$ Simulationen $140$ Sekunden benötigt. Der Ist Zustand benötigt bei denselben Bedingungen $1580$ Sekunden ($26$ Minuten) für die Übertragung. Mit dieser Kompression können etwa $7$ komprimierte Simulationen pro Sekunde übertragen werden. 
-
-Ein Vorteil dieses Verfahrens ist die Laufzeit Dekompression: Da keine rechenaufwändige Transformationen verwendet werden $19$ Millisekunden für eine Dekompression (Siehe Abschnitt \ref{anhang:performance}) benötigt. Mit einem Thread ist die Testmaschine in der Lage $50$ Simulationen pro Sekunde zu dekomprimieren.
