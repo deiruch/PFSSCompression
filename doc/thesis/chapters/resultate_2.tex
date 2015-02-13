@@ -29,7 +29,7 @@ Eine mögliche Optimierung ist die adaptive Genauigkeits-Kodierung des DCT Kompr
 \end{figure}
 
 \subsubsection{Variante: Adaptives Subsampling} \label{resultate:loesung2:adaptive}
-Um die Kompressionsrate der Prädiktiven Kodierung in dieselbe Grössenordnung zu gelangen wie die Kompressionen des Adaptives Subsampling oder der DCT müssen mehr Informationen gelöscht werden. Deshalb wird das Adaptive Subsampling eingesetzt, es werden andere Parameter verwendet und im Schnitt 50\% mehr Daten übertragen als in der Kompression mittels Adaptivem Subsampling.
+Um mit der Kompressionsrate der Prädiktiven Kodierung in dieselbe Grössenordnung zu gelangen wie die Kompressionen des Adaptives Subsampling oder der DCT müssen mehr Informationen gelöscht werden. Deshalb wird das Adaptive Subsampling eingesetzt, es werden andere Parameter verwendet und im Schnitt 50\% mehr Daten übertragen als in der Kompression mittels Adaptivem Subsampling.
 
 \begin{figure}[!htbp]
 	\center
@@ -38,7 +38,7 @@ width=1\textwidth,keepaspectratio]{./pictures/resultate/loesung2/variante1/resul
 	\caption{Kompressionsraten der Prediktiven Kodierungen mit dem Adaptiven Subsampling.}
 	\label{resultate:loesung2:adaptive:euler}
 \end{figure}
-Das Diagramm der Abbildung \ref{resultate:loesung2:adaptive:euler} zeigt die Kompressionsraten. Die Resultate liegen dicht beieinander und der Abstand zwischen Kodierung und der Kompression, welche ohne Kodierung erreicht wird wurde drastisch vermindert. Die Kodierungen erreichen eine PSNR-HVS-M von 139,2. Das Angle Subsampling verändert die Eigenschaften der Daten. Die Diagramme der Abbildung \ref{resultate:loesung2:adaptive:channel} zeigen die Veränderung: Monotone Steigungen sind nach dem Subsampling nicht mehr vorhanden. Die einfachen Prädiktoren können die Daten nicht zuverlässig vorhersagen.
+Das Diagramm der Abbildung \ref{resultate:loesung2:adaptive:euler} zeigt die Kompressionsraten. Die Resultate liegen dicht beieinander und der Abstand zwischen Kodierung und der Kompression, welche ohne Kodierung erreicht wird, wurde drastisch vermindert. Die Kodierungen erreichen eine PSNR-HVS-M von 139,2. Das Angle Subsampling verändert die Eigenschaften der Daten. Die Diagramme der Abbildung \ref{resultate:loesung2:adaptive:channel} zeigen die Veränderung: Monotone Steigungen sind nach dem Subsampling nicht mehr vorhanden. Die einfachen Prädiktoren können die Daten nicht zuverlässig vorhersagen.
 
 \begin{figure}[!htbp]
 	\center
@@ -51,7 +51,7 @@ width=0.49\textwidth,height=5cm,keepaspectratio]{./pictures/resultate/loesung2/v
 \end{figure}
 
 \subsubsection{Rekursive Lineare Kodierung} \label{resultate:loesung2:wavelet}
-Die Rekursive Lineare Kodierung ist in der Lage nicht-stetigen Kanälen eine sinnvolle Vorhersage zu berechnen. Das Verfahren ist im Abschnitt \ref{konzept:prediktiv} genauer erläutert. Die Punkte werden ins sphärische Koordinatensystem überführt. In diesem Koordinatensystem sind 16 Bit Genauigkeit pro Koordinatenachse ausreichend und die PCA muss nicht berechnet werden. Im Schnitt können dadurch 30 Bytes pro Feldlinie eingespart werden. Zusätzlich werden die Vorhersagefehler quantisiert.
+Die Rekursive Lineare Kodierung ist in der Lage für nicht-stetige Kanäle eine sinnvolle Vorhersage zu berechnen. Das Verfahren ist im Abschnitt \ref{konzept:prediktiv} genauer erläutert. Die Punkte werden ins sphärische Koordinatensystem überführt. In diesem Koordinatensystem sind 16 Bit Genauigkeit pro Koordinatenachse ausreichend und die PCA muss nicht berechnet werden. Im Schnitt können dadurch 30 Bytes pro Feldlinie eingespart werden. Zusätzlich werden die Vorhersagefehler quantisiert.
 
 \begin{figure}[!htbp]
 	\center
