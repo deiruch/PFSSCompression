@@ -15,7 +15,7 @@ namespace CompressedPFSSManager.PFSS
 
         internal List<PFSSLine> lines { get; private set; }
 
-        public PFSSData(double b0, double l0, List<PFSSLine> lines)
+        public PFSSData(double l0, double b0, List<PFSSLine> lines)
         {
             this.b0 = b0;
             this.l0 = l0;
