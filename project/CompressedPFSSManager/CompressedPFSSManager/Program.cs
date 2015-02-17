@@ -35,10 +35,16 @@ namespace CompressedPFSSManager
                 catch
                 {
                 }
-                //---------------------------Modification by Jonas Schwammberger---------------------------------------------------
-                Process.Start(args[1], Path.Combine(Environment.CurrentDirectory, "pfss_run_batch.pro") + " > idllog.txt").WaitForExit();
-                
-                
+
+                var proc = Process.Start(args[1], Path.Combine(Environment.CurrentDirectory, "pfss_run_batch.pro") + " > idllog.txt");
+                if (!proc.WaitForExit(5 * 60 * 1000))
+                {
+                    proc.Kill();
+                    Thread.Sleep(30000);
+                    continue;
+                }
+
+
                 if (tmpDir.EnumerateFiles("*.fits").Count() == 0)
                 {
                     Console.WriteLine("Not found");
@@ -46,7 +52,7 @@ namespace CompressedPFSSManager
                     return;
                 }
 
-                
+
                 if (tmpDir.EnumerateFiles("*.fits").Count() > 1)
                 {
                     Console.WriteLine("Found more than one FITS file in output directory " + tmpDir.FullName);
