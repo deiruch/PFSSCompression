@@ -36,6 +36,7 @@ namespace CompressedPFSSManager.PFSS
             SphericalDataCreator constructor = new SphericalDataCreator(l0, b0, ptr, ptr_nz_len, ptph, ptth);
 
             PFSSData data = constructor.Create();
+            fits.Close();
             return data;
         }
     }
