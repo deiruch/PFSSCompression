@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CompressedPFSSManager.PFSS
 {
-    enum TYPE
+    enum LineType
     {
         SUN_TO_OUTSIDE,
         SUN_TO_SUN,
@@ -17,14 +17,11 @@ namespace CompressedPFSSManager.PFSS
 
     class PFSSLine
     {
-        internal TYPE Type { get; private set; }
-        internal List<PFSSPoint> points { get; private set; }
+        internal LineType Type;
+        internal List<PFSSPoint> points;
+        internal List<PFSSPoint> predictionErrors;
 
-        internal PFSSPoint startPoint { get; set; }
-        internal PFSSPoint endPoint { get; set; }
-        internal List<PFSSPoint> predictionErrors { get; set; }
-
-        public PFSSLine(TYPE t, List<PFSSPoint> points)
+        public PFSSLine(LineType t, List<PFSSPoint> points)
         {
             this.Type = t;
             this.points = points;

@@ -1,80 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CompressedPFSSManager.PFSS
 {
-    /// <summary>
-    /// Creates the PFSSData structure containing points in the spherical coordinate system
-    /// </summary>
-    class SphericalDataCreator
-    {
-        public static readonly double ANGLE_OF_LOD = Math.Cos(5.0 / 180 * Math.PI);
-        protected double l0 { get; private set; }
-        protected double b0 { get; private set; }
-        protected short[] ptr { get; private set; }
-        protected short[] ptr_nz_len { get; private set; }
-        protected short[] ptph { get; private set; }
-        protected short[] ptth { get; private set; }
+	/// <summary>
+	/// Creates the PFSSData structure containing points in the spherical coordinate system
+	/// </summary>
+	class SphericalDataCreator
+	{
+		protected double l0;
+		protected double b0;
+		protected float[] ptx;
+		protected short[] ptr_nz_len;
+		protected float[] pty;
+		protected float[] ptz;
 
-        public SphericalDataCreator(double l0, double b0, short[] ptr, short[] ptr_nz_len, short[] ptph, short[] ptth)
-        {
-            this.l0 = l0;
-            this.b0 = b0;
-            this.ptr = ptr;
-            this.ptr_nz_len = ptr_nz_len;
-            this.ptph = ptph;
-            this.ptth = ptth;
-        }
+		public SphericalDataCreator(double _l0, double _b0, float[] _ptr, short[] _ptr_nz_len, float[] _ptph, float[] _ptth)
+		{
+			Debug.Assert(_ptr.Length == _ptth.Length);
+			Debug.Assert(_ptth.Length == _ptph.Length);
 
-        protected TYPE getType(int startLine, int lineEnd)
-        {
-            //error: somewhere between IDL and Fits there is something which eats the last few floats, but only floats!
-            if (lineEnd > ptr.Length)
-            {
-                lineEnd = ptr.Length - 1;
-            }
+			l0 = _l0;
+			b0 = _b0;
+			ptr_nz_len = _ptr_nz_len;
 
-            if (ptr[startLine] > 1 * 1.05)
-                return TYPE.OUTSIDE_TO_SUN;
-            else if (ptr[lineEnd] > 1 * 1.05)
-                return TYPE.SUN_TO_OUTSIDE;
-            else
-                return TYPE.SUN_TO_SUN;
-        }
+			ptx = new float[_ptr.Length];
+			pty = new float[_ptr.Length];
+			ptz = new float[_ptr.Length];
 
-        public PFSSData Create()
-        {
-            List<PFSSLine> lines = new List<PFSSLine>(ptr_nz_len.Length);
+			for (var i = 0; i < _ptr.Length; i++)
+			{
+				ptx[i] = (float)(_ptr[i] * PFSSPoint.SUN_RADIUS * Math.Sin(_ptth[i]) * Math.Sin(_ptph[i])); 	//x
+				pty[i] = (float)(_ptr[i] * PFSSPoint.SUN_RADIUS * Math.Cos(_ptth[i])); 				//y     
+				ptz[i] = (float)(_ptr[i] * PFSSPoint.SUN_RADIUS * Math.Sin(_ptth[i]) * Math.Cos(_ptph[i])); 	//z
+			}
+		}
 
-            int lineEnd = ptr_nz_len[0] - 1;
-            int lineStart = 0;
+		protected LineType GetType(int lineStart, int lineEnd)
+		{
+			//error: somewhere between IDL and Fits there is something which eats the last few floats, but only floats!
+			if (lineEnd > ptx.Length)
+			{
+				Console.WriteLine("Warning: Truncated line");
+				lineEnd = ptx.Length - 1;
+			}
 
-            TYPE type = getType(lineStart, lineEnd);
+            var rStart = Math.Sqrt(Math.Pow(ptx[lineStart], 2) + Math.Pow(pty[lineStart], 2) + Math.Pow(ptz[lineStart], 2));
+            var rEnd = Math.Sqrt(Math.Pow(ptx[lineEnd], 2) + Math.Pow(pty[lineEnd], 2) + Math.Pow(ptz[lineEnd], 2));
 
-            int vertexIndex = 0;
-            for (int i = 0; i < ptr_nz_len.Length; i++)
-            {
-                int lineSize = ptr_nz_len[i];
-                List<PFSSPoint> line = new List<PFSSPoint>(lineSize);
-                TYPE t = getType(vertexIndex, vertexIndex + lineSize - 1);
+            if (rStart > PFSSPoint.SUN_RADIUS * 1.05)
+				return LineType.OUTSIDE_TO_SUN;
+            else if (rEnd > PFSSPoint.SUN_RADIUS * 1.05)
+				return LineType.SUN_TO_OUTSIDE;
+			else
+				return LineType.SUN_TO_SUN;
+		}
 
-                int maxSize = vertexIndex + lineSize;
-                int index = 0;
-                for (; vertexIndex < maxSize; vertexIndex++)
-                {
-                    PFSSPoint current = new PFSSPoint(ptr[vertexIndex], ptph[vertexIndex], ptth[vertexIndex]);
-                    line.Add(current);
-                    index++;
-                }
+		public PFSSData Create()
+		{
+			var lines = new List<PFSSLine>(ptr_nz_len.Length);
 
-                PFSSLine l = new PFSSLine(t, line);
-                lines.Add(l);
-            }
+			int lineEnd = ptr_nz_len[0] - 1;
+			int lineStart = 0;
 
-            return new PFSSData(l0, b0,lines);
-        }
-    }
+			var type = GetType(lineStart, lineEnd);
+
+			int vertexIndex = 0;
+			for (int i = 0; i < ptr_nz_len.Length; i++)
+			{
+				var lineSize = ptr_nz_len[i];
+				var line = new List<PFSSPoint>(lineSize);
+				var t = GetType(vertexIndex, vertexIndex + lineSize - 1);
+
+				var maxSize = vertexIndex + lineSize;
+				for (; vertexIndex < maxSize; vertexIndex++)
+					line.Add(new PFSSPoint(ptx[vertexIndex], pty[vertexIndex], ptz[vertexIndex]));
+
+				lines.Add(new PFSSLine(t, line));
+			}
+
+			return new PFSSData(l0, b0,lines);
+		}
+	}
 }

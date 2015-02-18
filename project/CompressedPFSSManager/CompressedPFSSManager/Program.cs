@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CompressedPFSSManager.CompressionAlgorithm;
+using CompressedPFSSManager.PFSS;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -14,6 +16,9 @@ namespace CompressedPFSSManager
         static DirectoryInfo DestDir;
         static void Main(string[] args)
         {
+            //var output2 = CompressLossy(new FileInfo(@"C:\Users\de\Documents\Visual Studio 2013\Projects\PfssManagerCompressed\project\CompressedPFSSManager\CompressedPFSSManager\bin\Debug\1996-07-02_18-04-00.000_pfss_field_data.fits"));
+            //return;
+
             if (args.Length != 2)
             {
                 Console.WriteLine("PfssManager.exe [DestinationDirectory] [SswStartupScript]");
@@ -39,27 +44,43 @@ namespace CompressedPFSSManager
                 var proc = Process.Start(args[1], Path.Combine(Environment.CurrentDirectory, "pfss_run_batch.pro") + " > idllog.txt");
                 if (!proc.WaitForExit(5 * 60 * 1000))
                 {
+                    Console.WriteLine("IDL is not responding... :(");
+                    try
+                    {
+                        proc.Kill();
+                    }
+                    catch (InvalidOperationException)
+                    {
+                    }
+                    tmpDir.Delete(true);
+                    Thread.Sleep(30000);
+                    continue;
+                }
+
+                try
+                {
                     proc.Kill();
+                }
+                catch (InvalidOperationException)
+                {
+                }
+
+                if (tmpDir.EnumerateFiles("*.fits").Count() == 0)
+                {
+                    Console.WriteLine("Could not find any FITS files in output directory " + tmpDir.FullName);
+                    tmpDir.Delete(true);
                     Thread.Sleep(30000);
                     continue;
                 }
 
 
-                if (tmpDir.EnumerateFiles("*.fits").Count() == 0)
+                if (tmpDir.EnumerateFiles("*.fits").Count() != 1)
                 {
-                    Console.WriteLine("Not found");
-                    tmpDir.Delete(true);
-                    return;
-                }
-
-
-                if (tmpDir.EnumerateFiles("*.fits").Count() > 1)
-                {
-                    Console.WriteLine("Found more than one FITS file in output directory " + tmpDir.FullName);
+                    Console.WriteLine("Did not find exactly one FITS file in output directory " + tmpDir.FullName);
                     return;
                 }
                 var fits = tmpDir.EnumerateFiles("*.fits").SingleOrDefault();
-                var output = Compression.CompressLossy(fits);
+                var output = CompressLossy(fits);
 
                 //var output = tmpDir.EnumerateFiles("*.fits.rar").SingleOrDefault();
                 //---------------------------Modification by Jonas Schwammberger---------------------------------------------------
@@ -115,6 +136,24 @@ namespace CompressedPFSSManager
         static DirectoryInfo GetDirectory(DateTime _dt)
         {
             return DestDir.CreateSubdirectory(_dt.ToString(@"YYYY\MM\"));
+        }
+
+        public static FileInfo CompressLossy(FileInfo fits)
+        {
+            var data = FitsReader.ReadFloatFits(fits);
+
+            data.lines.Sort((a,b) => a.points[0].X.CompareTo(b.points[0].X));
+
+            data.SubsampleByAngle(3.0);
+
+            RecursiveLinearPredictor.ForwardPrediction(data);
+
+            var fitsCompressed = new FileInfo(fits.Directory.FullName + "\\v1.fits");
+            OutputWriter.WriteFits(data, fitsCompressed);
+
+            var rarFits = new FileInfo(fits.FullName + ".rar");
+            OutputWriter.EncodeRAR(rarFits, fitsCompressed);
+            return rarFits;
         }
     }
 }
